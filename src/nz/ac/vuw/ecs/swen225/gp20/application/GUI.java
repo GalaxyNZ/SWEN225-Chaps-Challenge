@@ -5,6 +5,10 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public abstract class GUI {
 
@@ -28,8 +32,10 @@ public abstract class GUI {
     return drawing.getSize();
   }
 
+  HashSet<Integer> keys = new HashSet<>();
 
   public void initialise() {
+
     drawing = new JComponent() {
       protected void paintComponent(Graphics g) {
         redraw(g, getDrawingAreaDimension());
@@ -55,35 +61,35 @@ public abstract class GUI {
     JMenuItem newGameOne = new JMenuItem("New Game");
     newGameOne.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
-        System.out.println("Starts new game at level 1");
+        restartGame();
       }
     });
 
     JMenuItem restart = new JMenuItem("Restart");
     restart.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
-        System.out.println("Restarts current level");
+        restartRound();
       }
     });
 
     JMenuItem exit = new JMenuItem("Exit");
     exit.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
-        System.out.println("Exit without saving");
+        exitGame();
       }
     });
 
     JMenuItem saveExit = new JMenuItem("Save & Exit");
     saveExit.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
-        System.out.println("Save and exit");
+        exitSaveGame();
       }
     });
 
     JMenuItem load = new JMenuItem("Load");
     load.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
-        System.out.println("Loads a saved game");
+        loadGame();
       }
     });
 
@@ -98,14 +104,14 @@ public abstract class GUI {
     JMenuItem pause = new JMenuItem("Pause");
     pause.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
-        System.out.println("Pauses the game");
+        pauseGame();
       }
     });
 
     JMenuItem resume = new JMenuItem("Resume");
     resume.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
-        System.out.println("Resume the game");
+        resumeGame();
       }
     });
 
@@ -130,6 +136,35 @@ public abstract class GUI {
     Border edge = BorderFactory.createEmptyBorder(5, 5, 5, 5);
     controls.setBorder(edge);
 
+    frame.addKeyListener(new KeyListener() {
+      @Override
+      public void keyTyped(KeyEvent e) {
+
+      }
+
+      @Override
+      public void keyPressed(KeyEvent e) {
+        keys.add(e.getKeyCode());
+
+        if (keys.contains(17) && keys.size() == 2) {
+          if (keys.contains(88)) exitGame();
+          if (keys.contains(83)) exitSaveGame();
+          if (keys.contains(82)) loadGame();
+          if (keys.contains(80)) restartRound();
+          if (keys.contains(49)) restartGame();
+        }
+
+        if (keys.contains(32)) pauseGame();
+        if (keys.contains(27)) resumeGame();
+
+      }
+
+      @Override
+      public void keyReleased(KeyEvent e) {
+        keys.remove(e.getKeyCode());
+      }
+    });
+
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setLayout(new BorderLayout());
     frame.add(controls, BorderLayout.NORTH);
@@ -138,5 +173,33 @@ public abstract class GUI {
     frame.pack();
     frame.setVisible(true);
 
+  }
+
+  private void restartGame() {
+    System.out.println("Starts new game at level 1");
+  }
+
+  private void restartRound() {
+    System.out.println("Restarts current level");
+  }
+
+  private void loadGame() {
+    System.out.println("Loads a saved game");
+  }
+
+  private void exitSaveGame() {
+    System.out.println("Save and exit");
+  }
+
+  private void exitGame() {
+    System.out.println("Exit without saving");
+  }
+
+  private void resumeGame() {
+    System.out.println("Resume the game");
+  }
+
+  private void pauseGame() {
+    System.out.println("Pauses the game");
   }
 }
