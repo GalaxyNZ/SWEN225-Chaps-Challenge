@@ -3,11 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
+import java.awt.event.*;
 import java.util.HashSet;
 
 public abstract class GUI {
@@ -48,7 +44,7 @@ public abstract class GUI {
     drawing.setVisible(true);
 
     JPanel info = new JPanel(new GridLayout(3, 0, 5, 5));
-    info.setPreferredSize(new Dimension(DEFAULT_DRAWING_WIDTH/3, DEFAULT_DRAWING_HEIGHT));
+    info.setPreferredSize(new Dimension(DEFAULT_DRAWING_WIDTH*2/5, DEFAULT_DRAWING_HEIGHT));
     info.setBackground(Color.BLACK);
 
     JPanel display = new JPanel();
@@ -96,10 +92,11 @@ public abstract class GUI {
     JMenu menu = new JMenu("Menu");
     menu.setPreferredSize(new Dimension(45, 15));
     menu.add(newGameOne);
-    menu.add(restart);
-    menu.add(exit);
     menu.add(saveExit);
+    menu.add(restart);
     menu.add(load);
+    menu.add(exit);
+
 
     JMenuItem pause = new JMenuItem("Pause");
     pause.addActionListener(new ActionListener() {
@@ -117,14 +114,40 @@ public abstract class GUI {
 
     JMenu options = new JMenu("Options");
     options.setPreferredSize(new Dimension(60, 15));
-    options.add(pause);
     options.add(resume);
+    options.add(pause);
+
+    JMenuItem levelOne = new JMenuItem("Level One");
+    levelOne.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent ev) {
+        System.out.println("Play Level One");
+
+      }
+    });
+
+    JMenuItem levelTwo = new JMenuItem("Level Two");
+    load.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent ev) {
+        System.out.println("Play Level Two");
+      }
+    });
 
     JMenu level = new JMenu("Level");
     level.setPreferredSize(new Dimension(45, 15));
+    level.add(levelOne);
+    level.add(levelTwo);
+
+    JMenuItem up = new JMenuItem("Press the UP key to move up");
+    JMenuItem down = new JMenuItem("Press the DOWN key to move down");
+    JMenuItem right = new JMenuItem("Press the RIGHT key to move right");
+    JMenuItem left = new JMenuItem("Press the LEFT key to move left");
 
     JMenu help = new JMenu("Help");
     help.setPreferredSize(new Dimension(45, 15));
+    help.add(up);
+    help.add(down);
+    help.add(right);
+    help.add(left);
 
     JMenuBar controls = new JMenuBar();
     controls.add(menu);
@@ -165,6 +188,13 @@ public abstract class GUI {
       }
     });
 
+    frame.addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentResized(ComponentEvent e) {
+
+      }
+    });
+
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setLayout(new BorderLayout());
     frame.add(controls, BorderLayout.NORTH);
@@ -192,7 +222,12 @@ public abstract class GUI {
   }
 
   private void exitGame() {
-    System.out.println("Exit without saving");
+    int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit? Your game will not be saved.", "Exit Game",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+    if (result == JOptionPane.OK_OPTION) {
+      System.exit(0); // cleanly end the program.
+    }
   }
 
   private void resumeGame() {
