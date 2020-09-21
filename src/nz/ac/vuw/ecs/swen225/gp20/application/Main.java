@@ -9,7 +9,7 @@ public class Main extends GUI {
 
   @Override
   protected void redraw(Graphics g, Dimension d) {
-    g.setColor(Color.BLUE);
+    g.setColor(new Color(102,102,102));
     g.fillRect(0,0,d.width,d.height);
   }
 }

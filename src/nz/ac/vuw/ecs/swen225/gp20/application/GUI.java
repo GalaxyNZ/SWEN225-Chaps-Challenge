@@ -13,8 +13,7 @@ public abstract class GUI {
   private JFrame frame = new JFrame("Chaps Challenge");
   private JComponent drawing;
 
-  private static final int DEFAULT_DRAWING_HEIGHT = 500;
-  private static final int DEFAULT_DRAWING_WIDTH = 500;
+  private static final int DEFAULT_DISPLAY_SIZE = 800;
 
   public GUI() {
     initialise();
@@ -37,22 +36,25 @@ public abstract class GUI {
         redraw(g, getDrawingAreaDimension());
       }
     };
-
-    drawing.setPreferredSize(new Dimension(DEFAULT_DRAWING_WIDTH,
-            DEFAULT_DRAWING_HEIGHT));
-
     drawing.setVisible(true);
 
     JPanel info = new JPanel(new GridLayout(3, 0, 5, 5));
-    info.setPreferredSize(new Dimension(DEFAULT_DRAWING_WIDTH*2/5, DEFAULT_DRAWING_HEIGHT));
     info.setBackground(Color.BLACK);
 
     JPanel display = new JPanel();
-    display.setBackground(Color.GREEN);
+    display.setBackground(new Color(0,204,0));
+    display.setPreferredSize(new Dimension(DEFAULT_DISPLAY_SIZE, (int) (DEFAULT_DISPLAY_SIZE/1.6)));
+    display.setLayout(null);
 
-    display.setBorder(BorderFactory.createEmptyBorder(50,50,50,50));
     display.add(drawing);
     display.add(info);
+    int start = (DEFAULT_DISPLAY_SIZE-(DEFAULT_DISPLAY_SIZE/2+DEFAULT_DISPLAY_SIZE/4+20))/2;
+    drawing.setBounds(start, 50, DEFAULT_DISPLAY_SIZE/2,
+            DEFAULT_DISPLAY_SIZE/2);
+    info.setBounds(DEFAULT_DISPLAY_SIZE/2+start+20, 50, DEFAULT_DISPLAY_SIZE/4,
+            DEFAULT_DISPLAY_SIZE/2);
+
+
 
     JMenuItem newGameOne = new JMenuItem("New Game");
     newGameOne.addActionListener(new ActionListener() {
@@ -191,10 +193,23 @@ public abstract class GUI {
     frame.addComponentListener(new ComponentAdapter() {
       @Override
       public void componentResized(ComponentEvent e) {
+        int displayWidth = display.getWidth();
+        int displayHeight = display.getHeight();
+        int value = Math.min(displayWidth, displayHeight)-100;
+        if (value+value/2+20 > displayWidth) {
+          value = (displayWidth-20)*2/3;
+        }
+        int xPos = (displayWidth-(value+value/2+20))/2;
+        int yPos = (displayHeight-value)/2;
+        drawing.setBounds(xPos, yPos, value,
+                value);
+        info.setBounds(value+xPos+20, yPos, value/2,
+                value);
 
       }
     });
 
+    frame.setMinimumSize(new Dimension(DEFAULT_DISPLAY_SIZE, (int) (DEFAULT_DISPLAY_SIZE/1.6)));
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setLayout(new BorderLayout());
     frame.add(controls, BorderLayout.NORTH);
