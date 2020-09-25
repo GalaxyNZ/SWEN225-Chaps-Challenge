@@ -195,10 +195,8 @@ public abstract class GUI {
       public void componentResized(ComponentEvent e) {
         int displayWidth = display.getWidth();
         int displayHeight = display.getHeight();
-        int value = Math.min(displayWidth, displayHeight)-100;
-        if (value+value/2+20 > displayWidth) {
-          value = (displayWidth-20)*2/3;
-        }
+        int value = Math.min(displayWidth, displayHeight)-50;
+        if (value+value/2+70 > displayWidth) value = (displayWidth-70)*2/3;
         int xPos = (displayWidth-(value+value/2+20))/2;
         int yPos = (displayHeight-value)/2;
         drawing.setBounds(xPos, yPos, value,
