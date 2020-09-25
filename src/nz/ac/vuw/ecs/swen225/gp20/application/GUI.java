@@ -1,10 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashSet;
 
 public abstract class GUI {
 
@@ -27,8 +27,6 @@ public abstract class GUI {
     return drawing.getSize();
   }
 
-  HashSet<Integer> keys = new HashSet<>();
-
   public void initialise() {
 
     drawing = new JComponent() {
@@ -37,9 +35,11 @@ public abstract class GUI {
       }
     };
     drawing.setVisible(true);
+    drawing.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY));
 
     JPanel info = new JPanel(new GridLayout(3, 0, 5, 5));
-    info.setBackground(Color.BLACK);
+    info.setBackground(Color.LIGHT_GRAY);
+    info.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY));
 
     JPanel display = new JPanel();
     display.setBackground(new Color(0,204,0));
@@ -57,6 +57,8 @@ public abstract class GUI {
 
 
     JMenuItem newGameOne = new JMenuItem("New Game");
+    KeyStroke NGO = KeyStroke.getKeyStroke(KeyEvent.VK_1,2);
+    newGameOne.setAccelerator(NGO);
     newGameOne.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         restartGame();
@@ -64,6 +66,8 @@ public abstract class GUI {
     });
 
     JMenuItem restart = new JMenuItem("Restart");
+    KeyStroke res = KeyStroke.getKeyStroke(KeyEvent.VK_P,2);
+    restart.setAccelerator(res);
     restart.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         restartRound();
@@ -71,6 +75,8 @@ public abstract class GUI {
     });
 
     JMenuItem exit = new JMenuItem("Exit");
+    KeyStroke ex = KeyStroke.getKeyStroke(KeyEvent.VK_X,2);
+    exit.setAccelerator(ex);
     exit.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         exitGame();
@@ -78,6 +84,8 @@ public abstract class GUI {
     });
 
     JMenuItem saveExit = new JMenuItem("Save & Exit");
+    KeyStroke saveEx = KeyStroke.getKeyStroke(KeyEvent.VK_S,2);
+    saveExit.setAccelerator(saveEx);
     saveExit.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         exitSaveGame();
@@ -85,11 +93,14 @@ public abstract class GUI {
     });
 
     JMenuItem load = new JMenuItem("Load");
+    KeyStroke lo = KeyStroke.getKeyStroke(KeyEvent.VK_R,2);
+    load.setAccelerator(lo);
     load.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         loadGame();
       }
     });
+
 
     JMenu menu = new JMenu("Menu");
     menu.setPreferredSize(new Dimension(45, 15));
@@ -101,6 +112,8 @@ public abstract class GUI {
 
 
     JMenuItem pause = new JMenuItem("Pause");
+    KeyStroke pa = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,0);
+    pause.setAccelerator(pa);
     pause.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         pauseGame();
@@ -108,6 +121,8 @@ public abstract class GUI {
     });
 
     JMenuItem resume = new JMenuItem("Resume");
+    KeyStroke resu = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0);
+    resume.setAccelerator(resu);
     resume.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         resumeGame();
@@ -123,7 +138,6 @@ public abstract class GUI {
     levelOne.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         System.out.println("Play Level One");
-
       }
     });
 
@@ -161,34 +175,6 @@ public abstract class GUI {
     Border edge = BorderFactory.createEmptyBorder(5, 5, 5, 5);
     controls.setBorder(edge);
 
-    frame.addKeyListener(new KeyListener() {
-      @Override
-      public void keyTyped(KeyEvent e) {
-
-      }
-
-      @Override
-      public void keyPressed(KeyEvent e) {
-        keys.add(e.getKeyCode());
-
-        if (keys.contains(17) && keys.size() == 2) {
-          if (keys.contains(88)) exitGame();
-          if (keys.contains(83)) exitSaveGame();
-          if (keys.contains(82)) loadGame();
-          if (keys.contains(80)) restartRound();
-          if (keys.contains(49)) restartGame();
-        }
-
-        if (keys.contains(32)) pauseGame();
-        if (keys.contains(27)) resumeGame();
-
-      }
-
-      @Override
-      public void keyReleased(KeyEvent e) {
-        keys.remove(e.getKeyCode());
-      }
-    });
 
     frame.addComponentListener(new ComponentAdapter() {
       @Override
@@ -199,11 +185,8 @@ public abstract class GUI {
         if (value+value/2+70 > displayWidth) value = (displayWidth-70)*2/3;
         int xPos = (displayWidth-(value+value/2+20))/2;
         int yPos = (displayHeight-value)/2;
-        drawing.setBounds(xPos, yPos, value,
-                value);
-        info.setBounds(value+xPos+20, yPos, value/2,
-                value);
-
+        drawing.setBounds(xPos, yPos, value, value);
+        info.setBounds(value+xPos+20, yPos, value/2, value);
       }
     });
 
