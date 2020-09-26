@@ -95,7 +95,7 @@ public abstract class GUI {
 
 
     JMenuItem newGameOne = new JMenuItem("New Game");
-    KeyStroke NGO = KeyStroke.getKeyStroke(KeyEvent.VK_1,1);
+    KeyStroke NGO = KeyStroke.getKeyStroke(KeyEvent.VK_1,2);
     newGameOne.setAccelerator(NGO);
     newGameOne.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
