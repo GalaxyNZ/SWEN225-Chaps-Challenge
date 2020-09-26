@@ -5,7 +5,6 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public abstract class GUI {
 
@@ -50,7 +49,7 @@ public abstract class GUI {
     GridLayout gl = new GridLayout(2, 0, 0, 0);
 
     JLabel timeText = new JLabel("Time");
-    timeLeft = new JLabel();
+    timeLeft = new JLabel("60");
 
 
     JPanel time = new JPanel(gl);
@@ -106,53 +105,43 @@ public abstract class GUI {
 
 
     JMenuItem newGameOne = new JMenuItem("New Game");
-    KeyStroke NGO = KeyStroke.getKeyStroke(KeyEvent.VK_1,2);
+    KeyStroke NGO = KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK);
     newGameOne.setAccelerator(NGO);
-    newGameOne.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        restartGame();
-        redraw();
-      }
+    newGameOne.addActionListener(ev -> {
+      restartGame();
+      redraw();
     });
 
     JMenuItem restart = new JMenuItem("Restart");
-    KeyStroke res = KeyStroke.getKeyStroke(KeyEvent.VK_P,2);
+    KeyStroke res = KeyStroke.getKeyStroke(KeyEvent.VK_P,InputEvent.CTRL_DOWN_MASK);
     restart.setAccelerator(res);
-    restart.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        restartRound();
-        redraw();
-      }
+    restart.addActionListener(ev -> {
+      restartRound();
+      redraw();
     });
 
     JMenuItem exit = new JMenuItem("Exit");
-    KeyStroke ex = KeyStroke.getKeyStroke(KeyEvent.VK_X,2);
+    KeyStroke ex = KeyStroke.getKeyStroke(KeyEvent.VK_X,InputEvent.CTRL_DOWN_MASK);
     exit.setAccelerator(ex);
-    exit.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        exitGame();
-        redraw();
-      }
+    exit.addActionListener(ev -> {
+      exitGame();
+      redraw();
     });
 
     JMenuItem saveExit = new JMenuItem("Save & Exit");
-    KeyStroke saveEx = KeyStroke.getKeyStroke(KeyEvent.VK_S,2);
+    KeyStroke saveEx = KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_DOWN_MASK);
     saveExit.setAccelerator(saveEx);
-    saveExit.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        exitSaveGame();
-        redraw();
-      }
+    saveExit.addActionListener(ev -> {
+      exitSaveGame();
+      redraw();
     });
 
     JMenuItem load = new JMenuItem("Load");
-    KeyStroke lo = KeyStroke.getKeyStroke(KeyEvent.VK_R,2);
+    KeyStroke lo = KeyStroke.getKeyStroke(KeyEvent.VK_R,InputEvent.CTRL_DOWN_MASK);
     load.setAccelerator(lo);
-    load.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        loadGame();
-        redraw();
-      }
+    load.addActionListener(ev -> {
+      loadGame();
+      redraw();
     });
 
 
@@ -168,21 +157,17 @@ public abstract class GUI {
     JMenuItem pause = new JMenuItem("Pause");
     KeyStroke pa = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,0);
     pause.setAccelerator(pa);
-    pause.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        pauseGame();
-        redraw();
-      }
+    pause.addActionListener(ev -> {
+      pauseGame();
+      redraw();
     });
 
     JMenuItem resume = new JMenuItem("Resume");
     KeyStroke resu = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0);
     resume.setAccelerator(resu);
-    resume.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        resumeGame();
-        redraw();
-      }
+    resume.addActionListener(ev -> {
+      resumeGame();
+      redraw();
     });
 
     JMenu options = new JMenu("Options");
@@ -191,18 +176,10 @@ public abstract class GUI {
     options.add(pause);
 
     JMenuItem levelOne = new JMenuItem("Level One");
-    levelOne.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        System.out.println("Play Level One");
-      }
-    });
+    levelOne.addActionListener(ev -> System.out.println("Play Level One"));
 
     JMenuItem levelTwo = new JMenuItem("Level Two");
-    load.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        System.out.println("Play Level Two");
-      }
-    });
+    load.addActionListener(ev -> System.out.println("Play Level Two"));
 
     JMenu level = new JMenu("Level");
     level.setPreferredSize(new Dimension(45, 15));
@@ -274,17 +251,13 @@ public abstract class GUI {
       timer.stop();
       timeElapsed = 0;
     }
-    timer = new Timer(1000, new ActionListener() {
-
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        if (!gamePaused) {
-          timeLeft.setText(String.valueOf(timePerLevel - timeElapsed));
-          timeElapsed++;
-          if (timePerLevel - timeElapsed < 30) timeLeft.setForeground(new Color(255, 120, 0));
-          if (timePerLevel - timeElapsed < 15) timeLeft.setForeground(Color.RED);
-          if (timePerLevel - timeElapsed < 0) timer.stop();
-        }
+    timer = new Timer(1000, e -> {
+      if (!gamePaused) {
+        timeLeft.setText(String.valueOf(timePerLevel - timeElapsed));
+        timeElapsed++;
+        if (timePerLevel - timeElapsed < 30) timeLeft.setForeground(new Color(255, 120, 0));
+        if (timePerLevel - timeElapsed < 15) timeLeft.setForeground(Color.RED);
+        if (timePerLevel - timeElapsed < 0) timer.stop();
       }
     });
     timer.start();
