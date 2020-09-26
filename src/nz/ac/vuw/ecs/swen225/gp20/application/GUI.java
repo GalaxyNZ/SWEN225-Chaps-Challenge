@@ -29,33 +29,54 @@ public abstract class GUI {
 
   public void initialise() {
 
+    Border border = BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY);
+
     drawing = new JComponent() {
       protected void paintComponent(Graphics g) {
         redraw(g, getDrawingAreaDimension());
       }
     };
     drawing.setVisible(true);
-    drawing.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY));
+    drawing.setBorder(border);
 
-    JPanel time = new JPanel();
+    GridLayout gl = new GridLayout(2, 0, 0, 0);
+
+    JLabel timeText = new JLabel("Time");
+    setJLabel(timeText);
+
+    JPanel time = new JPanel(gl);
     time.setBackground(Color.LIGHT_GRAY);
-    time.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY));
+    time.setBorder(border);
+    time.add(timeText);
 
-    JPanel chips = new JPanel();
+    JLabel chipsText = new JLabel("Chips");
+    setJLabel(chipsText);
+
+    JPanel chips = new JPanel(gl);
     chips.setBackground(Color.LIGHT_GRAY);
-    chips.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY));
+    chips.setBorder(border);
+    chips.add(chipsText);
 
-    JPanel items = new JPanel();
+    JLabel itemsText = new JLabel("Items");
+    setJLabel(itemsText);
+
+    JPanel items = new JPanel(gl);
     items.setBackground(Color.LIGHT_GRAY);
-    items.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY));
+    items.setBorder(border);
+    items.add(itemsText);
 
-    JPanel lvl = new JPanel();
+    JLabel lvlText = new JLabel("Level");
+    setJLabel(lvlText);
+
+    JPanel lvl = new JPanel(gl);
     lvl.setBackground(Color.LIGHT_GRAY);
-    lvl.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY));
+    lvl.setBorder(border);
+    lvl.add(lvlText);
+
 
     JPanel info = new JPanel(new GridLayout(4, 0, 0, 0));
     info.setBackground(Color.LIGHT_GRAY);
-    info.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY));
+    info.setBorder(border);
     info.add(lvl);
     info.add(time);
     info.add(chips);
@@ -219,6 +240,11 @@ public abstract class GUI {
     frame.pack();
     frame.setVisible(true);
 
+  }
+
+  private void setJLabel(JLabel label) {
+    label.setHorizontalAlignment(JLabel.CENTER);
+    label.setFont(new Font(label.getName(), Font.BOLD, 20));
   }
 
   private void restartGame() {
