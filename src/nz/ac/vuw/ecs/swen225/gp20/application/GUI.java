@@ -5,6 +5,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public abstract class GUI {
 
@@ -42,7 +43,6 @@ public abstract class GUI {
     GridLayout gl = new GridLayout(2, 0, 0, 0);
 
     JLabel timeText = new JLabel("Time");
-    setJLabel(timeText);
 
     JPanel time = new JPanel(gl);
     time.setBackground(Color.LIGHT_GRAY);
@@ -50,7 +50,6 @@ public abstract class GUI {
     time.add(timeText);
 
     JLabel chipsText = new JLabel("Chips");
-    setJLabel(chipsText);
 
     JPanel chips = new JPanel(gl);
     chips.setBackground(Color.LIGHT_GRAY);
@@ -58,7 +57,6 @@ public abstract class GUI {
     chips.add(chipsText);
 
     JLabel itemsText = new JLabel("Items");
-    setJLabel(itemsText);
 
     JPanel items = new JPanel(gl);
     items.setBackground(Color.LIGHT_GRAY);
@@ -66,7 +64,6 @@ public abstract class GUI {
     items.add(itemsText);
 
     JLabel lvlText = new JLabel("Level");
-    setJLabel(lvlText);
 
     JPanel lvl = new JPanel(gl);
     lvl.setBackground(Color.LIGHT_GRAY);
@@ -103,6 +100,7 @@ public abstract class GUI {
     newGameOne.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         restartGame();
+        redraw();
       }
     });
 
@@ -112,6 +110,7 @@ public abstract class GUI {
     restart.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         restartRound();
+        redraw();
       }
     });
 
@@ -121,6 +120,7 @@ public abstract class GUI {
     exit.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         exitGame();
+        redraw();
       }
     });
 
@@ -130,6 +130,7 @@ public abstract class GUI {
     saveExit.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         exitSaveGame();
+        redraw();
       }
     });
 
@@ -139,6 +140,7 @@ public abstract class GUI {
     load.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         loadGame();
+        redraw();
       }
     });
 
@@ -158,6 +160,7 @@ public abstract class GUI {
     pause.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         pauseGame();
+        redraw();
       }
     });
 
@@ -167,6 +170,7 @@ public abstract class GUI {
     resume.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         resumeGame();
+        redraw();
       }
     });
 
@@ -228,6 +232,12 @@ public abstract class GUI {
         int yPos = (displayHeight-value)/2;
         drawing.setBounds(xPos, yPos, value, value);
         info.setBounds(value+xPos+20, yPos, value/2, value);
+        int fontSize = info.getWidth()/12;
+        setJLabel(lvlText, fontSize);
+        setJLabel(chipsText, fontSize);
+        setJLabel(timeText, fontSize);
+        setJLabel(itemsText, fontSize);
+        info.updateUI();
       }
     });
 
@@ -239,12 +249,11 @@ public abstract class GUI {
 
     frame.pack();
     frame.setVisible(true);
-
   }
 
-  private void setJLabel(JLabel label) {
+  private void setJLabel(JLabel label, int size) {
     label.setHorizontalAlignment(JLabel.CENTER);
-    label.setFont(new Font(label.getName(), Font.BOLD, 20));
+    label.setFont(new Font(label.getName(), Font.BOLD, size));
   }
 
   private void restartGame() {
