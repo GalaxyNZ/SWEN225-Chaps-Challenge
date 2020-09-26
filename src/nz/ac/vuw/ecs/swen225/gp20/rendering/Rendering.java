@@ -1,7 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp20.rendering;
 
+import nz.ac.vuw.ecs.swen225.gp20.application.Main;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collections;
 
 
 /**
@@ -20,12 +23,24 @@ public class Rendering {
     private float time = 1.0f;
     
 
-    public Rendering(Dimension d, Graphics g){//board
-        size = d;
-        findPlayerPos();//board
-        reCenter(position);
-        determineAction();
-        draw(g);
+    public Rendering(){}
+
+    public void testDrawingAnimation (Graphics g, Main m, String actor){
+        Graphics2D g2 = (Graphics2D) g;
+        switch (actor){
+            case "Down":
+                count++;
+                still(g2,actor);
+                if(count >= 5) count = 0;
+                try{
+                    Thread.sleep((200));
+                }catch(Exception ignored){}
+                break;
+            case "Up":
+                break;
+            case "Left":
+
+        }
     }
 
     public void update(Graphics g, Dimension d){//board
@@ -123,9 +138,13 @@ public class Rendering {
         //nested for loop
     }
     private void still(Graphics2D g, String str){
+        g.setColor(new Color(0,0,0,40));
+        g.fillOval(12,50,41,20);
         try{
-            Image im = new ImageIcon("/res/" + str + "-i" + count +".png").getImage();
+            Image im = new ImageIcon("res/" + str + "-i" + count +".png").getImage();
+
             g.drawImage(im, 0,0,64,64, null);
+
         }catch (Exception ignored){}
     }
     private boolean runLeft(Graphics2D g){
