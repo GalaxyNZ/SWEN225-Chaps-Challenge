@@ -1,17 +1,24 @@
 package nz.ac.vuw.ecs.swen225.gp20.rendering;
 
 import javax.swing.*;
-import javax.swing.text.Position;
 import java.awt.*;
 
+
+/**
+ * Order of act-
+ * 1.init class (done once)  or update board
+ * 2.find player position and previous position
+ * 3.determine the action and (maybe)change the action
+ * 4.draw
+ */
 public class Rendering {
     private Dimension size;
     private Point position, prev;
     private int count  = 0;
-    private String action = "Still", lastAction = "Still";
+    private String action = "Down", lastAction = "Down";
     private boolean acting = false;
-    double time = 1;
-    int[][] board;
+    private float time = 1.0f;
+    
 
     public Rendering(Dimension d, Graphics g){//board
         size = d;
@@ -20,34 +27,49 @@ public class Rendering {
         determineAction();
         draw(g);
     }
-    public void updateBoard(Graphics g){//board
+
+    public void update(Graphics g, Dimension d){//board
+        size = d;
         findPlayerPos();//board
         reCenter(position);
         determineAction();
         draw(g);
     }
-    public void changeTiming(int i){
-        switch (i){
-            case 1:
-                time = 0.25;
-            case 2:
-                time = 0.5;
-            case 3:
-                time = 1;
-            case 4:
-                time = 1.5;
-            case 5:
-                time = 2;
-            default:
-                if(i < 1 || i > 5){
-                    try{
-                        throw new NumberFormatException("Must be within 1 - 5");
-                    }catch (Exception ignored){}
-                }
+    public void changeTiming(float i){
+        if(i > 0.0f && i <= 5.0f){
+            time = i;
+            return;
         }
+        try{
+            throw new NumberFormatException("Is not within 1 and 5");
+        }catch (Exception ignored){}
     }
     public void determineAction(){
-        if(prev == position && lastAction.equals("Still")) changeAction("Still");
+        if(prev == position){
+            switch (lastAction){
+                case "Run-Left":
+                case "Left":
+                    changeAction("Left");
+                    break;
+
+                case "Run-Right":
+                case "Right":
+                    changeAction("Right");
+                    break;
+
+                case "Run-Up":
+                case "Up":
+                    changeAction("Up");
+                    break;
+
+                case "Run-Down":
+                case "Down":
+                    changeAction("Down");
+                    break;
+            }
+        }
+
+
     }
     public void changeAction(String act){
         if(!acting){
@@ -56,7 +78,6 @@ public class Rendering {
             count = 0;
         }
     }
-    public void setSize(Dimension d){size = d;}
     public void reCenter(Point p){
         prev = position;
         position = p;
@@ -68,17 +89,12 @@ public class Rendering {
         //Draw Board
         switch (action){
             case "Down":
-                stillDown(g2);
-                break;
             case "Left":
-                stillLeft(g2);
-                break;
             case "Up" :
-                stillUp(g2);
-                break;
             case "Right":
-                stillRight(g2);
+                still(g2, action);
                 break;
+
             case "Run-Left":
                 acting = runLeft(g2);
                 break;
@@ -96,37 +112,19 @@ public class Rendering {
             soundOnRun();
         }
         try{
-            Thread.sleep(200 * (long)time);
+            Thread.sleep((long)(200 * time));
         }catch(Exception ignored){}
 
-        if(count > 5) count = 0;
+        if(count >= 5) count = 0;
 
     }
 
     private void findPlayerPos(){//Board here
         //nested for loop
     }
-    private void stillDown(Graphics2D g){
+    private void still(Graphics2D g, String str){
         try{
-            Image im = new ImageIcon("/res/Still-i" + count +".png").getImage();
-            g.drawImage(im, 0,0,64,64, null);
-        }catch (Exception ignored){}
-    }
-    private void stillUp(Graphics2D g){
-        try{
-            Image im = new ImageIcon("/res/Up-i" + count +".png").getImage();
-            g.drawImage(im, 0,0,64,64, null);
-        }catch (Exception ignored){}
-    }
-    private void stillLeft(Graphics2D g){
-        try{
-            Image im = new ImageIcon("/res/Left-i" + count +".png").getImage();
-            g.drawImage(im, 0,0,64,64, null);
-        }catch (Exception ignored){}
-    }
-    private void stillRight(Graphics2D g){
-        try{
-            Image im = new ImageIcon("/res/Right-i" + count +".png").getImage();
+            Image im = new ImageIcon("/res/" + str + "-i" + count +".png").getImage();
             g.drawImage(im, 0,0,64,64, null);
         }catch (Exception ignored){}
     }
