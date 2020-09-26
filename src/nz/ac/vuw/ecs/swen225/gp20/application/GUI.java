@@ -37,9 +37,29 @@ public abstract class GUI {
     drawing.setVisible(true);
     drawing.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY));
 
-    JPanel info = new JPanel(new GridLayout(3, 0, 5, 5));
+    JPanel time = new JPanel();
+    time.setBackground(Color.LIGHT_GRAY);
+    time.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY));
+
+    JPanel chips = new JPanel();
+    chips.setBackground(Color.LIGHT_GRAY);
+    chips.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY));
+
+    JPanel items = new JPanel();
+    items.setBackground(Color.LIGHT_GRAY);
+    items.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY));
+
+    JPanel lvl = new JPanel();
+    lvl.setBackground(Color.LIGHT_GRAY);
+    lvl.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY));
+
+    JPanel info = new JPanel(new GridLayout(4, 0, 0, 0));
     info.setBackground(Color.LIGHT_GRAY);
     info.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY));
+    info.add(lvl);
+    info.add(time);
+    info.add(chips);
+    info.add(items);
 
     JPanel display = new JPanel();
     display.setBackground(new Color(0,204,0));
@@ -57,7 +77,7 @@ public abstract class GUI {
 
 
     JMenuItem newGameOne = new JMenuItem("New Game");
-    KeyStroke NGO = KeyStroke.getKeyStroke(KeyEvent.VK_1,2);
+    KeyStroke NGO = KeyStroke.getKeyStroke(KeyEvent.VK_1,1);
     newGameOne.setAccelerator(NGO);
     newGameOne.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
