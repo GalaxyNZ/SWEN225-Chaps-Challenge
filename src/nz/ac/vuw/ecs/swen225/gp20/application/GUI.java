@@ -28,6 +28,13 @@ public abstract class GUI {
     return drawing.getSize();
   }
 
+  private static final int GAP_SIZE = 25;
+  private static final int BORDER_SIZE = 25;
+  private static final int timePerLevel = 60;
+  public JLabel timeLeft;
+  public Timer timer;
+  public boolean gamePaused = false;
+
   public void initialise() {
 
     Border border = BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY);
@@ -43,11 +50,14 @@ public abstract class GUI {
     GridLayout gl = new GridLayout(2, 0, 0, 0);
 
     JLabel timeText = new JLabel("Time");
+    timeLeft = new JLabel();
+
 
     JPanel time = new JPanel(gl);
     time.setBackground(Color.LIGHT_GRAY);
     time.setBorder(border);
     time.add(timeText);
+    time.add(timeLeft);
 
     JLabel chipsText = new JLabel("Chips");
 
@@ -86,10 +96,11 @@ public abstract class GUI {
 
     display.add(drawing);
     display.add(info);
-    int start = (DEFAULT_DISPLAY_SIZE-(DEFAULT_DISPLAY_SIZE/2+DEFAULT_DISPLAY_SIZE/4+20))/2;
-    drawing.setBounds(start, 50, DEFAULT_DISPLAY_SIZE/2,
+    int start = (DEFAULT_DISPLAY_SIZE-(DEFAULT_DISPLAY_SIZE/2+DEFAULT_DISPLAY_SIZE/4+GAP_SIZE))/2;
+    drawing.setBounds(start, BORDER_SIZE, DEFAULT_DISPLAY_SIZE/2,
             DEFAULT_DISPLAY_SIZE/2);
-    info.setBounds(DEFAULT_DISPLAY_SIZE/2+start+20, 50, DEFAULT_DISPLAY_SIZE/4,
+
+    info.setBounds(DEFAULT_DISPLAY_SIZE/2+start+GAP_SIZE, BORDER_SIZE, DEFAULT_DISPLAY_SIZE/4,
             DEFAULT_DISPLAY_SIZE/2);
 
 
@@ -226,16 +237,16 @@ public abstract class GUI {
       public void componentResized(ComponentEvent e) {
         int displayWidth = display.getWidth();
         int displayHeight = display.getHeight();
-        int value = Math.min(displayWidth, displayHeight)-50;
-        if (value+value/2+70 > displayWidth) value = (displayWidth-70)*2/3;
-        int xPos = (displayWidth-(value+value/2+20))/2;
+        int value = Math.min(displayWidth, displayHeight)-BORDER_SIZE*2;
+        if (value+value/2+BORDER_SIZE*2+GAP_SIZE > displayWidth) value = (displayWidth-BORDER_SIZE*2-GAP_SIZE)*2/3;
+        int xPos = (displayWidth-(value+value/2+GAP_SIZE))/2;
         int yPos = (displayHeight-value)/2;
         drawing.setBounds(xPos, yPos, value, value);
-        info.setBounds(value+xPos+20, yPos, value/2, value);
-        int fontSize = info.getWidth()/12;
-        setJLabel(lvlText, fontSize);
+        info.setBounds(value+xPos+GAP_SIZE, yPos, value/2, value);
+        int fontSize = info.getWidth()/12;setJLabel(lvlText, fontSize);
         setJLabel(chipsText, fontSize);
         setJLabel(timeText, fontSize);
+        setJLabel(timeLeft, fontSize);
         setJLabel(itemsText, fontSize);
         info.updateUI();
       }
@@ -256,8 +267,27 @@ public abstract class GUI {
     label.setFont(new Font(label.getName(), Font.BOLD, size));
   }
 
+  int timeElapsed = 0;
   private void restartGame() {
     System.out.println("Starts new game at level 1");
+    if (timeElapsed > 0) {
+      timer.stop();
+      timeElapsed = 0;
+    }
+    timer = new Timer(1000, new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (!gamePaused) {
+          timeLeft.setText(String.valueOf(timePerLevel - timeElapsed));
+          timeElapsed++;
+          if (timePerLevel - timeElapsed < 30) timeLeft.setForeground(new Color(255, 120, 0));
+          if (timePerLevel - timeElapsed < 15) timeLeft.setForeground(Color.RED);
+          if (timePerLevel - timeElapsed < 0) timer.stop();
+        }
+      }
+    });
+    timer.start();
   }
 
   private void restartRound() {
@@ -283,9 +313,11 @@ public abstract class GUI {
 
   private void resumeGame() {
     System.out.println("Resume the game");
+    gamePaused = false;
   }
 
   private void pauseGame() {
     System.out.println("Pauses the game");
+    gamePaused = true;
   }
 }
