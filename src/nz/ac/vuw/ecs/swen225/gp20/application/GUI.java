@@ -5,7 +5,6 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public abstract class GUI {
 
@@ -28,6 +27,13 @@ public abstract class GUI {
     return drawing.getSize();
   }
 
+  private static final int GAP_SIZE = 25;
+  private static final int BORDER_SIZE = 25;
+  private static final int timePerLevel = 60;
+  public JLabel timeLeft;
+  public Timer timer;
+  public boolean gamePaused = false;
+
   public void initialise() {
 
     Border border = BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY);
@@ -43,11 +49,14 @@ public abstract class GUI {
     GridLayout gl = new GridLayout(2, 0, 0, 0);
 
     JLabel timeText = new JLabel("Time");
+    timeLeft = new JLabel("60");
+
 
     JPanel time = new JPanel(gl);
     time.setBackground(Color.LIGHT_GRAY);
     time.setBorder(border);
     time.add(timeText);
+    time.add(timeLeft);
 
     JLabel chipsText = new JLabel("Chips");
 
@@ -86,62 +95,53 @@ public abstract class GUI {
 
     display.add(drawing);
     display.add(info);
-    int start = (DEFAULT_DISPLAY_SIZE-(DEFAULT_DISPLAY_SIZE/2+DEFAULT_DISPLAY_SIZE/4+20))/2;
-    drawing.setBounds(start, 50, DEFAULT_DISPLAY_SIZE/2,
+    int start = (DEFAULT_DISPLAY_SIZE-(DEFAULT_DISPLAY_SIZE/2+DEFAULT_DISPLAY_SIZE/4+GAP_SIZE))/2;
+    drawing.setBounds(start, BORDER_SIZE, DEFAULT_DISPLAY_SIZE/2,
             DEFAULT_DISPLAY_SIZE/2);
-    info.setBounds(DEFAULT_DISPLAY_SIZE/2+start+20, 50, DEFAULT_DISPLAY_SIZE/4,
+
+    info.setBounds(DEFAULT_DISPLAY_SIZE/2+start+GAP_SIZE, BORDER_SIZE, DEFAULT_DISPLAY_SIZE/4,
             DEFAULT_DISPLAY_SIZE/2);
 
 
 
     JMenuItem newGameOne = new JMenuItem("New Game");
-    KeyStroke NGO = KeyStroke.getKeyStroke(KeyEvent.VK_1,2);
+    KeyStroke NGO = KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK);
     newGameOne.setAccelerator(NGO);
-    newGameOne.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        restartGame();
-        redraw();
-      }
+    newGameOne.addActionListener(ev -> {
+      restartGame();
+      redraw();
     });
 
     JMenuItem restart = new JMenuItem("Restart");
-    KeyStroke res = KeyStroke.getKeyStroke(KeyEvent.VK_P,2);
+    KeyStroke res = KeyStroke.getKeyStroke(KeyEvent.VK_P,InputEvent.CTRL_DOWN_MASK);
     restart.setAccelerator(res);
-    restart.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        restartRound();
-        redraw();
-      }
+    restart.addActionListener(ev -> {
+      restartRound();
+      redraw();
     });
 
     JMenuItem exit = new JMenuItem("Exit");
-    KeyStroke ex = KeyStroke.getKeyStroke(KeyEvent.VK_X,2);
+    KeyStroke ex = KeyStroke.getKeyStroke(KeyEvent.VK_X,InputEvent.CTRL_DOWN_MASK);
     exit.setAccelerator(ex);
-    exit.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        exitGame();
-        redraw();
-      }
+    exit.addActionListener(ev -> {
+      exitGame();
+      redraw();
     });
 
     JMenuItem saveExit = new JMenuItem("Save & Exit");
-    KeyStroke saveEx = KeyStroke.getKeyStroke(KeyEvent.VK_S,2);
+    KeyStroke saveEx = KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_DOWN_MASK);
     saveExit.setAccelerator(saveEx);
-    saveExit.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        exitSaveGame();
-        redraw();
-      }
+    saveExit.addActionListener(ev -> {
+      exitSaveGame();
+      redraw();
     });
 
     JMenuItem load = new JMenuItem("Load");
-    KeyStroke lo = KeyStroke.getKeyStroke(KeyEvent.VK_R,2);
+    KeyStroke lo = KeyStroke.getKeyStroke(KeyEvent.VK_R,InputEvent.CTRL_DOWN_MASK);
     load.setAccelerator(lo);
-    load.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        loadGame();
-        redraw();
-      }
+    load.addActionListener(ev -> {
+      loadGame();
+      redraw();
     });
 
 
@@ -157,21 +157,17 @@ public abstract class GUI {
     JMenuItem pause = new JMenuItem("Pause");
     KeyStroke pa = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,0);
     pause.setAccelerator(pa);
-    pause.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        pauseGame();
-        redraw();
-      }
+    pause.addActionListener(ev -> {
+      pauseGame();
+      redraw();
     });
 
     JMenuItem resume = new JMenuItem("Resume");
     KeyStroke resu = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0);
     resume.setAccelerator(resu);
-    resume.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        resumeGame();
-        redraw();
-      }
+    resume.addActionListener(ev -> {
+      resumeGame();
+      redraw();
     });
 
     JMenu options = new JMenu("Options");
@@ -180,18 +176,10 @@ public abstract class GUI {
     options.add(pause);
 
     JMenuItem levelOne = new JMenuItem("Level One");
-    levelOne.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        System.out.println("Play Level One");
-      }
-    });
+    levelOne.addActionListener(ev -> System.out.println("Play Level One"));
 
     JMenuItem levelTwo = new JMenuItem("Level Two");
-    load.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent ev) {
-        System.out.println("Play Level Two");
-      }
-    });
+    load.addActionListener(ev -> System.out.println("Play Level Two"));
 
     JMenu level = new JMenu("Level");
     level.setPreferredSize(new Dimension(45, 15));
@@ -226,16 +214,16 @@ public abstract class GUI {
       public void componentResized(ComponentEvent e) {
         int displayWidth = display.getWidth();
         int displayHeight = display.getHeight();
-        int value = Math.min(displayWidth, displayHeight)-50;
-        if (value+value/2+70 > displayWidth) value = (displayWidth-70)*2/3;
-        int xPos = (displayWidth-(value+value/2+20))/2;
+        int value = Math.min(displayWidth, displayHeight)-BORDER_SIZE*2;
+        if (value+value/2+BORDER_SIZE*2+GAP_SIZE > displayWidth) value = (displayWidth-BORDER_SIZE*2-GAP_SIZE)*2/3;
+        int xPos = (displayWidth-(value+value/2+GAP_SIZE))/2;
         int yPos = (displayHeight-value)/2;
         drawing.setBounds(xPos, yPos, value, value);
-        info.setBounds(value+xPos+20, yPos, value/2, value);
-        int fontSize = info.getWidth()/12;
-        setJLabel(lvlText, fontSize);
+        info.setBounds(value+xPos+GAP_SIZE, yPos, value/2, value);
+        int fontSize = info.getWidth()/12;setJLabel(lvlText, fontSize);
         setJLabel(chipsText, fontSize);
         setJLabel(timeText, fontSize);
+        setJLabel(timeLeft, fontSize);
         setJLabel(itemsText, fontSize);
         info.updateUI();
       }
@@ -256,8 +244,23 @@ public abstract class GUI {
     label.setFont(new Font(label.getName(), Font.BOLD, size));
   }
 
+  int timeElapsed = 0;
   private void restartGame() {
     System.out.println("Starts new game at level 1");
+    if (timeElapsed > 0) {
+      timer.stop();
+      timeElapsed = 0;
+    }
+    timer = new Timer(1000, e -> {
+      if (!gamePaused) {
+        timeLeft.setText(String.valueOf(timePerLevel - timeElapsed));
+        timeElapsed++;
+        if (timePerLevel - timeElapsed < 30) timeLeft.setForeground(new Color(255, 120, 0));
+        if (timePerLevel - timeElapsed < 15) timeLeft.setForeground(Color.RED);
+        if (timePerLevel - timeElapsed < 0) timer.stop();
+      }
+    });
+    timer.start();
   }
 
   private void restartRound() {
@@ -283,9 +286,11 @@ public abstract class GUI {
 
   private void resumeGame() {
     System.out.println("Resume the game");
+    gamePaused = false;
   }
 
   private void pauseGame() {
     System.out.println("Pauses the game");
+    gamePaused = true;
   }
 }
