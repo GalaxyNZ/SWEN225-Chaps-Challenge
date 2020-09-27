@@ -50,7 +50,7 @@ public abstract class GUI {
     GridLayout gl = new GridLayout(2, 0, 0, 0);
 
     JLabel timeText = new JLabel("Time");
-    timeLeft = new JLabel("60");
+    timeLeft = new JLabel("60.0");
 
 
     JPanel time = new JPanel(gl);
@@ -221,11 +221,12 @@ public abstract class GUI {
         int yPos = (displayHeight-value)/2;
         drawing.setBounds(xPos, yPos, value, value);
         info.setBounds(value+xPos+GAP_SIZE, yPos, value/2, value);
-        int fontSize = info.getWidth()/12;setJLabel(lvlText, fontSize);
-        setJLabel(chipsText, fontSize);
-        setJLabel(timeText, fontSize);
-        setJLabel(timeLeft, fontSize);
-        setJLabel(itemsText, fontSize);
+        int textFontSize = info.getWidth()/12;setJLabel(lvlText, textFontSize);
+        int infoFontSize = info.getWidth()/8;setJLabel(lvlText, textFontSize);
+        setJLabel(chipsText, textFontSize);
+        setJLabel(timeText, textFontSize);
+        setJLabel(timeLeft, infoFontSize);
+        setJLabel(itemsText, textFontSize);
         info.updateUI();
       }
     });
