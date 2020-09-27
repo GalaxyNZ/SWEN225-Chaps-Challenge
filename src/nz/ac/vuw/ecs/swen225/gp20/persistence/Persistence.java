@@ -1,6 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.Gson;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,10 +21,27 @@ public class Persistence {
 
       String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/levels/";
 
+      JFileChooser chooser = new JFileChooser(path);
+      FileNameExtensionFilter filter = new FileNameExtensionFilter(
+              "JSON files", "json");
+      chooser.setFileFilter(filter);
+      int returnVal = chooser.showOpenDialog(null);
+      if(returnVal == JFileChooser.APPROVE_OPTION) {
+        System.out.println("You chose to open this file: " +
+                chooser.getSelectedFile().getName());
+      }
+      else return;
+
+
+
       // create a reader
-      Path pathToFile = Paths.get(path +"level1.json");
-      System.out.println(pathToFile.toAbsolutePath());
-      Reader reader = Files.newBufferedReader(Paths.get(path +"level1.json"));
+     // Path pathToFile = Paths.get(path +"level1.json");
+      //System.out.println(pathToFile.toAbsolutePath());
+      //Reader reader = Files.newBufferedReader(Paths.get(path +"level1.json"));
+      //System.out.println(chooser.getSelectedFile().getPath());
+      Reader reader = Files.newBufferedReader(Paths.get(chooser.getSelectedFile().getPath()));
+
+
 
       //convert to Gson
       // convert JSON file to map
