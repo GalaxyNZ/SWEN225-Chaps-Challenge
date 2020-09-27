@@ -1,15 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import nz.ac.vuw.ecs.swen225.gp20.rendering.Rendering;
-
-import javax.json.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -51,7 +46,7 @@ public class Persistence {
   }
 
   public static void readBoard(String maze){
-    Scanner sc = new Scanner(maze).useDelimiter("\\,");
+    Scanner sc = new Scanner(maze).useDelimiter(",");
     int count = 0;
 
     while(sc.hasNext()){
