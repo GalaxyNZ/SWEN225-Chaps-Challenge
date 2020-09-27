@@ -17,8 +17,7 @@ public class Main extends GUI {
   protected void redraw(Graphics g, Dimension d) {
     g.setColor(Color.LIGHT_GRAY);
     g.fillRect(0,0,d.width,d.height);
-    r.testDrawingAnimation(g,null,"Down");
+    //r.testDrawingAnimation(g,null,"Down");
     redraw();
-
   }
 }

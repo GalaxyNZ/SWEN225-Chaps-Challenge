@@ -5,6 +5,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
 
 public abstract class GUI {
 
@@ -244,17 +245,18 @@ public abstract class GUI {
     label.setFont(new Font(label.getName(), Font.BOLD, size));
   }
 
-  int timeElapsed = 0;
+  public float timeElapsed = 0f; // Current time elapsed since start
+  DecimalFormat df =new DecimalFormat("#.#");
   private void restartGame() {
     System.out.println("Starts new game at level 1");
-    if (timeElapsed > 0) {
+    if (timeElapsed > 0f) {
       timer.stop();
-      timeElapsed = 0;
+      timeElapsed = 0f;
     }
-    timer = new Timer(1000, e -> {
+    timer = new Timer(100, e -> {
       if (!gamePaused) {
-        timeLeft.setText(String.valueOf(timePerLevel - timeElapsed));
-        timeElapsed++;
+        timeLeft.setText(String.valueOf(df.format(timePerLevel - timeElapsed)));
+        timeElapsed += 0.1f;
         if (timePerLevel - timeElapsed < 30) timeLeft.setForeground(new Color(255, 120, 0));
         if (timePerLevel - timeElapsed < 15) timeLeft.setForeground(Color.RED);
         if (timePerLevel - timeElapsed < 0) timer.stop();
