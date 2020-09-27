@@ -30,7 +30,7 @@ public abstract class GUI {
 
   private static final int GAP_SIZE = 25;
   private static final int BORDER_SIZE = 25;
-  private static final int timePerLevel = 60;
+  private static final float timePerLevel = 60f;
   public JLabel timeLeft;
   public Timer timer;
   public boolean gamePaused = false;
@@ -246,7 +246,6 @@ public abstract class GUI {
   }
 
   public float timeElapsed = 0f; // Current time elapsed since start
-  DecimalFormat df =new DecimalFormat("#.#");
   private void restartGame() {
     System.out.println("Starts new game at level 1");
     if (timeElapsed > 0f) {
@@ -255,9 +254,9 @@ public abstract class GUI {
     }
     timer = new Timer(100, e -> {
       if (!gamePaused) {
-        timeLeft.setText(String.valueOf(df.format(timePerLevel - timeElapsed)));
+        timeLeft.setText(String.valueOf(String.format("%.1f", timePerLevel - timeElapsed)));
         timeElapsed += 0.1f;
-        if (timePerLevel - timeElapsed < 30) timeLeft.setForeground(new Color(255, 120, 0));
+        if (timePerLevel - timeElapsed < 30) timeLeft.setForeground(new Color(227, 115, 14));
         if (timePerLevel - timeElapsed < 15) timeLeft.setForeground(Color.RED);
         if (timePerLevel - timeElapsed < 0) timer.stop();
       }
