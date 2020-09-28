@@ -4,9 +4,20 @@ import java.awt.Point;
 
 public class InfoTile extends Tile{
 	private String tileChar;
+	private String info;
 	private Point boardLocation;
-	private boolean isObstacle;
+	private boolean isObstacle = true;
 	private Item containedItem;
+	
+	/*
+	 * Constructor method, requires the standard Point on the map as well as the string of information that this Tile shows when it contains the Player.
+	 */
+	
+	public InfoTile(Point location, String information) {
+		boardLocation = location;
+		info = information;
+		tileChar = "I";
+	}
 		
 	/*
 	 * Tells this Tile where on the Board array it is.
@@ -27,6 +38,7 @@ public class InfoTile extends Tile{
 	/*
 	 * Updates Tile to either contain an Item or null. Returns the old item in-case it needs to be added to Chap's inventory.
 	 * TODO: Possible change to Item system? Avoid returning null values and work off of an Item Boolean call?
+	 * TODO: Work with GUI so that this method can make a GUI call to print out the info when given a string(this classes 'info').
 	 */
 	
 	public Item addItem(Item newItem) {
@@ -55,11 +67,10 @@ public class InfoTile extends Tile{
 	
 	/*
 	 * Allows the move through boolean of this tile to be changed (If Player has all the keys or treasure).
-	 * TODO: This method only applies to FreeTile, maybe make it limited to that Tile type? Possible exploit in changing obstacle value of walls?
+	 * TODO: This method only applies to FreeTile, maybe make it limited to that Tile type?
 	 */
 	
 	public void changeObstacle(Boolean newState) {
-		isObstacle = newState;
 	}
 	
 	/*

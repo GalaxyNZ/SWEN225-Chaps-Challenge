@@ -5,8 +5,17 @@ import java.awt.Point;
 public class WallTile extends Tile{
 	private String tileChar;
 	private Point boardLocation;
-	private boolean isObstacle;
+	private boolean isObstacle = true;
 	private Item containedItem;	
+	
+	/*
+	 * Constructor method, requires the standard Point on the map. All parameters are set on creation, this Tile can never be entered or contain an Item.
+	 */
+	
+	public WallTile(Point location) {
+		boardLocation = location;
+		tileChar = "#";
+	}
 	
 	/*
 	 * Tells this Tile where on the Board array it is.
@@ -30,9 +39,7 @@ public class WallTile extends Tile{
 	 */
 	
 	public Item addItem(Item newItem) {
-		Item oldItem = containedItem;
-		containedItem = newItem;
-		return oldItem;
+		return null;
 	}
 	
 	/*
@@ -42,7 +49,7 @@ public class WallTile extends Tile{
 	 */
 	
 	public Item getItem() { 
-		return containedItem;
+		return null;
 	}
 	
 	/*
@@ -50,7 +57,7 @@ public class WallTile extends Tile{
 	 */
 	
 	public Boolean getObstacle() {
-		return isObstacle;
+		return true;
 	}
 	
 	/*
@@ -59,7 +66,6 @@ public class WallTile extends Tile{
 	 */
 	
 	public void changeObstacle(Boolean newState) {
-		isObstacle = newState;
 	}
 	
 	/*
