@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class Persistence {
 
-  public void loadFile(String[] args) { //read
+  public void loadFile() { //read
 
     try {
       // create Gson instance

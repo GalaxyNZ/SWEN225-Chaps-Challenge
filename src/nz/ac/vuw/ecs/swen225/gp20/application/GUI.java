@@ -29,7 +29,6 @@ public abstract class GUI {
 
   private static final int GAP_SIZE = 25;
   private static final int BORDER_SIZE = 25;
-  public Timer timer;
 
   public void initialise() {
 
@@ -137,7 +136,7 @@ public abstract class GUI {
     KeyStroke lo = KeyStroke.getKeyStroke(KeyEvent.VK_R,InputEvent.CTRL_DOWN_MASK);
     load.setAccelerator(lo);
     load.addActionListener(ev -> {
-      loadGame();
+      loadGame(timeLeft);
       redraw();
     });
 
@@ -167,10 +166,26 @@ public abstract class GUI {
       redraw();
     });
 
+    JMenuItem recStart = new JMenuItem("Start Recording");
+    recStart.addActionListener(ev -> {
+      startRec();
+      redraw();
+    });
+
+    JMenuItem recEnd = new JMenuItem("End Recording");
+    recEnd.addActionListener(ev -> {
+      endRec();
+      redraw();
+    });
+
+
+
     JMenu options = new JMenu("Options");
     options.setPreferredSize(new Dimension(60, 15));
     options.add(resume);
     options.add(pause);
+    options.add(recStart);
+    options.add(recEnd);
 
     JMenuItem levelOne = new JMenuItem("Level One");
     levelOne.addActionListener(ev -> System.out.println("Play Level One"));
@@ -237,6 +252,12 @@ public abstract class GUI {
     frame.setVisible(true);
   }
 
+  protected abstract void endRec();
+
+  protected abstract void startRec();
+
+  protected abstract void loadGame(JLabel timeLeft);
+
   protected abstract void resumeGame();
 
   protected abstract void pauseGame();
@@ -251,11 +272,7 @@ public abstract class GUI {
   private void restartRound() {
     System.out.println("Restarts current level");
   }
-
-  private void loadGame() {
-    System.out.println("Loads a saved game");
-  }
-
+  
   private void exitSaveGame() {
     System.out.println("Save and exit");
   }
