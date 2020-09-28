@@ -2,11 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.awt.Point;
 
-/*
- * Skeleton Class for Tile system, establishes all Tile methods to keep coherence. 
- */
-
-class Tile {
+public class FreeTile extends Tile{
 	private String tileChar;
 	private Point boardLocation;
 	private boolean isObstacle;
@@ -74,9 +70,4 @@ class Tile {
 	public String getPrintChar() {
 		return tileChar;
 	}
-	
-	
-	
-	
-	
 }
