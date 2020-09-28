@@ -36,6 +36,14 @@ public class InfoTile extends Tile{
 	}
 	
 	/*
+	 * Returns the information on this Tile.
+	 */
+	
+	public String getInfo() {
+		return info;
+	}
+	
+	/*
 	 * Updates Tile to either contain an Item or null. Returns the old item in-case it needs to be added to Chap's inventory.
 	 * TODO: Possible change to Item system? Avoid returning null values and work off of an Item Boolean call?
 	 * TODO: Work with GUI so that this method can make a GUI call to print out the info when given a string(this classes 'info').

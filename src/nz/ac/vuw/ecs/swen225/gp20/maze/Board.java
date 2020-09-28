@@ -13,11 +13,14 @@ public class Board {
 	public Tile[][] boardMap;
 	private String tileInformation;
 	private int numChips;
+	private Point playerLocation;
+	protected int xSize;
+	protected int ySize;
 	
 	public Board(String input) {
 		ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(input.split("[|]")));
-		int xSize = Integer.parseInt(delimitedInput.remove(0));
-		int ySize = Integer.parseInt(delimitedInput.remove(0));
+		xSize = Integer.parseInt(delimitedInput.remove(0));
+		ySize = Integer.parseInt(delimitedInput.remove(0));
 		tileInformation = delimitedInput.remove(0);
 		numChips = Integer.parseInt(delimitedInput.remove(0));
 		boardMap = new Tile[ySize][xSize];
@@ -35,6 +38,16 @@ public class Board {
 			}			
 		}
 	}
+	
+	public Point findPlayer() {		
+		return playerLocation;
+	}
+	
+	public int getChips() {
+		return numChips;
+	}
+	
+	
 	
 	private Tile textAssignmentTable(String input, Point location) {
 		
@@ -68,6 +81,7 @@ public class Board {
 		case "T":
 			return new FreeTile(location, new TreasureItem());
 		case "CHAP":
+			playerLocation = location;
 			return new FreeTile(location, new Chap());
 		default:
 			System.out.println("DEFAULT CASE REACHED");

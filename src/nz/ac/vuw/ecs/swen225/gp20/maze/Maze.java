@@ -1,7 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import java.awt.Point;
+import java.util.Scanner;
+
 /*
  * The main class behind the gameplay, this constructs a board and is responsible for validating and executing a Players inputs from the GUI or keyboard.
+ * TODO: Remove all instances of static variables to allow multiple Mazes to be created.
  */
 
 public class Maze {
@@ -30,26 +34,107 @@ public class Maze {
 			+ "BK1|YK1|RK1|GK2";
 	
 	private static Board board;
+	public String password;
+	private static Player player;
+	private static boolean endGameCondition = false;
 	
 	/*
 	 * Temporary Main for testing purposes.
+	 * TODO: Change to constructor method once testing is complete, introduce input of string for this maps password. Introduce input of string for map details. 
 	 */
 	
 	public static void main(String[] args) {
 		board = new Board(mapTester);
+		player = new Player(board.findPlayer(), board.getChips());
 		gameplayLoop();
 	}
 	
 	/*
-	 * Executes move if valid then returns true. If move invalid returns false.
+	 * The main gameplay loop, this repeats until end game condition is met.
+	 * TODO: Finish implementation of movement and checks.
 	 */
 	
-	public boolean makeAMove(String direction) {
+	public static void gameplayLoop() {
+		printGame();
+		while(!endGameCondition) {
+			boolean validMove = false;
+			while(!validMove) {
+				Scanner s = new Scanner(System.in);
+				System.out.println("ENTER MOVE (W,A,S,D)");
+				String input = s.next();
+				switch(input.toLowerCase()){
+				case "w":
+					validMove = checkValidMove(new Point(player.getLocation().x, player.getLocation().y+1));
+					if(!validMove) {
+						System.out.println("Movement in this direction is obstructed");
+					}
+				case "a":
+					validMove = checkValidMove(new Point(player.getLocation().x-1, player.getLocation().y));
+					if(!validMove) {
+						System.out.println("Movement in this direction is obstructed");
+					}
+				case "s":
+					validMove = checkValidMove(new Point(player.getLocation().x, player.getLocation().y-1));
+					if(!validMove) {
+						System.out.println("Movement in this direction is obstructed");
+					}
+				case "d":
+					validMove = checkValidMove(new Point(player.getLocation().x+1, player.getLocation().y));
+					if(!validMove) {
+						System.out.println("Movement in this direction is obstructed");
+					}
+				default:
+					if(!validMove) {
+						System.out.println("You typed the following invalid input: \"" + input + "\"");
+					}
+				}
+			}
+			
+		}
+		
+		System.out.println("DONE");
+	}
+	
+	/*
+	 * Checks if the Player inputed move is valid and executes it.
+	 * TODO: Finish method, implement FreeTile checks.
+	 */
+	
+	public static boolean checkValidMove(Point newLocation) {
+		int oldX = player.getLocation().x;
+		int oldY = player.getLocation().y;
+		Tile oldLocation = board.boardMap[oldY][oldX];
+		int x = newLocation.x;
+		int y = newLocation.y;
+		if(x >= board.xSize || y >= board.ySize) {
+			return false;
+		}
+		Tile toBeMovedTo = board.boardMap[y][x];
+		if(toBeMovedTo instanceof WallTile) {
+			return false;
+		}
+		else if(toBeMovedTo instanceof InfoTile) {
+			System.out.println(((InfoTile) toBeMovedTo).getInfo());
+			toBeMovedTo.addItem(oldLocation.addItem(null));
+			return true;
+		}
+		else if(toBeMovedTo instanceof ExitTile) {
+			endGameCondition = true;
+			return true;
+		}
+		else {
+			if(toBeMovedTo.getItem() instanceof ExitLockItem) {
+				
+			}
+			else if(toBeMovedTo.getItem() instanceof LockedDoorItem) {
+				
+			}
+		}
+		
 		return false;
 	}
 	
-	public static void gameplayLoop() {
-		
-		System.out.println("DONE");
+	private static void printGame() {
+		System.out.println("GAME MAP PRINT GOES HERE");
 	}
 }
