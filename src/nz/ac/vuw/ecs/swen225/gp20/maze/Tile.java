@@ -10,8 +10,7 @@ class Tile {
 	private String tileChar;
 	private Point boardLocation;
 	private boolean isObstacle;
-	private Item containedItem;
-	
+	private Item containedItem;	
 	
 	/*
 	 * Tells this Tile where on the Board array it is.
