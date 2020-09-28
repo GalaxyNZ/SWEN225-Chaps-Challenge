@@ -12,6 +12,7 @@ class Tile {
 	private boolean isObstacle;
 	private Item containedItem;
 	
+	
 	/*
 	 * Tells this Tile where on the Board array it is.
 	 */
