@@ -5,7 +5,6 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.text.DecimalFormat;
 
 public abstract class GUI {
 
@@ -30,10 +29,7 @@ public abstract class GUI {
 
   private static final int GAP_SIZE = 25;
   private static final int BORDER_SIZE = 25;
-  private static final float timePerLevel = 60f;
-  public JLabel timeLeft;
   public Timer timer;
-  public boolean gamePaused = false;
 
   public void initialise() {
 
@@ -50,7 +46,7 @@ public abstract class GUI {
     GridLayout gl = new GridLayout(2, 0, 0, 0);
 
     JLabel timeText = new JLabel("Time");
-    timeLeft = new JLabel("60.0");
+    JLabel timeLeft = new JLabel("60.0");
 
 
     JPanel time = new JPanel(gl);
@@ -109,7 +105,7 @@ public abstract class GUI {
     KeyStroke NGO = KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK);
     newGameOne.setAccelerator(NGO);
     newGameOne.addActionListener(ev -> {
-      restartGame();
+      newGame(timeLeft);
       redraw();
     });
 
@@ -241,28 +237,15 @@ public abstract class GUI {
     frame.setVisible(true);
   }
 
+  protected abstract void resumeGame();
+
+  protected abstract void pauseGame();
+
+  protected abstract void newGame(JLabel timeLeft);
+
   private void setJLabel(JLabel label, int size) {
     label.setHorizontalAlignment(JLabel.CENTER);
     label.setFont(new Font(label.getName(), Font.BOLD, size));
-  }
-
-  public float timeElapsed = 0f; // Current time elapsed since start
-  private void restartGame() {
-    System.out.println("Starts new game at level 1");
-    if (timeElapsed > 0f) {
-      timer.stop();
-      timeElapsed = 0f;
-    }
-    timer = new Timer(100, e -> {
-      if (!gamePaused) {
-        timeLeft.setText(String.valueOf(String.format("%.1f", timePerLevel - timeElapsed)));
-        timeElapsed += 0.1f;
-        if (timePerLevel - timeElapsed < 30) timeLeft.setForeground(new Color(227, 115, 14));
-        if (timePerLevel - timeElapsed < 15) timeLeft.setForeground(Color.RED);
-        if (timePerLevel - timeElapsed < 0) timer.stop();
-      }
-    });
-    timer.start();
   }
 
   private void restartRound() {
@@ -284,15 +267,5 @@ public abstract class GUI {
     if (result == JOptionPane.OK_OPTION) {
       System.exit(0); // cleanly end the program.
     }
-  }
-
-  private void resumeGame() {
-    System.out.println("Resume the game");
-    gamePaused = false;
-  }
-
-  private void pauseGame() {
-    System.out.println("Pauses the game");
-    gamePaused = true;
   }
 }
