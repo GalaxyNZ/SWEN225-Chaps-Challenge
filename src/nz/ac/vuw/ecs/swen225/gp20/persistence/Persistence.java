@@ -13,7 +13,8 @@ import java.util.Scanner;
 
 
 public class Persistence {
-  public static void main(String[] args) { //read
+
+  public void loadFile(String[] args) { //read
 
     try {
       // create Gson instance
@@ -32,16 +33,12 @@ public class Persistence {
       }
       else return;
 
-
-
       // create a reader
      // Path pathToFile = Paths.get(path +"level1.json");
       //System.out.println(pathToFile.toAbsolutePath());
       //Reader reader = Files.newBufferedReader(Paths.get(path +"level1.json"));
       //System.out.println(chooser.getSelectedFile().getPath());
       Reader reader = Files.newBufferedReader(Paths.get(chooser.getSelectedFile().getPath()));
-
-
 
       //convert to Gson
       // convert JSON file to map
