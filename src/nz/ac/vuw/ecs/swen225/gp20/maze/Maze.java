@@ -15,7 +15,8 @@ public class Maze {
 	 * TODO: Application implemented with other classes, main changed to Maze constructor so multiple levels can be implemented.
 	 * Coords are stored as X,Y
 	 */
-	private static String mapTester = "17|16|SAMPLE TILE INFO|11|F|F|F|F|F|F|F|F|F|F|F|F|F|F|F|F|F|"
+	private static String mapTester =
+			"17|16|SAMPLE TILE INFO|11|F|F|F|F|F|F|F|F|F|F|F|F|F|F|F|F|F|"
 			+ "F|F|F|W|W|W|W|W|F|W|W|W|W|W|F|F|F|"
 			+ "F|F|F|W|F|F|F|W|W|W|F|F|F|W|F|F|F|"
 			+ "F|F|F|W|F|T|F|W|EXT|W|F|T|F|W|F|F|F|"

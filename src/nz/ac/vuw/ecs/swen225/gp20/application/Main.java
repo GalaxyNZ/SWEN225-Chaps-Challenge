@@ -17,15 +17,19 @@ public class Main extends GUI {
   public static void main(String... args) {
     Main game = new Main();
     renderer = new Rendering();
+
+
   }
 
   @Override
   protected void redraw(Graphics g, Dimension d) {
     g.setColor(Color.LIGHT_GRAY);
     g.fillRect(0, 0, d.width, d.height);
-    //renderer.testDrawingAnimation(g,null,"Down");
-    redraw();
+    renderer.testDrawingAnimation(g,"Down",String.format("%.1f", timeElapsed));
+
+
   }
+
 
   @Override
   protected void newGame(JLabel timeLeft) {
@@ -79,6 +83,8 @@ public class Main extends GUI {
         if (timePerLevel - timeElapsed < 30) timeLeft.setForeground(new Color(227, 115, 14));
         if (timePerLevel - timeElapsed < 15) timeLeft.setForeground(Color.RED);
         if (timePerLevel - timeElapsed < 0) timer.stop();
+
+        if(renderer.updateFrame(String.format("%.1f", timeElapsed))) redraw();
       }
     });
     timer.start();
