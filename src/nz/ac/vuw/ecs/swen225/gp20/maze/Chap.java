@@ -6,4 +6,8 @@ public class Chap extends Item{
 		
 	}
 	
+	public String getChar() {
+		return "CHP";
+	}
+	
 }

@@ -15,13 +15,8 @@ public class FreeTile extends Tile{
 	public FreeTile(Point location, Item item) {
 		boardLocation = location;
 		if(item == null) {
-			tileChar = "#";
+			tileChar = "| |";
 			isObstacle = false;
-		}
-		else {
-			tileChar = item.getChar();
-			//TODO: Implement instanceof checks for items that require conditions to be pass-able in order to set obstacle boolean.
-			
 		}
 		containedItem = item;
 	}
@@ -50,13 +45,6 @@ public class FreeTile extends Tile{
 	public Item addItem(Item newItem) {
 		Item oldItem = containedItem;
 		containedItem = newItem;
-		//TODO: Add checker for Chap inventory to change obstacle state.
-		if(newItem == null) {
-			tileChar = "#";
-		}
-		else {
-			tileChar = newItem.getChar();
-		}
 		return oldItem;
 	}
 	
@@ -93,6 +81,9 @@ public class FreeTile extends Tile{
 	 */
 	
 	public String getPrintChar() {
+		if(containedItem != null) {
+			return containedItem.getChar();
+		}
 		return tileChar;
 	}
 }

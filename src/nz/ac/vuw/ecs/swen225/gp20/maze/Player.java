@@ -26,6 +26,40 @@ public class Player {
 		return location;
 	}
 	
+	public boolean keyCheck(String colorOfDoor) {
+		for(Item i : inventory) {
+			if(i instanceof KeyItem) {
+				if(i.getColor() == colorOfDoor) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public void removeUsedKeys() {
+		for(int i = 0; i < inventory.size(); i++) {
+			if(inventory.get(i) instanceof KeyItem) {
+				KeyItem thisKey = (KeyItem)inventory.get(i);
+				if(thisKey.used >= thisKey.maxUses) {
+					inventory.remove(i);
+					break;
+				}
+			}
+		}
+	}
+	
+	public KeyItem getKey(String color) {
+		for(Item i : inventory) {
+			if(i instanceof KeyItem) {
+				if(i.getColor() == color) {
+					return (KeyItem) i;
+				}
+			}
+		}
+		return null;
+	}
+	
 	public boolean addToInv(Item item) {
 		if(inventory.size() < 8) {
 			inventory.add(item);

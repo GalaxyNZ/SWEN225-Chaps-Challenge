@@ -16,7 +16,7 @@ public class InfoTile extends Tile{
 	public InfoTile(Point location, String information) {
 		boardLocation = location;
 		info = information;
-		tileChar = "I";
+		tileChar = "|I|";
 	}
 		
 	/*
