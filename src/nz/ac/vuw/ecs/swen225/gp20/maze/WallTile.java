@@ -45,7 +45,6 @@ public class WallTile extends Tile{
 	/*
 	 * Returns the Item that this tile is holding.
 	 * TODO: Currently only use is for GUI printing, may change to return Item.toString OR item Image reference for GUI printing.
-	 * TODO: Update this to work with any proposed new item return system as mentioned in addItem comments.
 	 */
 	
 	public Item getItem() { 
@@ -58,14 +57,6 @@ public class WallTile extends Tile{
 	
 	public Boolean getObstacle() {
 		return true;
-	}
-	
-	/*
-	 * Allows the move through boolean of this tile to be changed (If Player has all the keys or treasure).
-	 * TODO: This method only applies to FreeTile, maybe make it limited to that Tile type? Possible exploit in changing obstacle value of walls?
-	 */
-	
-	public void changeObstacle(Boolean newState) {
 	}
 	
 	/*

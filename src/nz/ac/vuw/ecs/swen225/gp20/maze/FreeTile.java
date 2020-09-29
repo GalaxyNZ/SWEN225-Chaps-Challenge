@@ -5,7 +5,7 @@ import java.awt.Point;
 public class FreeTile extends Tile{
 	private String tileChar;
 	private Point boardLocation;
-	private boolean isObstacle;
+	private boolean isObstacle = false;
 	private Item containedItem;	
 	
 	/*
@@ -14,10 +14,8 @@ public class FreeTile extends Tile{
 	
 	public FreeTile(Point location, Item item) {
 		boardLocation = location;
-		if(item == null) {
-			tileChar = "| |";
-			isObstacle = false;
-		}
+		tileChar = "| |";
+		isObstacle = false;
 		containedItem = item;
 	}
 	
@@ -51,7 +49,6 @@ public class FreeTile extends Tile{
 	/*
 	 * Returns the Item that this tile is holding.
 	 * TODO: Currently only use is for GUI printing, may change to return Item.toString OR item Image reference for GUI printing.
-	 * TODO: Update this to work with any proposed new item return system as mentioned in addItem comments.
 	 */
 	
 	public Item getItem() { 
@@ -68,7 +65,7 @@ public class FreeTile extends Tile{
 	
 	/*
 	 * Allows the move through boolean of this tile to be changed (If Player has all the keys or treasure).
-	 * TODO: This method only applies to FreeTile, maybe make it limited to that Tile type? Possible exploit in changing obstacle value of walls?
+	 * TODO: This method only applies to FreeTile, maybe make it limited to that Tile type? Re-implement with Door check system.
 	 */
 	
 	public void changeObstacle(Boolean newState) {
@@ -81,9 +78,9 @@ public class FreeTile extends Tile{
 	 */
 	
 	public String getPrintChar() {
-		if(containedItem != null) {
-			return containedItem.getChar();
+		if(containedItem == null) {
+			return tileChar;
 		}
-		return tileChar;
+		return containedItem.getChar();
 	}
 }

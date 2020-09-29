@@ -4,7 +4,6 @@ import java.awt.Point;
 
 public class InfoTile extends Tile{
 	private String tileChar;
-	private String info;
 	private Point boardLocation;
 	private boolean isObstacle = true;
 	private Item containedItem;
@@ -13,9 +12,8 @@ public class InfoTile extends Tile{
 	 * Constructor method, requires the standard Point on the map as well as the string of information that this Tile shows when it contains the Player.
 	 */
 	
-	public InfoTile(Point location, String information) {
+	public InfoTile(Point location) {
 		boardLocation = location;
-		info = information;
 		tileChar = "|I|";
 	}
 		
@@ -33,14 +31,6 @@ public class InfoTile extends Tile{
 	
 	public Point getBoardLocation() {
 		return boardLocation;
-	}
-	
-	/*
-	 * Returns the information on this Tile.
-	 */
-	
-	public String getInfo() {
-		return info;
 	}
 	
 	/*
@@ -87,6 +77,9 @@ public class InfoTile extends Tile{
 	 */
 	
 	public String getPrintChar() {
+		if(containedItem instanceof Chap) {
+			return "CHP";
+		}
 		return tileChar;
 	}
 }

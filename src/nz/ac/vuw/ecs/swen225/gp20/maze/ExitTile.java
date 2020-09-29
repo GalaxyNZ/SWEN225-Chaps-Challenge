@@ -36,7 +36,6 @@ public class ExitTile extends Tile{
 	/*
 	 * Updates Tile to either contain an Item or null. Returns the old item in-case it needs to be added to Chap's inventory.
 	 * TODO: Possible change to Item system? Avoid returning null values and work off of an Item Boolean call?
-	 * TODO: Calls method that ends round
 	 */
 	
 	public Item addItem(Item newItem) {
@@ -45,29 +44,11 @@ public class ExitTile extends Tile{
 	}
 	
 	/*
-	 * Returns the Item that this tile is holding.
-	 * TODO: Currently only use is for printing, may change to return Item.toString OR item Image reference for GUI printing.
-	 * TODO: Update this to work with any proposed new item return system as mentioned in addItem comments.
-	 */
-	
-	public Item getItem() { 
-		return containedItem;
-	}
-	
-	/*
 	 * Returns a boolean based on whether or not this tile can be passed through by the player.
 	 */
 	
 	public Boolean getObstacle() {
 		return isObstacle;
-	}
-	
-	/*
-	 * Allows the move through boolean of this tile to be changed (If Player has all the keys or treasure).
-	 * TODO: This method only applies to FreeTile, maybe make it limited to that Tile type?
-	 */
-	
-	public void changeObstacle(Boolean newState) {
 	}
 	
 	/*
