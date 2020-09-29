@@ -7,7 +7,7 @@ import java.awt.Point;
  */
 
 class Tile {
-	private String tileChar;
+	private String tileChar = "NUL";
 	private Point boardLocation;
 	private boolean isObstacle;
 	private Item containedItem;	

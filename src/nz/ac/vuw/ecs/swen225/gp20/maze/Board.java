@@ -16,6 +16,10 @@ public class Board {
 	private Point playerLocation;
 	protected int xSize;
 	protected int ySize;
+	private int YKMax;
+	private int BKMax;
+	private int GKMax;
+	private int RKMax;
 	
 	public Board(String input) {
 		ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(input.split("[|]")));
@@ -27,18 +31,27 @@ public class Board {
 		makeTiles(delimitedInput, xSize, ySize);
 	}
 	
-	private void makeTiles(ArrayList<String> input, int xSize, int ySize) {		
+	private void makeTiles(ArrayList<String> input, int xSize, int ySize) {
+		setUpExtraInfo(input, xSize*ySize);
 		int i;
 		int j;
 		int count = 0;
-		for(i = 0; i < xSize; i++) {
-			for(j = 0; j < ySize; j++) {
-				boardMap[j][i] = textAssignmentTable(input.get(count), new Point(i, j));
+		for(i = 0; i < ySize; i++) {
+			for(j = 0; j < xSize; j++) {
+				boardMap[i][j] = textAssignmentTable(input.get(count), new Point(i, j));
 				count++;
 			}			
 		}
 	}
 	
+	private void setUpExtraInfo(ArrayList<String> input, int fromThisLocation) {
+		for(int i = fromThisLocation; i < input.size(); i++) {
+			switch(input.get(i)) {
+			
+			}
+		}
+	}
+
 	public Point findPlayer() {		
 		return playerLocation;
 	}
@@ -61,13 +74,13 @@ public class Board {
 		case "EXTLCK":
 			return new FreeTile(location, new ExitLockItem(numChips));
 		case "YK":
-			return new FreeTile(location, new KeyItem("Y"));
+			return new FreeTile(location, new KeyItem("Y", YKMax));
 		case "BK":
-			return new FreeTile(location, new KeyItem("B"));
+			return new FreeTile(location, new KeyItem("B", BKMax));
 		case "RK":
-			return new FreeTile(location, new KeyItem("R"));
+			return new FreeTile(location, new KeyItem("R", RKMax));
 		case "GK":
-			return new FreeTile(location, new KeyItem("G"));
+			return new FreeTile(location, new KeyItem("G", GKMax));
 		case "YKD":
 			return new FreeTile(location, new LockedDoorItem("Y"));
 		case "BKD":

@@ -5,4 +5,8 @@ public class Item {
 	public String getChar() {
 		return "";
 	}
+	
+	public String getColor() {
+		return "VOID COLOR";
+	}
 }

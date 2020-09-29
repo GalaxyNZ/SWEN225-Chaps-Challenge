@@ -1,6 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 /*
@@ -46,6 +49,8 @@ public class Maze {
 	public static void main(String[] args) {
 		board = new Board(mapTester);
 		player = new Player(board.findPlayer(), board.getChips());
+		//printGame();
+		System.out.println(player.getLocation());
 		gameplayLoop();
 	}
 	
@@ -55,41 +60,68 @@ public class Maze {
 	 */
 	
 	public static void gameplayLoop() {
-		printGame();
+		int count = 0;
 		while(!endGameCondition) {
+			printGame();
 			boolean validMove = false;
 			while(!validMove) {
-				Scanner s = new Scanner(System.in);
-				System.out.println("ENTER MOVE (W,A,S,D)");
-				String input = s.next();
-				switch(input.toLowerCase()){
-				case "w":
-					validMove = checkValidMove(new Point(player.getLocation().x, player.getLocation().y+1));
-					if(!validMove) {
-						System.out.println("Movement in this direction is obstructed");
+				//System.out.println("ENTER MOVE (W,A,S,D)");
+				//BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+				//String input= "";
+				//try {
+				//	input = reader.readLine();
+				//} catch (IOException e) {
+				//	e.printStackTrace();
+				//}
+				//switch(input.toLowerCase()){
+				switch(3){
+				case 1:
+					count++;
+					if(count > 1) {
+						endGameCondition = true;
 					}
-				case "a":
-					validMove = checkValidMove(new Point(player.getLocation().x-1, player.getLocation().y));
-					if(!validMove) {
-						System.out.println("Movement in this direction is obstructed");
-					}
-				case "s":
 					validMove = checkValidMove(new Point(player.getLocation().x, player.getLocation().y-1));
 					if(!validMove) {
 						System.out.println("Movement in this direction is obstructed");
 					}
-				case "d":
+					break;
+				case 2:
+					count++;
+					if(count > 1) {
+						endGameCondition = true;
+					}
+					validMove = checkValidMove(new Point(player.getLocation().x-1, player.getLocation().y));
+					if(!validMove) {
+						System.out.println("Movement in this direction is obstructed");
+					}
+					break;
+				case 3:
+					count++;
+					if(count > 1) {
+						endGameCondition = true;
+					}
+					validMove = checkValidMove(new Point(player.getLocation().x, player.getLocation().y+1));
+					if(!validMove) {
+						System.out.println("Movement in this direction is obstructed");
+					}
+					break;
+				case 4:
+					count++;
+					if(count > 1) {
+						endGameCondition = true;
+					}
 					validMove = checkValidMove(new Point(player.getLocation().x+1, player.getLocation().y));
 					if(!validMove) {
 						System.out.println("Movement in this direction is obstructed");
 					}
+					break;
 				default:
 					if(!validMove) {
-						System.out.println("You typed the following invalid input: \"" + input + "\"");
+						//System.out.println("You typed the following invalid input: \"" + input + "\"");
 					}
+					break;
 				}
 			}
-			
 		}
 		
 		System.out.println("DONE");
@@ -97,7 +129,6 @@ public class Maze {
 	
 	/*
 	 * Checks if the Player inputed move is valid and executes it.
-	 * TODO: Finish method, implement FreeTile checks.
 	 */
 	
 	public static boolean checkValidMove(Point newLocation) {
@@ -107,34 +138,77 @@ public class Maze {
 		int x = newLocation.x;
 		int y = newLocation.y;
 		if(x >= board.xSize || y >= board.ySize) {
+			System.out.println("OUT OF BOARD PARAMETERS");
 			return false;
 		}
 		Tile toBeMovedTo = board.boardMap[y][x];
+		System.out.println(toBeMovedTo);
 		if(toBeMovedTo instanceof WallTile) {
+			System.out.println("WALLTILE");
 			return false;
 		}
 		else if(toBeMovedTo instanceof InfoTile) {
 			System.out.println(((InfoTile) toBeMovedTo).getInfo());
 			toBeMovedTo.addItem(oldLocation.addItem(null));
+			
 			return true;
 		}
 		else if(toBeMovedTo instanceof ExitTile) {
 			endGameCondition = true;
 			return true;
 		}
-		else {
+		else { //Only remaining option is FreeTile.			
 			if(toBeMovedTo.getItem() instanceof ExitLockItem) {
-				
+				if(player.treasureCheck()) {
+					toBeMovedTo.addItem(oldLocation.addItem(null));
+					return true;
+				}
+				else {
+					System.out.println("NOT ENOUGH TREASURE");
+					return false;
+				}
 			}
 			else if(toBeMovedTo.getItem() instanceof LockedDoorItem) {
-				
+				String doorColor = toBeMovedTo.getItem().getColor();
+				if(player.keyCheck(doorColor)) {
+					player.getKey(doorColor).increment();
+					player.removeUsedKeys();
+					toBeMovedTo.addItem(oldLocation.addItem(null));
+					return true;
+				}
+				else {
+					System.out.println("NEED KEY");
+					return false;
+				}
+			}
+			else if(toBeMovedTo.getItem() instanceof KeyItem) {
+				if(!player.addToInv(toBeMovedTo.getItem())) {
+					System.out.println("TOO MANY ITEMS");
+					return false;
+				}
+				else {
+					toBeMovedTo.addItem(oldLocation.addItem(null));
+					return true;
+				}
+			}
+			else { //Tile contains either null or treasure.
+				if(toBeMovedTo.getItem() instanceof TreasureItem) {
+					player.foundTreasure(new TreasureItem());
+				}
+				toBeMovedTo.addItem(oldLocation.addItem(null));
+				return true;
 			}
 		}
-		
-		return false;
 	}
 	
 	private static void printGame() {
-		System.out.println("GAME MAP PRINT GOES HERE");
+		StringBuilder output = new StringBuilder();
+		for(int i = 0; i < board.ySize; i++) {			
+			for(int j = 0; j < board.xSize; j++) {
+				output.append(board.boardMap[i][j].getPrintChar());
+			}
+			output.append("\n");
+		}
+		System.out.println(output.toString());
 	}
 }

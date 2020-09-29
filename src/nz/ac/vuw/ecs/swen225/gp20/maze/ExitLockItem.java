@@ -6,4 +6,8 @@ public class ExitLockItem extends Item{
 		
 	}
 	
+	public String getChar() {
+		return "ELK";
+	}
+	
 }

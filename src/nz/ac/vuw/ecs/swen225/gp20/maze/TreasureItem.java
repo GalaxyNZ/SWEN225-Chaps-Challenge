@@ -5,4 +5,8 @@ public class TreasureItem extends Item{
 	public TreasureItem() {
 		
 	}
+	
+	public String getChar() {
+		return "|T|";
+	}
 }

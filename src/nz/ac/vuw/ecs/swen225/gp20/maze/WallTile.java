@@ -14,7 +14,7 @@ public class WallTile extends Tile{
 	
 	public WallTile(Point location) {
 		boardLocation = location;
-		tileChar = "#";
+		tileChar = "|#|";
 	}
 	
 	/*
