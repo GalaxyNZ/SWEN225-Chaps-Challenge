@@ -1,6 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.Gson;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Board;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -45,16 +47,19 @@ public class Persistence {
       Map<String, String> map = gson.fromJson(reader, Map.class);
 
       // print map entries
-      for (Map.Entry<String, String> entry : map.entrySet()) {
+      for (Map.Entry<?, ?> entry : map.entrySet()) {
 
-        String varName = entry.getKey();
-        if(varName.equals("board")){
-          readBoard(entry.getValue());
-        }
-        else System.out.println(entry.getKey() + " = " + entry.getValue());
+        String varName = entry.getKey().toString();
+       // if(varName.equals("board")){
+         // readBoard(entry.getValue().toString());
+        //}
+         System.out.println(entry.getKey() + " = " + entry.getValue());
       }
 
       reader.close();
+
+      //Maze maze = new Maze(map);
+
 
     } catch (Exception ex) {
       ex.printStackTrace();
