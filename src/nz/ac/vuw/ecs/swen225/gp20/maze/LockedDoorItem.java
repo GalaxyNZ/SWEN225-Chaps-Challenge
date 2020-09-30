@@ -28,9 +28,12 @@ public class LockedDoorItem extends Item{
 	/*
 	 * Returns the print string for printBoard() calls.
 	 */
-	
+
 	public String getChar() {
 		return "LKD";
+	}
+	public String toString() {
+		return color.substring(0, 1).toUpperCase();
 	}
 	
 }

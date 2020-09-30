@@ -31,9 +31,12 @@ public class KeyItem extends Item{
 		/*
 		 * Returns the print string for printBoard() calls.
 		 */
-		
-		public String getChar() {
-			return "KCL";
-		}
+
+	public String getChar() {
+		return "KCL";
+	}
+	public String toString() {
+		return color.substring(0, 1).toLowerCase();
+	}
 		
 	}

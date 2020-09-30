@@ -14,7 +14,7 @@ public class WallTile extends Tile{
 	
 	public WallTile(Point location) {
 		boardLocation = location;
-		tileChar = "|#|";
+		tileChar = "#";
 	}
 	
 	/*
@@ -64,7 +64,7 @@ public class WallTile extends Tile{
 	 * Used for text based version of the game (Testing implementation only).
 	 */
 	
-	public String getPrintChar() {
+	public String toString() {
 		return tileChar;
 	}
 }

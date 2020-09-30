@@ -14,7 +14,7 @@ public class ExitTile extends Tile{
 	
 	public ExitTile(Point location) {
 		boardLocation = location;
-		tileChar = "|E|";
+		tileChar = "E";
 	}
 	
 	/*
@@ -56,7 +56,7 @@ public class ExitTile extends Tile{
 	 * Used for text based version of the game (Testing implementation only).
 	 */
 	
-	public String getPrintChar() {
+	public String toString() {
 		return tileChar;
 	}
 }

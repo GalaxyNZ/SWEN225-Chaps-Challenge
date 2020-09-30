@@ -14,7 +14,7 @@ public class FreeTile extends Tile{
 	
 	public FreeTile(Point location, Item item) {
 		boardLocation = location;
-		tileChar = "| |";
+		tileChar = " ";
 		isObstacle = false;
 		containedItem = item;
 	}
@@ -77,10 +77,10 @@ public class FreeTile extends Tile{
 	 * Used for text based version of the game (Testing implementation only).
 	 */
 	
-	public String getPrintChar() {
+	public String toString() {
 		if(containedItem == null) {
 			return tileChar;
 		}
-		return containedItem.getChar();
+		return containedItem.toString();
 	}
 }
