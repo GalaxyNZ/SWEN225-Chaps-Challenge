@@ -45,7 +45,7 @@ public class Board {
 	
 	private ArrayList<String> getKeyInfo(ArrayList<String> input) {
 		String token = "";
-		while(!token.equals("F")) {
+		floop: while(!token.equals("F")) {
 			token = input.get(0);
 			switch(token) {
 			case "SETGK":
@@ -65,7 +65,7 @@ public class Board {
 				YKMax = Integer.parseInt(input.remove(0));
 				break;
 			default:
-				
+				break floop; // NOTE: Added to stop a infinite loop if no keys were present
 			}
 		}
 		return input;
@@ -154,6 +154,18 @@ public class Board {
 			System.out.println("DEFAULT CASE REACHED"); //Indicates an error in the mapString in Maze.java.
 			return null;
 		}		
+	}
+
+	public String toString() {
+		String mapString= "";
+		for (int y = 0; y < ySize; y++) {
+			mapString += "|";
+			for (int x = 0; x < xSize; x++) {
+				mapString += boardMap[y][x].toString() + "|";
+			}
+			mapString += "\n";
+		}
+		return mapString;
 	}
 
 }

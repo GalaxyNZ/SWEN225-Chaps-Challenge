@@ -18,9 +18,12 @@ public class ExitLockItem extends Item{
 	/*
 	 * Returns the print string for printBoard() calls.
 	 */
-	
+
 	public String getChar() {
 		return "ELK";
+	}
+	public String toString() {
+		return "%";
 	}
 	
 }

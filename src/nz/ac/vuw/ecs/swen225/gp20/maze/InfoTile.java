@@ -14,7 +14,7 @@ public class InfoTile extends Tile{
 	
 	public InfoTile(Point location) {
 		boardLocation = location;
-		tileChar = "|I|";
+		tileChar = "I";
 	}
 		
 	/*
@@ -76,9 +76,9 @@ public class InfoTile extends Tile{
 	 * Used for text based version of the game (Testing implementation only).
 	 */
 	
-	public String getPrintChar() {
+	public String toString() {
 		if(containedItem instanceof Chap) {
-			return "CHP";
+			return "X"; // was CHP
 		}
 		return tileChar;
 	}

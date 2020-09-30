@@ -17,9 +17,12 @@ public class Chap extends Item{
 	/*
 	 * Returns the print string of this item to override the tile is is in's print string.
 	 */
-	
+
 	public String getChar() {
 		return "CHP";
+	}
+	public String toString() {
+		return "X";
 	}
 	
 }

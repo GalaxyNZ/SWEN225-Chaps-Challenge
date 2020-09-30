@@ -74,9 +74,4 @@ class Tile {
 	public String getPrintChar() {
 		return tileChar;
 	}
-	
-	
-	
-	
-	
 }

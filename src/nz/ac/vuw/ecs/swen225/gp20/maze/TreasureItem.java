@@ -18,7 +18,7 @@ public class TreasureItem extends Item{
 	 * Returns the print string for printBoard() calls.
 	 */
 	
-	public String getChar() {
-		return "|T|";
+	public String toString() {
+		return "T";
 	}
 }
