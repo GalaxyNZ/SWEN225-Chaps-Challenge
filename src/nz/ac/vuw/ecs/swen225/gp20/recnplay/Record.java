@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -26,7 +27,7 @@ public class Record {
    * Begins recording of gameplay by saving current state
    * of board and recording movements, then saving to Json file.
    */
-  public void record() {
+  public void record(Maze maze) {
 
     JSONArray moves = new JSONArray();
     JSONObject file = new JSONObject();
