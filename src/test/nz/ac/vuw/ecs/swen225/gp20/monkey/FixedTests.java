@@ -31,11 +31,11 @@ public class FixedTests {
     @Test
     public void test1_ConstructBoard() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
-                + "W|F|F|F|W|"
-                + "F|F|F|F|F|"
-                + "F|F|F|F|F|"
-                + "F|F|F|F|F|"
-                + "F|F|F|F|F|";
+                + "#| | | |#|"
+                + " | | | | |"
+                + " | | | | |"
+                + " | | | | |"
+                + " | | | | |";
 
         String moves = "";
 
@@ -104,7 +104,7 @@ public class FixedTests {
         String[] moves = new String[]{ "w", "w", "a", "a", "s", "s", "d"};
 
         String expected =
-                        "| | | | | |\n" +
+                "| | | | | |\n" +
                         "| | | | | |\n" +
                         "| |X| | | |\n" +
                         "| | | | | |\n" +
@@ -112,6 +112,29 @@ public class FixedTests {
 
         assertEquals(expected, runTest(map, moves));
     }
+
+    @Test
+    public void test4_lockedDoors() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
+                + "F|F|F|F|F|"
+                + "W|W|BKD|W|W|"
+                + "F|F|BK|F|F|"
+                + "F|F|X|F|F|"
+                + "F|F|F|F|F|";
+
+        String[] moves = new String[]{ "w", "w", "w"};
+
+        String expected =
+                "| | |X| | |\n" +
+                        "|#|#| |#|#|\n" +
+                        "| | | | | |\n" +
+                        "| | | | | |\n" +
+                        "| | | | | |\n";
+
+        assertEquals(expected, runTest(map, moves));
+    }
+
+
 
     private String runTest(String map) {
         // Create the game board and simulation

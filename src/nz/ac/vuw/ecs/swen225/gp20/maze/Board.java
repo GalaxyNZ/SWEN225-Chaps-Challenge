@@ -45,7 +45,7 @@ public class Board {
 	
 	private ArrayList<String> getKeyInfo(ArrayList<String> input) {
 		String token = "";
-		floop: while(!token.equals("F")) {
+		floop: while(!token.equals("F")) { // TODO: Explain this? Idk what purpose it serves so maybe check if you need it? idk
 			token = input.get(0);
 			switch(token) {
 			case "SETGK":
