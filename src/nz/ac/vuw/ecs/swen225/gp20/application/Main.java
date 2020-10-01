@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.Rendering;
 
@@ -12,6 +13,7 @@ public class Main extends GUI {
   public boolean gamePaused = false;
   private Timer timer;
   static Rendering renderer;
+  Maze maze;
 
 
   public static void main(String... args) {
@@ -23,9 +25,8 @@ public class Main extends GUI {
   protected void redraw(Graphics g, Dimension d) {
     g.setColor(Color.LIGHT_GRAY);
     g.fillRect(0, 0, d.width, d.height);
-    renderer.testDrawingAnimation(g,"Down",String.format("%.1f", timeElapsed));
-
-
+    if (maze != null) renderer.drawBoard(g, d, maze);
+    //renderer.testDrawingAnimation(g,"Down",String.format("%.1f", timeElapsed));
   }
 
 
@@ -52,7 +53,7 @@ public class Main extends GUI {
     System.out.println("Loads a saved game");
     if (timer != null) timer.stop();
     Persistence persistence = new Persistence();
-    persistence.loadFile();
+    maze = persistence.loadFile();
     startTimer(timeLeft);
   }
 
