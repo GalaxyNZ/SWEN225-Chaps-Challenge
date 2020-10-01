@@ -6,7 +6,7 @@ import java.awt.Point;
  * Skeleton Class for Tile system, establishes all Tile methods to keep coherence. 
  */
 
-class Tile {
+public class Tile {
 	private String tileChar = "NUL";
 	private Point boardLocation;
 	private boolean isObstacle;
