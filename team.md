@@ -5,6 +5,6 @@
 |Maze|Elliott Nichols|nicholelli1|
 |Application|Coby Stobbs|stobbscoby|
 |Renderer|||
-|Persistence|||
+|Persistence|Oliver Bathgate|bathgaoliv|
 |Record and Replay|Hoang Pham|phamhoan4|
 |Monkey Tests|||
