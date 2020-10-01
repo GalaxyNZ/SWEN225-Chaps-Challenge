@@ -9,12 +9,19 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-
+/**
+ *This class represents the recording aspect of the game.
+ */
 public class Record {
   //private ArrayList<String> moves = new ArrayList<>();
   public Queue<GUI.direction> q = new ArrayDeque<>();
   private Boolean isRecording = false;
 
+
+  /**
+   * Begins recording of gameplay by saving current state
+   * of board and recording movements, then saving to Json file.
+   */
   public void record() {
 
     JSONArray moves = new JSONArray();
@@ -47,10 +54,17 @@ public class Record {
     }
   }
 
+  /**
+   * Adds moves to the queue for recording.
+   * @param direction
+   */
   public void addMove(GUI.direction direction){
     q.add(direction);
   }
 
+  /**
+   * Stops recording the movement so we can save to Json file.
+   */
   public void stopRecording(){
     isRecording = false;
   }
