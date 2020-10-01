@@ -72,8 +72,12 @@ public class Record {
     isRecording = false;
   }
 
+  /**
+   * Sets the recording name to "yyyy/MM/dd-HH:mm:ss" so that most file names are unique.
+   * @return
+   */
   public String fileName(){
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm:ss");
     LocalDateTime now = LocalDateTime.now();
     return dateTimeFormatter.format(now);
   }
