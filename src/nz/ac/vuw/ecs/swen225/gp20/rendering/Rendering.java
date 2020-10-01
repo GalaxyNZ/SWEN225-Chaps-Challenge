@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.rendering;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.*;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -206,5 +208,66 @@ public class Rendering {
     }
 
     private void soundOnRun(){ }
+
+    public void drawBoard(Graphics g, Dimension d, Maze maze) {
+        Board b = maze.getBoard();
+        int size = b.getWidth();
+        int tileSize = (int) d.getWidth()/size;
+
+        for (int y = 0; y < b.getHeight(); y++) {
+            for (int x = 0; x < size; x++) {
+                String tileChar = b.getTile(x, y).toString();
+                g.setColor(Color.GRAY);
+                switch (tileChar) {
+                    case "_":
+                        g.setColor(Color.WHITE);
+                        break;
+                    case "#":
+                        g.setColor(Color.GRAY);
+                        break;
+                    case "%":
+                        g.setColor(Color.MAGENTA);
+                        break;
+                    case "E":
+                        g.setColor(new Color(40, 104, 90));
+                        break;
+                    case "i":
+                        g.setColor(new Color(92, 12, 144));
+                        break;
+                    case "T":
+                        g.setColor(Color.darkGray);
+                        break;
+                    case "G":
+                        g.setColor(Color.GREEN);
+                        break;
+                    case "g":
+                        g.setColor(new Color(13, 120, 6, 255));
+                        break;
+                    case "R":
+                        g.setColor(Color.RED);
+                        break;
+                    case "r":
+                        g.setColor(Color.pink);
+                        break;
+                    case "Y":
+                        g.setColor(Color.ORANGE);
+                        break;
+                    case "y":
+                        g.setColor(Color.YELLOW);
+                        break;
+                    case "B":
+                        g.setColor(Color.BLUE);
+                        break;
+                    case "b":
+                        g.setColor(Color.CYAN);
+                        break;
+                    case "X":
+                        g.setColor(Color.black);
+                        break;
+                }
+                g.fillRect(x*tileSize, y*tileSize, tileSize, tileSize);
+            }
+        }
+    }
 
 }

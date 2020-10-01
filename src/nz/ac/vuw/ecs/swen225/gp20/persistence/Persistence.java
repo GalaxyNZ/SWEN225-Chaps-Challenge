@@ -60,14 +60,14 @@ public class Persistence {
         //}
         System.out.println(entry.getKey() + " = " + entry.getValue());
       }
-      /*
+
       reader.close();
       boardWidth = (int) Double.parseDouble(map.get("xSize").toString());
       boardHeight = (int) Double.parseDouble(map.get("ySize").toString());
       Board board = new Board(boardWidth, boardHeight);
       readBoard(board);
       maze = new Maze(board, player);
-      */
+
 
 
       //Maze maze = new Maze(map);
@@ -79,7 +79,7 @@ public class Persistence {
     return maze;
 
   }
-  /*
+
   public void readBoard(Board board){
     Scanner sc = new Scanner(map.get("board").toString()).useDelimiter(",");
     int numChips = (int) Double.parseDouble(map.get("numChips").toString());
@@ -134,7 +134,9 @@ public class Persistence {
           break;
         case "C":
           board.setTileAt(x, y, new FreeTile(location, new Chap()));
-          player = new Player(new Point(x, y), numChips);
+          Point point = new Point(x, y);
+          player = new Player(point, numChips);
+          board.setPlayerLocation(point);
           break;
       }
       x++;
@@ -143,5 +145,5 @@ public class Persistence {
         y++;
       }
     }
-  }*/
+  }
 }

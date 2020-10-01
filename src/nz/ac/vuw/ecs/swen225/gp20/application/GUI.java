@@ -30,6 +30,13 @@ public abstract class GUI {
   private static final int GAP_SIZE = 25;
   private static final int BORDER_SIZE = 25;
 
+  public enum direction {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+  }
+
   public void initialise() {
 
     Border border = BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY);
@@ -199,9 +206,36 @@ public abstract class GUI {
     level.add(levelTwo);
 
     JMenuItem up = new JMenuItem("Press the UP key to move up");
+    KeyStroke upKey = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0);
+    up.setAccelerator(upKey);
+    up.addActionListener(e -> {
+      movePlayer(direction.UP);
+      redraw();
+    });
+
     JMenuItem down = new JMenuItem("Press the DOWN key to move down");
+    KeyStroke downKey = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0);
+    down.setAccelerator(downKey);
+    down.addActionListener(e -> {
+      movePlayer(direction.DOWN);
+      redraw();
+    });
+
     JMenuItem right = new JMenuItem("Press the RIGHT key to move right");
+    KeyStroke rightKey = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
+    right.setAccelerator(rightKey);
+    right.addActionListener(e -> {
+      movePlayer(direction.RIGHT);
+      redraw();
+    });
+
     JMenuItem left = new JMenuItem("Press the LEFT key to move left");
+    KeyStroke leftKey = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
+    left.setAccelerator(leftKey);
+    left.addActionListener(e -> {
+      movePlayer(direction.LEFT);
+      redraw();
+    });
 
     JMenu help = new JMenu("Help");
     help.setPreferredSize(new Dimension(45, 15));
@@ -251,6 +285,8 @@ public abstract class GUI {
     frame.pack();
     frame.setVisible(true);
   }
+
+  protected abstract void movePlayer(direction dir);
 
   protected abstract void endRec();
 

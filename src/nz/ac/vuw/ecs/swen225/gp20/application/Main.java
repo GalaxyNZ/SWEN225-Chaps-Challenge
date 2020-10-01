@@ -29,6 +29,10 @@ public class Main extends GUI {
     //renderer.testDrawingAnimation(g,"Down",String.format("%.1f", timeElapsed));
   }
 
+  @Override
+  protected void movePlayer(GUI.direction dir) {
+    maze.getBoard().movePlayer(dir);
+  }
 
   @Override
   protected void newGame(JLabel timeLeft) {

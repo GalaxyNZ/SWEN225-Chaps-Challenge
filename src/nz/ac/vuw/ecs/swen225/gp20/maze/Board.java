@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
+
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +38,12 @@ public class Board {
 		boardMap = new Tile[ySize][xSize];
 		delimitedInput = getKeyInfo(delimitedInput);
 		makeTiles(delimitedInput, xSize, ySize);
+	}
+
+	public Board(int x, int y) {
+		xSize = x;
+		ySize = y;
+		boardMap = new Tile[y][x];
 	}
 	
 	/*
@@ -168,4 +176,52 @@ public class Board {
 		return mapString;
 	}
 
+	public void setPlayerLocation(Point point) {
+		this.playerLocation = point;
+	}
+
+	public void setTileAt(int x, int y, Tile tile) {
+		boardMap[y][x] = tile;
+	}
+
+	public Tile getTile(int x, int y) {
+		return boardMap[y][x];
+	}
+
+	public int getWidth() {
+		return boardMap[0].length;
+	}
+
+	public int getHeight() {
+		return boardMap.length;
+	}
+
+	public void movePlayer(GUI.direction dir) {
+		Point newLocation = playerLocation;
+		switch (dir) {
+			case UP:
+				newLocation = new Point(playerLocation.x, playerLocation.y-1);
+				break;
+			case DOWN:
+				newLocation = new Point(playerLocation.x, playerLocation.y+1);
+				break;
+			case RIGHT:
+				newLocation = new Point(playerLocation.x+1, playerLocation.y);
+				break;
+			case LEFT:
+				newLocation = new Point(playerLocation.x-1, playerLocation.y);
+				break;
+		}
+		if (validMove(newLocation)) {
+			boardMap[playerLocation.y][playerLocation.x].addItem(null);
+			playerLocation = newLocation;
+			boardMap[playerLocation.y][playerLocation.x].addItem(new Chap());
+		}
+	}
+
+	public boolean validMove(Point newLocation) {
+		if (newLocation.x < 0 || newLocation.x >= boardMap[0].length || newLocation.y < 0 || newLocation.y >= boardMap.length) return false;
+		if (boardMap[newLocation.y][newLocation.x] instanceof WallTile) return false;
+		return true;
+	}
 }
