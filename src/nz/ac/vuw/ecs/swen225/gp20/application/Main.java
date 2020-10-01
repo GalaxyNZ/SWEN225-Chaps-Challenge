@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.Record;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.Rendering;
 
 import javax.swing.*;
@@ -12,13 +13,18 @@ public class Main extends GUI {
   public float timeElapsed = 0f; // Current time elapsed since start
   public boolean gamePaused = false;
   private Timer timer;
-  static Rendering renderer;
+  private Rendering renderer;
+  private Record recorder;
   Maze maze;
 
 
   public static void main(String... args) {
     Main game = new Main();
+  }
+
+  public Main() {
     renderer = new Rendering();
+    recorder = new Record();
   }
 
   @Override
@@ -32,6 +38,7 @@ public class Main extends GUI {
   @Override
   protected void movePlayer(GUI.direction dir) {
     maze.getBoard().movePlayer(dir);
+    recorder.addMove(dir);
   }
 
   @Override
@@ -64,11 +71,14 @@ public class Main extends GUI {
   @Override
   protected void endRec() {
     System.out.println("End Recording");
+    //recorder.stopRecording();
+    recorder.record(maze);
   }
 
   @Override
   protected void startRec() {
     System.out.println("Start Recording");
+    //recorder.record(maze);
   }
 
   /**
