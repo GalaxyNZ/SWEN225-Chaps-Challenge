@@ -37,20 +37,44 @@ public class Maze {
 			+ "F|F|F|F|F|W|W|W|W|W|W|W|F|F|F|F|F|"
 			+ "F|F|F|F|F|F|F|F|F|F|F|F|F|F|F|F|F|";
 	
-	private static Board board;
+	private Board board;
 	public String password;
-	private static Player player;
-	private static boolean endGameState = false;
+	private Player player;
+	private boolean endGameState = false;
+	private String[] testCases = new String[]{ "w", "a", "a", "s", "s", "d"}; //Manually programmable for simple testing.
 	
 	/*
 	 * Temporary Main for testing purposes.
 	 * TODO: Change to constructor method once testing is complete, introduce input of string for this maps password. Introduce input of string for map details. 
 	 */
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) { //THIS MAIN IS FOR TESTING ONLY, WHEN IMPLEMENTING USE CONSTRUCTORS BELOW
 		board = new Board(mapTester);
 		//printGame();
 		player = new Player(board.findPlayer(), board.getChips());
+		gameplayLoop();
+	}*/
+	
+	
+	
+	/*
+	 * Constructor class for a maze (1 Level of the game).
+	 */
+	
+	public Maze(String mapString) {
+		board = new Board(mapString);
+		player = new Player(board.findPlayer(), board.getChips());
+		gameplayLoop();
+	}
+	
+	/*
+	 * Constructor class for running Monkey Tests, takes an additional input of a list of moves to be executed.
+	 */
+	
+	public Maze(String mapString, String[] moveList) {
+		board = new Board(mapString);
+		player = new Player(board.findPlayer(), board.getChips());
+		testCases = moveList;
 		gameplayLoop();
 	}
 	
@@ -59,7 +83,7 @@ public class Maze {
 	 * Requests a move from getMove, then applies it to a switch case to attempt the move.
 	 */
 	
-	public static void gameplayLoop() {
+	public void gameplayLoop() {
 		int count = 0;
 		while(!endGameState) {
 			boolean valid = false;
@@ -98,7 +122,7 @@ public class Maze {
 					else {
 						System.out.println("INPUT MOVE " + move + " IS INVALID");
 					}
-					endGameState = true; //TESTING APPLICATION
+					//endGameState = true; //TESTING APPLICATION
 					break;
 				default:
 
@@ -117,8 +141,10 @@ public class Maze {
 	 * TODO: Change implementation so game does not auto end when d is the given output
 	 */
 	
-	public static String getMove(int testState) {
-		String[] testCases = new String[]{ "w", "a", "a", "s", "s", "d"};
+	public String getMove(int testState) {
+		if(testState >= testCases.length-1) { //Catch so that request for next move does not go out of bounds.
+			endGameState = true;
+		}
 		return testCases[testState];
 	}
 	
@@ -127,7 +153,7 @@ public class Maze {
 	 * Responds with a boolean that either validates or invalidates the move based on the requested Tile being an obstacle of some kind.
 	 */
 	
-	private static boolean validMove(Point oldLocation, Point newLocation) {
+	private boolean validMove(Point oldLocation, Point newLocation) {
 		int newX = newLocation.x;
 		int newY = newLocation.y;
 		if(board.boardMap[newY][newX] instanceof WallTile) { //Walls are always an obstacle.
@@ -170,11 +196,11 @@ public class Maze {
 	 * TODO: Reconfigure to instead make a GUI update call.
 	 */
 	
-	private static void printGame() {
+	private void printGame() {
 		StringBuilder output = new StringBuilder();
 		for(int i = 0; i < board.ySize; i++) {			
 			for(int j = 0; j < board.xSize; j++) {
-				output.append(board.boardMap[i][j].getPrintChar());
+				output.append(board.boardMap[i][j].toString());
 			}
 			output.append("\n");
 		}

@@ -71,7 +71,7 @@ class Tile {
 	 * Used for text based version of the game (Testing implementation only).
 	 */
 	
-	public String getPrintChar() {
+	public String toString() {
 		return tileChar;
 	}
 }
