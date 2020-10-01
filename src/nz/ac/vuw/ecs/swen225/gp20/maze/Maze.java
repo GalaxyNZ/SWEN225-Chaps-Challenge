@@ -66,7 +66,12 @@ public class Maze {
 		player = new Player(board.findPlayer(), board.getChips());
 		gameplayLoop();
 	}
-	
+
+	public Maze(Board board, Player player) {
+		this.board = board;
+		this.player = player;
+	}
+
 	/*
 	 * Constructor class for running Monkey Tests, takes an additional input of a list of moves to be executed.
 	 */

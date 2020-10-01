@@ -1,11 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.Gson;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Board;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,8 +15,12 @@ import java.util.Scanner;
 
 
 public class Persistence {
-
-  public void loadFile() { //read
+  Map<?, ?> map;
+  int boardWidth;
+  int boardHeight;
+  Player player;
+  public Maze loadFile() { //read
+    Maze maze = null;
 
     try {
       // create Gson instance
@@ -33,10 +37,10 @@ public class Persistence {
         System.out.println("You chose to open this file: " +
                 chooser.getSelectedFile().getName());
       }
-      else return;
+      else return null;
 
       // create a reader
-     // Path pathToFile = Paths.get(path +"level1.json");
+      // Path pathToFile = Paths.get(path +"level1.json");
       //System.out.println(pathToFile.toAbsolutePath());
       //Reader reader = Files.newBufferedReader(Paths.get(path +"level1.json"));
       //System.out.println(chooser.getSelectedFile().getPath());
@@ -44,19 +48,27 @@ public class Persistence {
 
       //convert to Gson
       // convert JSON file to map
-      Map<String, String> map = gson.fromJson(reader, Map.class);
+      map = gson.fromJson(reader, Map.class);
+
 
       // print map entries
       for (Map.Entry<?, ?> entry : map.entrySet()) {
 
         String varName = entry.getKey().toString();
-       // if(varName.equals("board")){
-         // readBoard(entry.getValue().toString());
+        // if(varName.equals("board")){
+        // readBoard(entry.getValue().toString());
         //}
-         System.out.println(entry.getKey() + " = " + entry.getValue());
+        System.out.println(entry.getKey() + " = " + entry.getValue());
       }
 
       reader.close();
+      boardWidth = (int) Double.parseDouble(map.get("xSize").toString());
+      boardHeight = (int) Double.parseDouble(map.get("ySize").toString());
+      Board board = new Board(boardWidth, boardHeight);
+      readBoard(board);
+      maze = new Maze(board, player);
+
+
 
       //Maze maze = new Maze(map);
 
@@ -64,21 +76,73 @@ public class Persistence {
     } catch (Exception ex) {
       ex.printStackTrace();
     }
+    return maze;
 
   }
 
-  public static void readBoard(String maze){
-    Scanner sc = new Scanner(maze).useDelimiter(",");
-    int count = 0;
+  public void readBoard(Board board){
+    Scanner sc = new Scanner(map.get("board").toString()).useDelimiter(",");
+    int numChips = (int) Double.parseDouble(map.get("numChips").toString());
+    int x = 0;
+    int y = 0;
 
     while(sc.hasNext()){
-      System.out.print("|");
-      System.out.print(sc.next());
-      count++;
-      if( count == 15){
-        System.out.print("|");
-        System.out.println();
-        count = 0;
+      Point location = new Point(x, y);
+      String character = sc.next();
+      switch (character) {
+        case "_":
+          board.setTileAt(x, y, new FreeTile(location, null));
+          break;
+        case "#":
+          board.setTileAt(x, y, new WallTile(location));
+          break;
+        case "E":
+          board.setTileAt(x, y, new ExitTile(location));
+          break;
+        case "l":
+          board.setTileAt(x, y, new FreeTile(location, new ExitLockItem(numChips)));
+          break;
+        case "i":
+          board.setTileAt(x, y, new InfoTile(location));
+          break;
+        case "T":
+          board.setTileAt(x, y, new FreeTile(location, new TreasureItem()));
+          break;
+        case "G":
+          board.setTileAt(x, y, new FreeTile(location, new LockedDoorItem("G")));
+          break;
+        case "g":
+          board.setTileAt(x, y, new FreeTile(location, new KeyItem("G", 1)));
+          break;
+        case "R":
+          board.setTileAt(x, y, new FreeTile(location, new LockedDoorItem("R")));
+          break;
+        case "r":
+          board.setTileAt(x, y, new FreeTile(location, new KeyItem("R", 1)));
+          break;
+        case "Y":
+          board.setTileAt(x, y, new FreeTile(location, new LockedDoorItem("Y")));
+          break;
+        case "y":
+          board.setTileAt(x, y, new FreeTile(location, new KeyItem("Y", 1)));
+          break;
+        case "B":
+          board.setTileAt(x, y, new FreeTile(location, new LockedDoorItem("B")));
+          break;
+        case "b":
+          board.setTileAt(x, y, new FreeTile(location, new KeyItem("B", 1)));
+          break;
+        case "C":
+          board.setTileAt(x, y, new FreeTile(location, new Chap()));
+          Point point = new Point(x, y);
+          player = new Player(point, numChips);
+          board.setPlayerLocation(point);
+          break;
+      }
+      x++;
+      if(x == boardWidth){
+        x = 0;
+        y++;
       }
     }
   }

@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.Rendering;
 
@@ -12,6 +13,7 @@ public class Main extends GUI {
   public boolean gamePaused = false;
   private Timer timer;
   static Rendering renderer;
+  Maze maze;
 
 
   public static void main(String... args) {
@@ -23,11 +25,14 @@ public class Main extends GUI {
   protected void redraw(Graphics g, Dimension d) {
     g.setColor(Color.LIGHT_GRAY);
     g.fillRect(0, 0, d.width, d.height);
-    renderer.testDrawingAnimation(g,"Down",String.format("%.1f", timeElapsed));
-
-
+    if (maze != null) renderer.drawBoard(g, d, maze);
+    //renderer.testDrawingAnimation(g,"Down",String.format("%.1f", timeElapsed));
   }
 
+  @Override
+  protected void movePlayer(GUI.direction dir) {
+    maze.getBoard().movePlayer(dir);
+  }
 
   @Override
   protected void newGame(JLabel timeLeft) {
@@ -52,7 +57,7 @@ public class Main extends GUI {
     System.out.println("Loads a saved game");
     if (timer != null) timer.stop();
     Persistence persistence = new Persistence();
-    persistence.loadFile();
+    maze = persistence.loadFile();
     startTimer(timeLeft);
   }
 
@@ -66,6 +71,14 @@ public class Main extends GUI {
     System.out.println("Start Recording");
   }
 
+  /**
+   * Creates a timer that increases in intervals
+   * of 0.1 seconds. Timer is then subtracted
+   * from the total time for the current level
+   * and displayed in the GUI.
+   *
+   * @param timeLeft is the Label where the timer is drawn
+   */
   public void startTimer(JLabel timeLeft) {
     // Resets timer if method is called again
     if (timeElapsed > 0f) {

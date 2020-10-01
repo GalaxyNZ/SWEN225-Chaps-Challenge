@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
 
+import com.sun.javafx.scene.traversal.Direction;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -19,15 +20,14 @@ public class Record {
 
     q.add("a");q.add("b");q.add("c");q.add("d");q.add("e");
 
-
-
     JSONArray moves = new JSONArray();
 
     JSONObject file = new JSONObject();
-
-
-    while (!q.isEmpty()){
-      moves.add(q.poll());
+    isRecording = true;
+    while (isRecording){
+      if (!q.isEmpty()) {
+        moves.add(q.poll());
+      }
     }
 
     file.put("xSize", 50);
@@ -40,18 +40,23 @@ public class Record {
     file.put("board", "boop beep boop");
     file.put("moves", moves);
 
-    try (FileWriter reee = new FileWriter("recording.json")) {
+    try (FileWriter recFile = new FileWriter("recording.json")) {
 
-      reee.write(file.toJSONString());
-      reee.flush();
+      recFile.write(file.toJSONString());
+      recFile.flush();
 
     } catch (IOException e) {
       e.printStackTrace();
     }
-
   }
 
+  public void addMove(String s){
+    q.add(s);
+  }
 
+  public void stopRecording(){
+    isRecording = false;
+  }
 
   public static void main(String[] args) {
     Record r = new Record();
