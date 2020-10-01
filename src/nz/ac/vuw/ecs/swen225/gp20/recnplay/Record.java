@@ -6,9 +6,11 @@ import org.json.simple.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
+import java.util.Date;
 import java.util.Queue;
 
 /**
@@ -31,11 +33,11 @@ public class Record {
 
 
     isRecording = true;
-    while (isRecording){
+    //while (isRecording){
       if (!q.isEmpty()) {
         moves.add(q.poll());
       }
-    }
+    //}
 
     file.put("xSize", 50);
     file.put("ySize", 50);
@@ -47,7 +49,7 @@ public class Record {
     file.put("board", "boop beep boop");
     file.put("moves", moves);
 
-    try (FileWriter recFile = new FileWriter(fileName())) {
+    try (FileWriter recFile = new FileWriter(fileName() + ".json")) {
 
       recFile.write(file.toJSONString());
       recFile.flush();
@@ -77,9 +79,9 @@ public class Record {
    * @return
    */
   public String fileName(){
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm:ss");
-    LocalDateTime now = LocalDateTime.now();
-    return dateTimeFormatter.format(now);
+    Date date = new Date();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+    return dateFormat.format(date);
   }
 
   public static void main(String[] args) {
