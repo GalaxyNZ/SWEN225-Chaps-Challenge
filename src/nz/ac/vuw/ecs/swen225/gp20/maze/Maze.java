@@ -94,7 +94,7 @@ public class Maze {
 			boolean valid = false;
 			//while(!valid) {
 				String move = getMove(count); //TESTING MOVE INPUT
-				System.out.println(move); //TESTING, ALLOWS COMPARISON TO MOVE REQUEST VS ACTUAL BOARD IMPLEMENTATION
+				//System.out.println(move); //TESTING, ALLOWS COMPARISON TO MOVE REQUEST VS ACTUAL BOARD IMPLEMENTATION
 				switch(move) {
 				case "w":
 					if(validMove(player.getLocation(), new Point(player.getLocation().x, player.getLocation().y-1))) { //Attempts move up 1 Tile.
@@ -135,7 +135,7 @@ public class Maze {
 				default:
 
 				}
-				printGame();
+				//printGame();
 			//}
 			count++; //TESTING, INCREMENTS SELECTED MOVE FROM getMove METHOD
 		}
@@ -219,5 +219,9 @@ public class Maze {
 
 	public Board getBoard() {
 		return board;
+	}
+
+	public Player getPlayer() {
+		return player;
 	}
 }

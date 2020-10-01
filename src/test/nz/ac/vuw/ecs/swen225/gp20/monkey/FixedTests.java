@@ -29,8 +29,11 @@ public class FixedTests {
         *
      */
 
+
+    // BASIC TESTS
+
     @Test
-    public void test1_ConstructBoard() {
+    public void SimpleBoardGeneration() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
                 + "#|_|_|_|#|"
                 + "_|_|_|_|_|"
@@ -41,17 +44,21 @@ public class FixedTests {
         String moves = "";
 
         String expected =
-                "|#| | | |#|\n" +
-                        "| | | | | |\n" +
-                        "| | |X| | |\n" +
-                        "| | | | | |\n" +
-                        "| | | | | |\n";
+                "|#|_|_|_|#|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|X|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
 
-        assertEquals(expected, runTest(map));
+        Maze maze = new Maze(map);
+
+        assertEquals(expected, maze.getBoard().toString());
+        assertEquals(0, maze.getPlayer().getTreasure());
+        assertEquals("[]", maze.getPlayer().getInventory().toString());
     }
 
     @Test
-    public void test2_ComplexBoard() {
+    public void ComplexBoardGeneration() {
         String map =  "17|16|SAMPLE TILE INFO|11|SETBK|1|SETYK|1|SETRK|1|SETGK|2|" +
                 "_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|" +
                 "_|_|_|#|#|#|#|#|_|#|#|#|#|#|_|_|_|" +
@@ -70,31 +77,33 @@ public class FixedTests {
                 "_|_|_|_|_|#|#|#|#|#|#|#|_|_|_|_|_|" +
                 "_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|";
 
-        String moves = "";
-
         String expected =
-                        "| | | | | | | | | | | | | | | | | |\n" +
-                        "| | | |#|#|#|#|#| |#|#|#|#|#| | | |\n" +
-                        "| | | |#| | | |#|#|#| | | |#| | | |\n" +
-                        "| | | |#| |T| |#|%|#| |T| |#| | | |\n" +
-                        "| |#|#|#|#|#|G|#|E|#|G|#|#|#|#|#| |\n" +
-                        "| |#| |y| |B| | | | | |R| |y| |#| |\n" +
-                        "| |#| |T| |#|b| |I| |r|#| |T| |#| |\n" +
-                        "| |#|#|#|#|#|T| |X| |T|#|#|#|#|#| |\n" +
-                        "| |#| |T| |#|b| | | |r|#| |T| |#| |\n" +
-                        "| |#| | | |R| | |T| | |B| | | |#| |\n" +
-                        "| |#|#|#|#|#|#|Y|#|Y|#|#|#|#|#|#| |\n" +
-                        "| | | | | |#| | |#| | |#| | | | | |\n" +
-                        "| | | | | |#| |T|#|T| |#| | | | | |\n" +
-                        "| | | | | |#| | |#|g| |#| | | | | |\n" +
-                        "| | | | | |#|#|#|#|#|#|#| | | | | |\n" +
-                        "| | | | | | | | | | | | | | | | | |\n";
+                "|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|\n" +
+                        "|_|_|_|#|#|#|#|#|_|#|#|#|#|#|_|_|_|\n" +
+                        "|_|_|_|#|_|_|_|#|#|#|_|_|_|#|_|_|_|\n" +
+                        "|_|_|_|#|_|T|_|#|%|#|_|T|_|#|_|_|_|\n" +
+                        "|_|#|#|#|#|#|G|#|E|#|G|#|#|#|#|#|_|\n" +
+                        "|_|#|_|y|_|B|_|_|_|_|_|R|_|y|_|#|_|\n" +
+                        "|_|#|_|T|_|#|b|_|I|_|r|#|_|T|_|#|_|\n" +
+                        "|_|#|#|#|#|#|T|_|X|_|T|#|#|#|#|#|_|\n" +
+                        "|_|#|_|T|_|#|b|_|_|_|r|#|_|T|_|#|_|\n" +
+                        "|_|#|_|_|_|R|_|_|T|_|_|B|_|_|_|#|_|\n" +
+                        "|_|#|#|#|#|#|#|Y|#|Y|#|#|#|#|#|#|_|\n" +
+                        "|_|_|_|_|_|#|_|_|#|_|_|#|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|#|_|T|#|T|_|#|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|#|_|_|#|g|_|#|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|#|#|#|#|#|#|#|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|\n";
 
-        assertEquals(expected, runTest(map));
+        Maze maze = new Maze(map);
+
+        assertEquals(expected, maze.getBoard().toString());
+        assertEquals(0, maze.getPlayer().getTreasure());
+        assertEquals("[]", maze.getPlayer().getInventory().toString());
     }
 
     @Test
-    public void test3_SimpleMovement() {
+    public void SimpleMovement() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_|"
@@ -105,38 +114,23 @@ public class FixedTests {
         String[] moves = new String[]{ "w", "w", "a", "a", "s", "s", "d"};
 
         String expected =
-                "| | | | | |\n" +
-                        "| | | | | |\n" +
-                        "| |X| | | |\n" +
-                        "| | | | | |\n" +
-                        "| | | | | |\n";
+                "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|X|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
 
-        assertEquals(expected, runTest(map, moves));
+        Maze maze = new Maze(map, moves);
+
+        assertEquals(expected, maze.getBoard().toString());
+        assertEquals(0, maze.getPlayer().getTreasure());
+        assertEquals("[]", maze.getPlayer().getInventory().toString());
     }
 
-    @Test
-    public void test4_lockedDoors() {
-        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
-                + "_|_|_|_|_|"
-                + "#|#|B|#|#|"
-                + "_|_|b|_|_|"
-                + "_|_|X|_|_|"
-                + "_|_|_|_|_|";
-
-        String[] moves = new String[]{ "w", "w", "w"};
-
-        String expected =
-                "| | |X| | |\n" +
-                        "|#|#| |#|#|\n" +
-                        "| | | | | |\n" +
-                        "| | | | | |\n" +
-                        "| | | | | |\n";
-
-        assertEquals(expected, runTest(map, moves));
-    }
+    // Restricted movement
 
     @Test
-    public void test5_walls() {
+    public void Walls() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "_|#|#|#|_|"
@@ -147,17 +141,22 @@ public class FixedTests {
         String[] moves = new String[]{ "w", "w", "w"};
 
         String expected =
-                "| | | | | |\n" +
-                        "| |#|#|#| |\n" +
-                        "| |#|X|#| |\n" +
-                        "| |#|#|#| |\n" +
-                        "| | | | | |\n";
+                "|_|_|_|_|_|\n" +
+                        "|_|#|#|#|_|\n" +
+                        "|_|#|X|#|_|\n" +
+                        "|_|#|#|#|_|\n" +
+                        "|_|_|_|_|_|\n";
 
-        assertEquals(expected, runTest(map, moves));
+        Maze maze = new Maze(map, moves);
+
+        assertEquals(expected, maze.getBoard().toString());
+        assertEquals(0, maze.getPlayer().getTreasure());
+        assertEquals("[]", maze.getPlayer().getInventory().toString());
     }
 
+
     @Test
-    public void test6_movementOffMap() {
+    public void MovementOffMap() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_|"
@@ -168,32 +167,204 @@ public class FixedTests {
         String[] moves = new String[]{ "w", "w", "w"};
 
         String expected =
-                "| | |X| | |\n" +
-                        "| | | | | |\n" +
-                        "| | | | | |\n" +
-                        "| | | | | |\n" +
-                        "| | | | | |\n";
+                "|_|_|X|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
 
-        assertEquals(expected, runTest(map, moves));
+        Maze maze = new Maze(map, moves);
+
+        assertEquals(expected, maze.getBoard().toString());
+        assertEquals(0, maze.getPlayer().getTreasure());
+        assertEquals("[]", maze.getPlayer().getInventory().toString());
+    }
+
+    // DOORS and KEYS
+    @Test
+    public void LockedDoors() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "#|#|B|#|#|"
+                + "_|_|b|_|_|"
+                + "_|_|X|_|_|"
+                + "_|_|_|_|_|";
+
+        String[] moves = new String[]{ "w", "w", "w"};
+
+        String expected =
+                "|_|_|X|_|_|\n" +
+                        "|#|#|_|#|#|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+        Maze maze = new Maze(map, moves);
+
+        assertEquals(expected, maze.getBoard().toString());
+        assertEquals(0, maze.getPlayer().getTreasure());
+        assertEquals("[b]", maze.getPlayer().getInventory().toString());
     }
 
 
 
-    private String runTest(String map) {
-        // Create the game board and simulation
-        Maze maze = new Maze(map);
-        // Somehow run inputs
+    @Test
+    public void NoKeyUnlockingDoor() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "#|#|G|#|#|"
+                + "_|_|b|_|_|"
+                + "_|_|X|_|_|"
+                + "_|_|_|_|_|";
 
-        return maze.getBoard().toString();
+        String[] moves = new String[]{ "w", "w", "w"};
+
+        String expected =
+                "|_|_|_|_|_|\n" +
+                        "|#|#|G|#|#|\n" +
+                        "|_|_|X|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+        Maze maze = new Maze(map, moves);
+
+        assertEquals(expected, maze.getBoard().toString());
+        assertEquals(0, maze.getPlayer().getTreasure());
+        assertEquals("[b]", maze.getPlayer().getInventory().toString());
     }
 
-    private String runTest(String map, String[] moves) {
-        // Create the game board and simulation
+    @Test
+    public void IncorrectKeyUnlockingDoor() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "#|#|G|#|#|"
+                + "_|_|_|_|_|"
+                + "_|_|X|_|_|"
+                + "_|_|_|_|_|";
+
+        String[] moves = new String[]{ "w", "w", "w"};
+
+        String expected =
+                "|_|_|_|_|_|\n" +
+                        "|#|#|G|#|#|\n" +
+                        "|_|_|X|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+        Maze maze = new Maze(map, moves);
+
+        assertEquals(expected, maze.getBoard().toString());
+        assertEquals(0, maze.getPlayer().getTreasure());
+        assertEquals("[]", maze.getPlayer().getInventory().toString());
+    }
+
+
+    // ITEM TESTS
+
+    @Test
+    public void PickUpTreasure() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "_|T|T|_|_|"
+                + "_|T|T|T|_|"
+                + "_|_|X|_|_|"
+                + "_|_|_|_|_|";
+
+        String[] moves = new String[]{ "w", "w", "a", "s", "d", "d"};
+
+        String expected =
+                "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|X|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+
+        Maze maze = new Maze(map, moves);
+
+        assertEquals(expected, maze.getBoard().toString());
+        assertEquals(5, maze.getPlayer().getTreasure());
+        assertEquals("[]", maze.getPlayer().getInventory().toString());
+    }
+
+    @Test
+    public void PickUpKeys() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "_|b|g|_|_|"
+                + "_|y|r|_|_|"
+                + "_|_|X|_|_|"
+                + "_|_|_|_|_|";
+
+        String[] moves = new String[]{ "w", "w", "a", "s"};
+
+        String expected =
+                "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|X|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+
         Maze maze = new Maze(map, moves);
 
 
-        // Somehow run inputs
 
-        return maze.getBoard().toString();
+        assertEquals(expected, maze.getBoard().toString());
+        assertEquals(0, maze.getPlayer().getTreasure());
+        assertEquals("[r, g, b, y]", maze.getPlayer().getInventory().toString());
+    }
+
+    @Test
+    public void PickUpMultipleKeys() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "_|b|g|_|_|"
+                + "_|y|r|_|_|"
+                + "_|y|X|_|_|"
+                + "_|b|g|r|_|";
+
+        String[] moves = new String[]{ "w", "w", "a", "s", "s", "s", "d", "d"};
+
+        String expected =
+                "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|X|_|\n";
+
+
+        Maze maze = new Maze(map, moves);
+
+        assertEquals(expected, maze.getBoard().toString());
+        assertEquals(0, maze.getPlayer().getTreasure());
+        assertEquals("[r, g, b, y, y, b, g, r]", maze.getPlayer().getInventory().toString());
+    }
+
+    // Ending Game
+    @Test
+    public void SimpleGameEnd() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "_|_|%|_|_|"
+                + "_|_|E|_|_|"
+                + "_|_|X|_|_|"
+                + "_|_|_|_|_|";
+
+        String[] moves = new String[]{ "w", "w"};
+
+        String expected =
+                "|_|_|_|_|_|\n" +
+                        "|_|_|X|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+
+        Maze maze = new Maze(map, moves);
+
+        assertEquals(expected, maze.getBoard().toString());
+        assertEquals(0, maze.getPlayer().getTreasure());
+        assertEquals("[E]", maze.getPlayer().getInventory().toString());
     }
 }
