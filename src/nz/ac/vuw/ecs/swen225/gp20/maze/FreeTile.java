@@ -14,7 +14,7 @@ public class FreeTile extends Tile{
 	
 	public FreeTile(Point location, Item item) {
 		boardLocation = location;
-		tileChar = "_";
+		tileChar = " ";
 		isObstacle = false;
 		containedItem = item;
 	}

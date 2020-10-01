@@ -132,8 +132,9 @@ public class Maze {
 
 				}
 				printGame();
+				count++; //TESTING, INCREMENTS SELECTED MOVE FROM getMove METHOD
 			}
-			count++; //TESTING, INCREMENTS SELECTED MOVE FROM getMove METHOD
+			
 		}
 		System.out.println("Player Inventory = " + player.getInventory()); //TESTING CALL
 		System.out.println("Player Chip Count = " + player.getTreasure()); //TESTING CALL
@@ -148,6 +149,7 @@ public class Maze {
 	public String getMove(int testState)  {
 		if(testState >= testCases.length-1) { //Catch so that request for next move does not go out of bounds.
 			endGameState = true;
+			return "BREAK";
 		}
 		return testCases[testState];
 	}
