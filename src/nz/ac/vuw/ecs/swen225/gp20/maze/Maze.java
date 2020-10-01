@@ -41,7 +41,7 @@ public class Maze {
 	public String password;
 	private Player player;
 	private boolean endGameState = false;
-	private String[] testCases = new String[]{ "w", "a", "a", "s", "s", "d"}; //Manually programmable for simple testing.
+	private String[] testCases = new String[]{"BREAK"}; //Manually programmable for simple testing.
 	
 	/*
 	 * Temporary Main for testing purposes.
@@ -75,6 +75,7 @@ public class Maze {
 		board = new Board(mapString);
 		player = new Player(board.findPlayer(), board.getChips());
 		testCases = moveList;
+		System.out.println(testCases.length);
 		gameplayLoop();
 	}
 	
@@ -124,12 +125,16 @@ public class Maze {
 					}
 					//endGameState = true; //TESTING APPLICATION
 					break;
+				case "BREAK":
+					valid = true;
+					break;
 				default:
 
 				}
 				printGame();
+				count++; //TESTING, INCREMENTS SELECTED MOVE FROM getMove METHOD
 			}
-			count++; //TESTING, INCREMENTS SELECTED MOVE FROM getMove METHOD
+			
 		}
 		System.out.println("Player Inventory = " + player.getInventory()); //TESTING CALL
 		System.out.println("Player Chip Count = " + player.getTreasure()); //TESTING CALL
@@ -141,13 +146,15 @@ public class Maze {
 	 * TODO: Change implementation so game does not auto end when d is the given output
 	 */
 	
-	public String getMove(int testState) {
+	public String getMove(int testState)  {
 		if(testState >= testCases.length-1) { //Catch so that request for next move does not go out of bounds.
 			endGameState = true;
+			return "BREAK";
 		}
 		return testCases[testState];
 	}
-	
+
+
 	/*
 	 * Takes an input of the players current location and the location they wish to move to.
 	 * Responds with a boolean that either validates or invalidates the move based on the requested Tile being an obstacle of some kind.
@@ -207,4 +214,7 @@ public class Maze {
 		System.out.println(output.toString());
 	}
 
+	public Board getBoard() {
+		return board;
+	}
 }

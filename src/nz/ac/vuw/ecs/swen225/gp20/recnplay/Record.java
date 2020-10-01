@@ -19,15 +19,14 @@ public class Record {
 
     q.add("a");q.add("b");q.add("c");q.add("d");q.add("e");
 
-
-
     JSONArray moves = new JSONArray();
 
     JSONObject file = new JSONObject();
 
-
-    while (!q.isEmpty()){
-      moves.add(q.poll());
+    while (isRecording){
+      if (!q.isEmpty()) {
+        moves.add(q.poll());
+      }
     }
 
     file.put("xSize", 50);
@@ -40,15 +39,14 @@ public class Record {
     file.put("board", "boop beep boop");
     file.put("moves", moves);
 
-    try (FileWriter reee = new FileWriter("recording.json")) {
+    try (FileWriter recFile = new FileWriter("recording.json")) {
 
-      reee.write(file.toJSONString());
-      reee.flush();
+      recFile.write(file.toJSONString());
+      recFile.flush();
 
     } catch (IOException e) {
       e.printStackTrace();
     }
-
   }
 
 

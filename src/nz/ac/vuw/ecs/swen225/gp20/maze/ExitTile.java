@@ -14,7 +14,7 @@ public class ExitTile extends Tile{
 	
 	public ExitTile(Point location) {
 		boardLocation = location;
-		tileChar = "E";
+		tileChar = "%";
 	}
 	
 	/*

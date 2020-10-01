@@ -23,7 +23,7 @@ public class ExitLockItem extends Item{
 		return "ELK";
 	}
 	public String toString() {
-		return "%";
+		return "E";
 	}
 	
 }

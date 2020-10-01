@@ -45,7 +45,7 @@ public class Board {
 	
 	private ArrayList<String> getKeyInfo(ArrayList<String> input) {
 		String token = "";
-		floop: while(!token.equals("F")) {
+		floop: while(!token.equals("F")) { // TODO: Explain this? Idk what purpose it serves so maybe check if you need it? idk
 			token = input.get(0);
 			switch(token) {
 			case "SETGK":
@@ -119,40 +119,40 @@ public class Board {
 	private Tile textAssignmentTable(String input, Point location) {
 		
 		switch(input) {
-		case "F":
-			return new FreeTile(location, null);
-		case "W":
-			return new WallTile(location);
-		case "EXT":
-			return new ExitTile(location);		
-		case "EXTLCK":
-			return new FreeTile(location, new ExitLockItem(numChips)); //Provides the ExitLock with a number of treasure the player must have to pass through this Item.
-		case "YK":
-			return new FreeTile(location, new KeyItem("Y", YKMax)); //All keys are given the predetermined value of uses that they have, so that when used the correct number of time they are removed from player inv.
-		case "BK":
-			return new FreeTile(location, new KeyItem("B", BKMax));
-		case "RK":
-			return new FreeTile(location, new KeyItem("R", RKMax));
-		case "GK":
-			return new FreeTile(location, new KeyItem("G", GKMax));
-		case "YKD":
-			return new FreeTile(location, new LockedDoorItem("Y"));
-		case "BKD":
-			return new FreeTile(location, new LockedDoorItem("B"));
-		case "RKD":
-			return new FreeTile(location, new LockedDoorItem("R"));			
-		case "GKD":
-			return new FreeTile(location, new LockedDoorItem("G"));
-		case "I":
-			return new InfoTile(location);
-		case "T":
-			return new FreeTile(location, new TreasureItem());
-		case "CHAP":
-			playerLocation = location;
-			return new FreeTile(location, new Chap());
-		default:
-			System.out.println("DEFAULT CASE REACHED"); //Indicates an error in the mapString in Maze.java.
-			return null;
+			case "_":
+				return new FreeTile(location, null);
+			case "#":
+				return new WallTile(location);
+			case "%":
+				return new ExitTile(location);
+			case "E":
+				return new FreeTile(location, new ExitLockItem(numChips)); //Provides the ExitLock with a number of treasure the player must have to pass through this Item.
+			case "y":
+				return new FreeTile(location, new KeyItem("Y", YKMax)); //All keys are given the predetermined value of uses that they have, so that when used the correct number of time they are removed from player inv.
+			case "b":
+				return new FreeTile(location, new KeyItem("B", BKMax));
+			case "r":
+				return new FreeTile(location, new KeyItem("R", RKMax));
+			case "g":
+				return new FreeTile(location, new KeyItem("G", GKMax));
+			case "Y":
+				return new FreeTile(location, new LockedDoorItem("Y"));
+			case "B":
+				return new FreeTile(location, new LockedDoorItem("B"));
+			case "R":
+				return new FreeTile(location, new LockedDoorItem("R"));
+			case "G":
+				return new FreeTile(location, new LockedDoorItem("G"));
+			case "I":
+				return new InfoTile(location);
+			case "T":
+				return new FreeTile(location, new TreasureItem());
+			case "X":
+				playerLocation = location;
+				return new FreeTile(location, new Chap());
+			default:
+				System.out.println("Default Case Reached with input: '" + input + "' at location " + location.x + " - " + location.y); //Indicates an error in the mapString in Maze.java.
+				return null;
 		}		
 	}
 
