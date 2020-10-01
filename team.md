@@ -2,7 +2,7 @@
 
 |Module   |Team Member Name   |Team Member Gitlab Account|
 |---|---|---|
-|Maze|||
+|Maze|Elliott Nichols|nicholelli1|
 |Application|Coby Stobbs|stobbscoby|
 |Renderer|||
 |Persistence|||
