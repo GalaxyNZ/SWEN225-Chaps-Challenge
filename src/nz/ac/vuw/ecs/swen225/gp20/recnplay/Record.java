@@ -6,6 +6,8 @@ import org.json.simple.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
@@ -25,8 +27,9 @@ public class Record {
   public void record() {
 
     JSONArray moves = new JSONArray();
-
     JSONObject file = new JSONObject();
+
+
     isRecording = true;
     while (isRecording){
       if (!q.isEmpty()) {
@@ -44,7 +47,7 @@ public class Record {
     file.put("board", "boop beep boop");
     file.put("moves", moves);
 
-    try (FileWriter recFile = new FileWriter("recording.json")) {
+    try (FileWriter recFile = new FileWriter(fileName())) {
 
       recFile.write(file.toJSONString());
       recFile.flush();
@@ -67,6 +70,12 @@ public class Record {
    */
   public void stopRecording(){
     isRecording = false;
+  }
+
+  public String fileName(){
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    LocalDateTime now = LocalDateTime.now();
+    return dateTimeFormatter.format(now);
   }
 
   public static void main(String[] args) {
