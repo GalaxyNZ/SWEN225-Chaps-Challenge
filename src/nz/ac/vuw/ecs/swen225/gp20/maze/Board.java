@@ -119,35 +119,35 @@ public class Board {
 	private Tile textAssignmentTable(String input, Point location) {
 		
 		switch(input) {
-		case "F":
+		case "_":
 			return new FreeTile(location, null);
-		case "W":
+		case "#":
 			return new WallTile(location);
-		case "EXT":
+		case "%":
 			return new ExitTile(location);		
-		case "EXTLCK":
+		case "E":
 			return new FreeTile(location, new ExitLockItem(numChips)); //Provides the ExitLock with a number of treasure the player must have to pass through this Item.
-		case "YK":
+		case "y":
 			return new FreeTile(location, new KeyItem("Y", YKMax)); //All keys are given the predetermined value of uses that they have, so that when used the correct number of time they are removed from player inv.
-		case "BK":
+		case "b":
 			return new FreeTile(location, new KeyItem("B", BKMax));
-		case "RK":
+		case "r":
 			return new FreeTile(location, new KeyItem("R", RKMax));
-		case "GK":
+		case "g":
 			return new FreeTile(location, new KeyItem("G", GKMax));
-		case "YKD":
+		case "Y":
 			return new FreeTile(location, new LockedDoorItem("Y"));
-		case "BKD":
+		case "B":
 			return new FreeTile(location, new LockedDoorItem("B"));
-		case "RKD":
+		case "R":
 			return new FreeTile(location, new LockedDoorItem("R"));			
-		case "GKD":
+		case "G":
 			return new FreeTile(location, new LockedDoorItem("G"));
 		case "I":
 			return new InfoTile(location);
 		case "T":
 			return new FreeTile(location, new TreasureItem());
-		case "CHAP":
+		case "X":
 			playerLocation = location;
 			return new FreeTile(location, new Chap());
 		default:

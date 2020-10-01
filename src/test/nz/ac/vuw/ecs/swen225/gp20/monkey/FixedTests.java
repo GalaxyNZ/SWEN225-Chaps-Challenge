@@ -3,6 +3,7 @@ package test.nz.ac.vuw.ecs.swen225.gp20.monkey;
 import static org.junit.jupiter.api.Assertions.*;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Board;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import org.junit.jupiter.api.Test;
 
 public class FixedTests {
@@ -31,11 +32,11 @@ public class FixedTests {
     @Test
     public void test1_ConstructBoard() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
-                + "#| | | |#|"
-                + " | | | | |"
-                + " | | | | |"
-                + " | | | | |"
-                + " | | | | |";
+                + "#|_|_|_|#|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|";
 
         String moves = "";
 
@@ -138,19 +139,19 @@ public class FixedTests {
 
     private String runTest(String map) {
         // Create the game board and simulation
-        Board board = new Board(map);
+        Maze maze = new Maze(map);
         // Somehow run inputs
 
-        return board.toString();
+        return maze.getBoard().toString();
     }
 
     private String runTest(String map, String[] moves) {
         // Create the game board and simulation
-        Board board = new Board(map);
+        Maze maze = new Maze(map, moves);
 
 
         // Somehow run inputs
 
-        return board.toString();
+        return maze.getBoard().toString();
     }
 }

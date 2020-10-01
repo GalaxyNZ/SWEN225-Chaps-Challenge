@@ -207,4 +207,7 @@ public class Maze {
 		System.out.println(output.toString());
 	}
 
+	public Board getBoard() {
+		return board;
+	}
 }
