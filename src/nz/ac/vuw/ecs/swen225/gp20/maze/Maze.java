@@ -75,7 +75,6 @@ public class Maze {
 		board = new Board(mapString);
 		player = new Player(board.findPlayer(), board.getChips());
 		testCases = moveList;
-		System.out.println(testCases.length);
 		gameplayLoop();
 	}
 	
@@ -88,7 +87,7 @@ public class Maze {
 		int count = 0;
 		while(!endGameState) {
 			boolean valid = false;
-			while(!valid) {
+			//while(!valid) {
 				String move = getMove(count); //TESTING MOVE INPUT
 				System.out.println(move); //TESTING, ALLOWS COMPARISON TO MOVE REQUEST VS ACTUAL BOARD IMPLEMENTATION
 				switch(move) {
@@ -132,7 +131,7 @@ public class Maze {
 
 				}
 				printGame();
-			}
+			//}
 			count++; //TESTING, INCREMENTS SELECTED MOVE FROM getMove METHOD
 		}
 		System.out.println("Player Inventory = " + player.getInventory()); //TESTING CALL
@@ -206,6 +205,7 @@ public class Maze {
 		for(int i = 0; i < board.ySize; i++) {			
 			for(int j = 0; j < board.xSize; j++) {
 				output.append(board.boardMap[i][j].toString());
+				output.append("|");
 			}
 			output.append("\n");
 		}

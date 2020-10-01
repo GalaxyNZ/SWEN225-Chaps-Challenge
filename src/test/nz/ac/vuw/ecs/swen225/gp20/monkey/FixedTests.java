@@ -119,7 +119,7 @@ public class FixedTests {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "#|#|B|#|#|"
-                + "_|_|B|_|_|"
+                + "_|_|b|_|_|"
                 + "_|_|X|_|_|"
                 + "_|_|_|_|_|";
 
@@ -128,6 +128,48 @@ public class FixedTests {
         String expected =
                 "| | |X| | |\n" +
                         "|#|#| |#|#|\n" +
+                        "| | | | | |\n" +
+                        "| | | | | |\n" +
+                        "| | | | | |\n";
+
+        assertEquals(expected, runTest(map, moves));
+    }
+
+    @Test
+    public void test5_walls() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "_|#|#|#|_|"
+                + "_|#|X|#|_|"
+                + "_|#|#|#|_|"
+                + "_|_|_|_|_|";
+
+        String[] moves = new String[]{ "w", "w", "w"};
+
+        String expected =
+                "| | | | | |\n" +
+                        "| |#|#|#| |\n" +
+                        "| |#|X|#| |\n" +
+                        "| |#|#|#| |\n" +
+                        "| | | | | |\n";
+
+        assertEquals(expected, runTest(map, moves));
+    }
+
+    @Test
+    public void test6_movementOffMap() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|X|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|";
+
+        String[] moves = new String[]{ "w", "w", "w"};
+
+        String expected =
+                "| | |X| | |\n" +
+                        "| | | | | |\n" +
                         "| | | | | |\n" +
                         "| | | | | |\n" +
                         "| | | | | |\n";
