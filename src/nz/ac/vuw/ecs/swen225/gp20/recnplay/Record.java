@@ -34,11 +34,11 @@ public class Record {
 
 
     isRecording = true;
-    while (isRecording){
-      if (!q.isEmpty()) {
+    //while (isRecording){
+      while (!q.isEmpty()) {
         moves.add(q.poll());
       }
-    }
+    //}
 
     file.put("xSize", maze.getBoard().getWidth());
     file.put("ySize", maze.getBoard().getHeight());

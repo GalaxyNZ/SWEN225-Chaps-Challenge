@@ -71,11 +71,14 @@ public class Main extends GUI {
   @Override
   protected void endRec() {
     System.out.println("End Recording");
+    //recorder.stopRecording();
+    recorder.record(maze);
   }
 
   @Override
   protected void startRec() {
     System.out.println("Start Recording");
+    //recorder.record(maze);
   }
 
   /**
