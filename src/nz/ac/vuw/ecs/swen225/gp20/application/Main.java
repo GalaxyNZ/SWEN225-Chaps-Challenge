@@ -71,6 +71,14 @@ public class Main extends GUI {
     System.out.println("Start Recording");
   }
 
+  /**
+   * Creates a timer that increases in intervals
+   * of 0.1 seconds. Timer is then subtracted
+   * from the total time for the current level
+   * and displayed in the GUI.
+   *
+   * @param timeLeft is the Label where the timer is drawn
+   */
   public void startTimer(JLabel timeLeft) {
     // Resets timer if method is called again
     if (timeElapsed > 0f) {

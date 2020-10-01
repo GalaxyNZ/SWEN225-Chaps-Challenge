@@ -8,25 +8,9 @@ import java.awt.event.*;
 
 public abstract class GUI {
 
-  protected abstract void redraw(Graphics g, Dimension d);
-
-  private JFrame frame = new JFrame("Chaps Challenge");
+  private final JFrame frame = new JFrame("Chaps Challenge");
   private JComponent drawing;
-
   private static final int DEFAULT_DISPLAY_SIZE = 800;
-
-  public GUI() {
-    initialise();
-  }
-
-  public void redraw() {
-    frame.repaint();
-  }
-
-  public Dimension getDrawingAreaDimension() {
-    return drawing.getSize();
-  }
-
   private static final int GAP_SIZE = 25;
   private static final int BORDER_SIZE = 25;
 
@@ -254,6 +238,10 @@ public abstract class GUI {
     Border edge = BorderFactory.createEmptyBorder(5, 5, 5, 5);
     controls.setBorder(edge);
 
+    /*
+      Scales the window so that board is always a square and
+      so that font scales as well.
+     */
 
     frame.addComponentListener(new ComponentAdapter() {
       @Override
@@ -286,33 +274,90 @@ public abstract class GUI {
     frame.setVisible(true);
   }
 
+  /**
+   * Redraws the entire board when called.
+   *
+   * @param g the graphics to draw the board.
+   * @param d dimension of the drawing area.
+   */
+  protected abstract void redraw(Graphics g, Dimension d);
+
+  /**
+   * Moves the player on the board in the given
+   * direction.
+   *
+   * @param dir is the direction that the player will
+   *            move based on key pressed.
+   */
   protected abstract void movePlayer(direction dir);
 
+  /**
+   * Ends the recording of moves and saves it to a
+   * JSON file.
+   */
   protected abstract void endRec();
 
+  /**
+   * Starts recording the moves taken.
+   */
   protected abstract void startRec();
 
+  /**
+   * @param timeLeft is the Label to display time left
+   *                 for current level.
+   *
+   */
   protected abstract void loadGame(JLabel timeLeft);
 
+  /**
+   * Resumes the game when called so timer continues
+   * and player can move.
+   */
   protected abstract void resumeGame();
 
+  /**
+   * Pauses the game when called so the timer stops
+   * and the player can't move.
+   */
   protected abstract void pauseGame();
 
+  /**
+   * @param timeLeft is the Label to display the current
+   *                 time left.
+   */
   protected abstract void newGame(JLabel timeLeft);
 
+  /**
+   * Helper method used to scale the labels and the text
+   * inside.
+   *
+   * @param label to scale
+   * @param size is font size of the scaled text
+   */
   private void setJLabel(JLabel label, int size) {
     label.setHorizontalAlignment(JLabel.CENTER);
     label.setFont(new Font(label.getName(), Font.BOLD, size));
   }
 
+  /**
+   * Restarts the current level that the player is on.
+   */
   private void restartRound() {
     System.out.println("Restarts current level");
   }
-  
+
+  /**
+   * Saves the current state of the game to a JSON file
+   * and then closes the game.
+   */
   private void exitSaveGame() {
     System.out.println("Save and exit");
   }
 
+  /**
+   * Exits the game when the player chooses to, but
+   * makes sure that the player is sure first.
+   */
   private void exitGame() {
     int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit? Your game will not be saved.", "Exit Game",
             JOptionPane.YES_NO_OPTION,
@@ -320,5 +365,27 @@ public abstract class GUI {
     if (result == JOptionPane.OK_OPTION) {
       System.exit(0); // cleanly end the program.
     }
+  }
+
+  /**
+   * Constructs the GUI object which initialises
+   * all components such as JPanels and MenuItems.
+   */
+  public GUI() {
+    initialise();
+  }
+
+  /**
+   * redraws the frame.
+   */
+  public void redraw() {
+    frame.repaint();
+  }
+
+  /**
+   * @return the dimension of the drawing area.
+   */
+  public Dimension getDrawingAreaDimension() {
+    return drawing.getSize();
   }
 }
