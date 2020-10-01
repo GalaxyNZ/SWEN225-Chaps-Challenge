@@ -5,6 +5,6 @@
 |Maze|||
 |Application|Coby Stobbs|stobbscoby|
 |Renderer|||
-|Persistence|||
+|Persistence|Oliver Bathgate|bathgaoliv|
 |Record and Replay|||
 |Monkey Tests|||

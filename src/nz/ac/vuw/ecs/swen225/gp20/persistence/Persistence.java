@@ -8,7 +8,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Scanner;
@@ -19,6 +18,24 @@ public class Persistence {
   int boardWidth;
   int boardHeight;
   Player player;
+
+  public String selctFile(){
+
+    String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/levels/";
+
+    JFileChooser chooser = new JFileChooser(path);
+    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+            "JSON files", "json");
+    chooser.setFileFilter(filter);
+    int returnVal = chooser.showOpenDialog(null);
+    if(returnVal == JFileChooser.APPROVE_OPTION) {
+      System.out.println("You chose to open this file: " +
+              chooser.getSelectedFile().getName());
+      return chooser.getSelectedFile().getPath();
+    }
+    else return null;
+  }
+
   public Maze loadFile() { //read
     Maze maze = null;
 
@@ -26,25 +43,10 @@ public class Persistence {
       // create Gson instance
       Gson gson = new Gson();
 
-      String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/levels/";
 
-      JFileChooser chooser = new JFileChooser(path);
-      FileNameExtensionFilter filter = new FileNameExtensionFilter(
-              "JSON files", "json");
-      chooser.setFileFilter(filter);
-      int returnVal = chooser.showOpenDialog(null);
-      if(returnVal == JFileChooser.APPROVE_OPTION) {
-        System.out.println("You chose to open this file: " +
-                chooser.getSelectedFile().getName());
-      }
-      else return null;
 
       // create a reader
-      // Path pathToFile = Paths.get(path +"level1.json");
-      //System.out.println(pathToFile.toAbsolutePath());
-      //Reader reader = Files.newBufferedReader(Paths.get(path +"level1.json"));
-      //System.out.println(chooser.getSelectedFile().getPath());
-      Reader reader = Files.newBufferedReader(Paths.get(chooser.getSelectedFile().getPath()));
+      Reader reader = Files.newBufferedReader(Paths.get(selctFile()));
 
       //convert to Gson
       // convert JSON file to map
@@ -53,11 +55,7 @@ public class Persistence {
 
       // print map entries
       for (Map.Entry<?, ?> entry : map.entrySet()) {
-
         String varName = entry.getKey().toString();
-        // if(varName.equals("board")){
-        // readBoard(entry.getValue().toString());
-        //}
         System.out.println(entry.getKey() + " = " + entry.getValue());
       }
 
@@ -67,10 +65,6 @@ public class Persistence {
       Board board = new Board(boardWidth, boardHeight);
       readBoard(board);
       maze = new Maze(board, player);
-
-
-
-      //Maze maze = new Maze(map);
 
 
     } catch (Exception ex) {
