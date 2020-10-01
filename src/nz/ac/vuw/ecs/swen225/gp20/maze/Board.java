@@ -119,40 +119,40 @@ public class Board {
 	private Tile textAssignmentTable(String input, Point location) {
 		
 		switch(input) {
-		case "_":
-			return new FreeTile(location, null);
-		case "#":
-			return new WallTile(location);
-		case "%":
-			return new ExitTile(location);		
-		case "E":
-			return new FreeTile(location, new ExitLockItem(numChips)); //Provides the ExitLock with a number of treasure the player must have to pass through this Item.
-		case "y":
-			return new FreeTile(location, new KeyItem("Y", YKMax)); //All keys are given the predetermined value of uses that they have, so that when used the correct number of time they are removed from player inv.
-		case "b":
-			return new FreeTile(location, new KeyItem("B", BKMax));
-		case "r":
-			return new FreeTile(location, new KeyItem("R", RKMax));
-		case "g":
-			return new FreeTile(location, new KeyItem("G", GKMax));
-		case "Y":
-			return new FreeTile(location, new LockedDoorItem("Y"));
-		case "B":
-			return new FreeTile(location, new LockedDoorItem("B"));
-		case "R":
-			return new FreeTile(location, new LockedDoorItem("R"));			
-		case "G":
-			return new FreeTile(location, new LockedDoorItem("G"));
-		case "I":
-			return new InfoTile(location);
-		case "T":
-			return new FreeTile(location, new TreasureItem());
-		case "X":
-			playerLocation = location;
-			return new FreeTile(location, new Chap());
-		default:
-			System.out.println("DEFAULT CASE REACHED"); //Indicates an error in the mapString in Maze.java.
-			return null;
+			case "_":
+				return new FreeTile(location, null);
+			case "#":
+				return new WallTile(location);
+			case "%":
+				return new ExitTile(location);
+			case "E":
+				return new FreeTile(location, new ExitLockItem(numChips)); //Provides the ExitLock with a number of treasure the player must have to pass through this Item.
+			case "y":
+				return new FreeTile(location, new KeyItem("Y", YKMax)); //All keys are given the predetermined value of uses that they have, so that when used the correct number of time they are removed from player inv.
+			case "b":
+				return new FreeTile(location, new KeyItem("B", BKMax));
+			case "r":
+				return new FreeTile(location, new KeyItem("R", RKMax));
+			case "g":
+				return new FreeTile(location, new KeyItem("G", GKMax));
+			case "Y":
+				return new FreeTile(location, new LockedDoorItem("Y"));
+			case "B":
+				return new FreeTile(location, new LockedDoorItem("B"));
+			case "R":
+				return new FreeTile(location, new LockedDoorItem("R"));
+			case "G":
+				return new FreeTile(location, new LockedDoorItem("G"));
+			case "I":
+				return new InfoTile(location);
+			case "T":
+				return new FreeTile(location, new TreasureItem());
+			case "X":
+				playerLocation = location;
+				return new FreeTile(location, new Chap());
+			default:
+				System.out.println("Default Case Reached with input: '" + input + "' at location " + location.x + " - " + location.y); //Indicates an error in the mapString in Maze.java.
+				return null;
 		}		
 	}
 
