@@ -34,20 +34,20 @@ public class Record {
 
 
     isRecording = true;
-    //while (isRecording){
+    while (isRecording){
       if (!q.isEmpty()) {
         moves.add(q.poll());
       }
-    //}
+    }
 
-    file.put("xSize", 50);
-    file.put("ySize", 50);
-    file.put("tileInfo", "boop beep boop");
+    file.put("xSize", maze.getBoard().getWidth());
+    file.put("ySize", maze.getBoard().getHeight());
+    file.put("tileInfo", maze.getBoard().getInfo());
     file.put("SETGK", 3);
     file.put("SETBK", 2);
     file.put("SETYK", 1);
     file.put("SETRK", 2);
-    file.put("board", "boop beep boop");
+    file.put("board", maze.getBoard().toString());
     file.put("moves", moves);
 
     try (FileWriter recFile = new FileWriter(fileName() + ".json")) {
@@ -87,7 +87,7 @@ public class Record {
 
   public static void main(String[] args) {
     Record r = new Record();
-    r.record();
+   // r.record();
   }
 
 }
