@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
 
+import com.sun.javafx.scene.traversal.Direction;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -22,7 +23,7 @@ public class Record {
     JSONArray moves = new JSONArray();
 
     JSONObject file = new JSONObject();
-
+    isRecording = true;
     while (isRecording){
       if (!q.isEmpty()) {
         moves.add(q.poll());
@@ -49,7 +50,13 @@ public class Record {
     }
   }
 
+  public void addMove(String s){
+    q.add(s);
+  }
 
+  public void stopRecording(){
+    isRecording = false;
+  }
 
   public static void main(String[] args) {
     Record r = new Record();
