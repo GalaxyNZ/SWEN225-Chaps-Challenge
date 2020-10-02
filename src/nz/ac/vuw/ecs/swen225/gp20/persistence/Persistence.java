@@ -19,7 +19,7 @@ public class Persistence {
   int boardHeight;
   Player player;
 
-  public String selctFile(){
+  public Maze selctFile(){
 
     String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/levels/";
 
@@ -29,14 +29,12 @@ public class Persistence {
     chooser.setFileFilter(filter);
     int returnVal = chooser.showOpenDialog(null);
     if(returnVal == JFileChooser.APPROVE_OPTION) {
-      System.out.println("You chose to open this file: " +
-              chooser.getSelectedFile().getName());
-      return chooser.getSelectedFile().getPath();
+      return loadFile(chooser.getSelectedFile().toString());
     }
     else return null;
   }
 
-  public Maze loadFile() { //read
+  public Maze loadFile(String file) { //read
     Maze maze = null;
 
     try {
@@ -46,7 +44,7 @@ public class Persistence {
 
 
       // create a reader
-      Reader reader = Files.newBufferedReader(Paths.get(selctFile()));
+      Reader reader = Files.newBufferedReader(Paths.get(file));
 
       //convert to Gson
       // convert JSON file to map
