@@ -4,7 +4,7 @@
 |---|---|---|
 |Maze|Elliott Nichols|nicholelli1|
 |Application|Coby Stobbs|stobbscoby|
-|Renderer|||
+|Renderer|Arnold Malata|malataarno/arnol|
 |Persistence|Oliver Bathgate|bathgaoliv|
 |Record and Replay|Hoang Pham|phamhoan4|
-|Monkey Tests|||
+|Monkey Tests|Luke Catherall|catherluke|
