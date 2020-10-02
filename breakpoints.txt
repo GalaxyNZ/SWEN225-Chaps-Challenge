@@ -15,3 +15,24 @@ Record and Replay
         line 67
 
 Persistence
+
+Maze
+    Maze
+        line 64
+        line 70
+        line 79
+    Board
+        line 32
+        line 43
+        line 54
+        line 103
+        line 119
+        line 183
+        line 191
+        line 195
+        line 199
+    Player
+        line 20
+        line 29
+        line 37
+
