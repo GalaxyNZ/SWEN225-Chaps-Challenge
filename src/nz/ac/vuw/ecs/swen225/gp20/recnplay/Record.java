@@ -35,9 +35,9 @@ public class Record {
 
     isRecording = true;
     //while (isRecording){
-      while (!q.isEmpty()) {
-        moves.add(q.poll());
-      }
+    while (!q.isEmpty()) {
+      moves.add(q.poll());
+    }
     //}
 
     file.put("xSize", maze.getBoard().getWidth());
@@ -87,7 +87,7 @@ public class Record {
 
   public static void main(String[] args) {
     Record r = new Record();
-   // r.record();
+    // r.record();
   }
 
 }
