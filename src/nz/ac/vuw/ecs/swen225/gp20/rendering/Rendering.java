@@ -2,6 +2,8 @@ package nz.ac.vuw.ecs.swen225.gp20.rendering;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Board;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -17,16 +19,25 @@ import java.awt.*;
  */
 public class Rendering {
     private Dimension size;
-    private Point position, prev;
-    private int count  = 0;
+    private Point position, prev, center;
+    private int count  = 0, frames = 5;
     private String action = "Down", lastAction = "Down", prevTime = "";
     private boolean acting = false;
     private String[] list = {"Down" , "Left", "Right", "Run-Down", "Run-Left", "Run-Right", "Run-Up" , "Up"};
     //private float time = 1.0f;
     public Rendering(){}
 
-    public void testDrawingAnimation (Graphics g, String actor, String currentTime){
-            Graphics2D g2 = (Graphics2D) g;
+    public void testDrawingAnimation (Graphics g, String actor, Dimension d, Maze m){
+        size = d;
+        center = new Point(size.width/2, size.height/2);
+
+        Graphics2D g2 = (Graphics2D) g;
+        g2.drawImage(new ImageIcon("res/Background.png").getImage(), -(int)(size.width*0.1)/2,-(int)(size.height*0.1)/2, (int)(size.width*1.1), (int)(size.height*1.1), null);
+
+        if(m != null){
+            findPlayerPos(m.getBoard());
+            findChunk(g2, m.getBoard());
+        }
                 switch (actor) {
                     case "Down":
                     case "Up":
@@ -45,14 +56,15 @@ public class Rendering {
                         }catch (Exception ignored){}
 
                 }
-                prevTime = currentTime;
     }
 
-    public void update(Graphics g, Dimension d, String currentTime){//board
+    public void update(Graphics g, Dimension d, Board b){//board
 
             size = d;
-            findPlayerPos();//board
-            reCenter(position);
+            center = new Point(size.width/2, size.height/2);
+
+            findPlayerPos(b);//board
+            checkPosition(position);
             determineAction();
             draw(g);
     }
@@ -75,16 +87,19 @@ public class Rendering {
     public boolean updateFrame(String currentTime){
         int i = (int) (Float.parseFloat(currentTime.substring(currentTime.indexOf("."))) * 10);
         if(!prevTime.equals(currentTime)) {
+            prevTime = currentTime;
             if (i % 2 == 0) {
                 count++;
-                if (count > 5) count = 1;
+                if (count > frames) count = 1;
                 return true;
             }
         }
+
         return false;
     }
     private void determineAction(){
         if(prev == position){
+            frames = 5;
             switch (lastAction){
                 case "Run-Left":
                 case "Left":
@@ -116,7 +131,13 @@ public class Rendering {
             count = 0;
         }
     }
-    private void reCenter(Point p){
+    private void findChunk(Graphics2D g, Board b){
+        int chunkSize = 3 + 2*(((size.width/2)-35)/70);
+        int chunkCenter = (((chunkSize * 70) - size.width)/2)+1;//Center is always off by 1
+        drawBackgroundInChunk(g, chunkSize, chunkCenter, b);
+
+    }
+    private void checkPosition(Point p){
         prev = position;
         position = p;
     }
@@ -149,17 +170,80 @@ public class Rendering {
         if(acting){
             soundOnRun();
         }
-        if(count == 5) count = 0;
 
     }
-    private void findPlayerPos(){//Board here
+    private void findPlayerPos(Board b){//Board here
+        for(int j = 0; j < b.getHeight(); j++){
+            for(int i = 0; i < b.getWidth(); i++) {
+                 String tileChar = b.getTile( i,  j).toString();
+                    if(tileChar.equals("X")){
+                        position = new Point(i,j);
+                    }
+            }}
         //nested for loop
     }
 
+    private void drawBackgroundInChunk(Graphics2D g, int chunkSize, int chunkCenter, Board b){
+        int indexX = position.x - chunkSize/2 ;
+        int indexY = position.y - chunkSize/2 ;
+
+        for(int j = 0; j < chunkSize; j++){
+            for(int i = 0; i < chunkSize; i++){
+                if(indexX+i < 0 || indexX+i > b.getWidth()-1 || indexY+j < 0 || indexY+j >= b.getHeight()-1) continue;
+                String tileChar = b.getTile(indexX+i, indexY+j).toString();
+                g.setColor(Color.GRAY);
+                switch (tileChar) {
+                    case "_":
+                        g.setColor(Color.WHITE);
+                        break;
+                    case "#":
+                        g.setColor(Color.GRAY);
+                        break;
+                    case "%":
+                        g.setColor(Color.MAGENTA);
+                        break;
+                    case "E":
+                        g.setColor(new Color(40, 104, 90));
+                        break;
+                    case "i":
+                        g.setColor(new Color(92, 12, 144));
+                        break;
+                    case "T":
+                        g.setColor(Color.darkGray);
+                        break;
+                    case "G":
+                        g.setColor(Color.GREEN);
+                        break;
+                    case "g":
+                        g.setColor(new Color(13, 120, 6, 255));
+                        break;
+                    case "R":
+                        g.setColor(Color.RED);
+                        break;
+                    case "r":
+                        g.setColor(Color.pink);
+                        break;
+                    case "Y":
+                        g.setColor(Color.ORANGE);
+                        break;
+                    case "y":
+                        g.setColor(Color.YELLOW);
+                        break;
+                    case "B":
+                        g.setColor(Color.BLUE);
+                        break;
+                    case "b":
+                        g.setColor(Color.CYAN);
+                        break;
+                }
+                g.fillRect((i* 70)-chunkCenter, (j*70)-chunkCenter, 70, 70);
+            }
+        }
+    }
     private boolean still(Graphics2D g, String str){
         try{
             Image im = new ImageIcon("res/" + str + "-i" + count +".png").getImage();
-            g.drawImage(im, 0,0,64,64, null);
+            g.drawImage(im, center.x - 32,center.y - 32,64,64, null);
 
         }catch (Exception ignored){}
         return false;

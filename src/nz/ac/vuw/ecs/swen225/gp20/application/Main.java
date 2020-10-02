@@ -31,8 +31,7 @@ public class Main extends GUI {
   protected void redraw(Graphics g, Dimension d) {
     g.setColor(Color.LIGHT_GRAY);
     g.fillRect(0, 0, d.width, d.height);
-    if (maze != null) renderer.drawBoard(g, d, maze);
-    //renderer.testDrawingAnimation(g,"Down",String.format("%.1f", timeElapsed));
+    if (maze != null) renderer.testDrawingAnimation(g,"Down",d,maze);
   }
 
   @Override
