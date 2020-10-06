@@ -21,9 +21,9 @@ public class Rendering {
     private Dimension size;
     private Point position, prev, center;
     private int count  = 0, frames = 5;
-    private String action = "Down", lastAction = "Down", prevTime = "";
+    private String  prevTime = "";
     private boolean acting = false;
-    private String[] list = {"Down" , "Left", "Right", "Run-Down", "Run-Left", "Run-Right", "Run-Up" , "Up"};
+    private Classification action = Classification.Down, lastAct = Classification.Down;
     //private float time = 1.0f;
     public Rendering(){}
 
@@ -46,27 +46,17 @@ public class Rendering {
                         still(g2, actor);
                         break;
                     default:
-                        try{
-                            StringBuilder message = new StringBuilder();
-                            for (String s : list) {
-                                message.append("\n").append(s);
-                            }
-                            throw new ErrorMessage("Error\n" +
-                                    "Check Actor is listed below: " + message);
-                        }catch (Exception ignored){}
 
                 }
     }
 
-    public void update(Graphics g, Dimension d, Board b){//board
-
-            size = d;
-            center = new Point(size.width/2, size.height/2);
-
-            findPlayerPos(b);//board
-            checkPosition(position);
-            determineAction();
-            draw(g);
+    public void update(Graphics g, Dimension d, Maze m){//board
+        if(m == null) return;
+        size = d;
+        center = new Point(size.width/2, size.height/2);
+        findPlayerPos(m.getBoard());//board
+        determineAction();
+        draw(g);
     }
 
     //Getter Method
@@ -100,33 +90,31 @@ public class Rendering {
     private void determineAction(){
         if(prev == position){
             frames = 5;
-            switch (lastAction){
-                case "Run-Left":
-                case "Left":
-                    changeAction("Left");
+            switch (lastAct){
+                case RunLeft:
+                case Left:
+                    changeAction(Classification.Left);
                     break;
+                case RunRight:
+                case Right:
+                    changeAction(Classification.Right);
+                    break;
+                case RunDown:
+                case Down:
+                    changeAction(Classification.Down);
+                    break;
+                case RunUp:
+                case Up:
+                    changeAction(Classification.Up);
 
-                case "Run-Right":
-                case "Right":
-                    changeAction("Right");
-                    break;
-
-                case "Run-Up":
-                case "Up":
-                    changeAction("Up");
-                    break;
-                case "Run-Down":
-                case "Down":
-                    changeAction("Down");
-                    break;
             }
         }
 
 
     }
-    private void changeAction(String act){
+    private void changeAction(Classification act){
         if(!acting){
-            lastAction = action;
+            lastAct = action;
             action = act;
             count = 0;
         }
@@ -147,23 +135,19 @@ public class Rendering {
 
         //Draw Board
         switch (action){
-            case "Down":
-            case "Left":
-            case "Up" :
-            case "Right":
-                acting = still(g2, action);
+            default:
+                acting = still(g2, action.toString());
                 break;
-
-            case "Run-Left":
+            case RunLeft:
                 acting = runLeft(g2);
                 break;
-            case "Run-Right":
+            case RunRight:
                 acting = runRight(g2);
                 break;
-            case "Run-Up":
+            case RunUp:
                 acting = runUp(g2);
                 break;
-            case "Run- Down":
+            case RunDown:
                 acting= runDown(g2);
 
         }
@@ -177,7 +161,7 @@ public class Rendering {
             for(int i = 0; i < b.getWidth(); i++) {
                  String tileChar = b.getTile( i,  j).toString();
                     if(tileChar.equals("X")){
-                        position = new Point(i,j);
+                        checkPosition(new Point(i,j));
                     }
             }}
         //nested for loop
@@ -190,20 +174,18 @@ public class Rendering {
         for(int j = 0; j < chunkSize; j++){
             for(int i = 0; i < chunkSize; i++){
                 if(indexX+i < 0 || indexX+i > b.getWidth()-1 || indexY+j < 0 || indexY+j >= b.getHeight()-1) continue;
-                String tileChar = b.getTile(indexX+i, indexY+j).toString();
-                g.setColor(Color.GRAY);
+                Point defaultP = new Point((i* 70)-chunkCenter,(j* 70)-chunkCenter);
+                int wh = 70;
+                String tileChar = b.getTile(indexX+i,indexY+j).toString();
                 switch (tileChar) {
-                    case "_":
-                        g.setColor(Color.WHITE);
-                        break;
                     case "#":
-                        g.setColor(Color.GRAY);
+                        new TileDesigns(g,defaultP,wh,Classification.Wall);
                         break;
                     case "%":
-                        g.setColor(Color.MAGENTA);
+                        new TileDesigns(g,defaultP,wh,Classification.Exit);
                         break;
                     case "E":
-                        g.setColor(new Color(40, 104, 90));
+                        new TileDesigns(g,defaultP,wh,Classification.ELI);
                         break;
                     case "i":
                         g.setColor(new Color(92, 12, 144));
@@ -235,8 +217,8 @@ public class Rendering {
                     case "b":
                         g.setColor(Color.CYAN);
                         break;
+                    default:
                 }
-                g.fillRect((i* 70)-chunkCenter, (j*70)-chunkCenter, 70, 70);
             }
         }
     }
@@ -292,66 +274,5 @@ public class Rendering {
     }
 
     private void soundOnRun(){ }
-
-    public void drawBoard(Graphics g, Dimension d, Maze maze) {
-        Board b = maze.getBoard();
-        int size = b.getWidth();
-        int tileSize = (int) d.getWidth()/size;
-
-        for (int y = 0; y < b.getHeight(); y++) {
-            for (int x = 0; x < size; x++) {
-                String tileChar = b.getTile(x, y).toString();
-                g.setColor(Color.GRAY);
-                switch (tileChar) {
-                    case "_":
-                        g.setColor(Color.WHITE);
-                        break;
-                    case "#":
-                        g.setColor(Color.GRAY);
-                        break;
-                    case "%":
-                        g.setColor(Color.MAGENTA);
-                        break;
-                    case "E":
-                        g.setColor(new Color(40, 104, 90));
-                        break;
-                    case "i":
-                        g.setColor(new Color(92, 12, 144));
-                        break;
-                    case "T":
-                        g.setColor(Color.darkGray);
-                        break;
-                    case "G":
-                        g.setColor(Color.GREEN);
-                        break;
-                    case "g":
-                        g.setColor(new Color(13, 120, 6, 255));
-                        break;
-                    case "R":
-                        g.setColor(Color.RED);
-                        break;
-                    case "r":
-                        g.setColor(Color.pink);
-                        break;
-                    case "Y":
-                        g.setColor(Color.ORANGE);
-                        break;
-                    case "y":
-                        g.setColor(Color.YELLOW);
-                        break;
-                    case "B":
-                        g.setColor(Color.BLUE);
-                        break;
-                    case "b":
-                        g.setColor(Color.CYAN);
-                        break;
-                    case "X":
-                        g.setColor(Color.black);
-                        break;
-                }
-                g.fillRect(x*tileSize, y*tileSize, tileSize, tileSize);
-            }
-        }
-    }
 
 }
