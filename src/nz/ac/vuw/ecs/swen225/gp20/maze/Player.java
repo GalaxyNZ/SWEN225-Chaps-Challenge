@@ -23,7 +23,7 @@ public class Player {
 	}
 	
 	/*
-	 * Returns the number of chips player has collected.
+	 * Returns the number of chips player has collected. Called for GUI printing.
 	 */
 	
 	public int getTreasure() {
@@ -55,52 +55,22 @@ public class Player {
 	}
 	
 	/*
-	 * Checks if player has a valid key for a give locked door.
-	 * TODO: Implement valid key check.
+	 * Returns true if player has a key that matches incoming door color, then increments the keys number of uses.
 	 */
 	
-	public boolean keyCheck(String colorOfDoor) {
+	public boolean getKey(String doorColor) {
 		for(Item i : inventory) {
 			if(i instanceof KeyItem) {
-				if(i.getColor() == colorOfDoor) {
+				if(i.getColor() == doorColor) {
+					KeyItem key = (KeyItem)i;
+					if(key.increment()) { //If this key has been used it maximum amount of times remove it from the players inventory.
+						inventory.remove(i);
+					}
 					return true;
 				}
 			}
 		}
 		return false;
-	}
-	
-	/*
-	 * Removes any keys that have been used from players inventory.
-	 * TODO: Re-implement this feature to run more coherently in the gameplayLoop.
-	 */
-	
-	public void removeUsedKeys() {
-		for(int i = 0; i < inventory.size(); i++) {
-			if(inventory.get(i) instanceof KeyItem) {
-				KeyItem thisKey = (KeyItem)inventory.get(i);
-				if(thisKey.used >= thisKey.maxUses) {
-					inventory.remove(i);
-					break;
-				}
-			}
-		}
-	}
-	
-	/*
-	 * Returns the key associated with a given color.
-	 * TODO: Re-implement key checks to be more coherent.
-	 */
-	
-	public KeyItem getKey(String color) {
-		for(Item i : inventory) {
-			if(i instanceof KeyItem) {
-				if(i.getColor() == color) {
-					return (KeyItem) i;
-				}
-			}
-		}
-		return null;
 	}
 	
 	/*
@@ -121,14 +91,12 @@ public class Player {
 			return true;
 		}
 		else {
-			System.out.println("INVENTORY FULL");
 			return false;
 		}
 	}
 	
 	/*
 	 * Returns true is player has enough chips to unlock ExitLockItem, false if player needs more chips.
-	 * TODO: Re-implement Door check systems to be more coherent.
 	 */
 	
 	public boolean treasureCheck() {

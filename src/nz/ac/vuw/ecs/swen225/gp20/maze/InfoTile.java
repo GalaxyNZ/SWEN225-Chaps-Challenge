@@ -7,14 +7,24 @@ public class InfoTile extends Tile{
 	private Point boardLocation;
 	private boolean isObstacle = true;
 	private Item containedItem;
+	private String info;
 	
 	/*
 	 * Constructor method, requires the standard Point on the map as well as the string of information that this Tile shows when it contains the Player.
 	 */
 	
-	public InfoTile(Point location) {
+	public InfoTile(Point location, String info) {
 		boardLocation = location;
 		tileChar = "I";
+		this.info = info;
+	}
+	
+	/*
+	 * Returns the info on this Tile for GUI printing.
+	 */
+	
+	public String getInfo() {
+		return info;
 	}
 		
 	/*

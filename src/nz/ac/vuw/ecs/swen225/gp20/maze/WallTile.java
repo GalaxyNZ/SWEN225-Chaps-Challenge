@@ -34,8 +34,7 @@ public class WallTile extends Tile{
 	}
 	
 	/*
-	 * Updates Tile to either contain an Item or null. Returns the old item in-case it needs to be added to Chap's inventory.
-	 * TODO: Possible change to Item system? Avoid returning null values and work off of an Item Boolean call?
+	 * Updates Tile to either contain an Item or null. Returns the old item in-case it needs to be added to Chap's inventory. WallTile cannot contain items.
 	 */
 	
 	public Item addItem(Item newItem) {
@@ -43,8 +42,7 @@ public class WallTile extends Tile{
 	}
 	
 	/*
-	 * Returns the Item that this tile is holding.
-	 * TODO: Currently only use is for GUI printing, may change to return Item.toString OR item Image reference for GUI printing.
+	 * Returns the Item that this tile is holding. WallTile cannot contain an Item, so will always return null for GUI printing.
 	 */
 	
 	public Item getItem() { 
@@ -52,7 +50,7 @@ public class WallTile extends Tile{
 	}
 	
 	/*
-	 * Returns a boolean based on whether or not this tile can be passed through by the player.
+	 * Returns a boolean based on whether or not this tile can be passed through by the player. WallTile is always an obstacle.
 	 */
 	
 	public Boolean getObstacle() {

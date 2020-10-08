@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /*
- * This item represents a locked door that requires a key of the same color as it in order to be passed. Once key is used on the door the door dissappears from the game.
+ * This item represents a locked door that requires a key of the same color as it in order to be passed. Once key is used on the door the door disappears from the game.
  */
 
 public class LockedDoorItem extends Item{
@@ -10,7 +10,6 @@ public class LockedDoorItem extends Item{
 	
 	/*
 	 * Basic constructor, only needs the doors color as an input.
-	 * TODO: Re-Implement door and key check system.
 	 */
 	
 	public LockedDoorItem(String color) {
