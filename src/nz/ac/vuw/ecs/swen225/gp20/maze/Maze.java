@@ -98,10 +98,17 @@ public class Maze {
 		else if(board.boardMap[newY][newX] instanceof FreeTile) { //FreeTiles are usually not an obstacle, but there are 3 conditions where they are.
 			if(board.boardMap[newY][newX].getItem() instanceof LockedDoorItem) { //FreeTile obstacle if player does not have a key for the door Item in the Tile.
 				LockedDoorItem thisDoor = (LockedDoorItem)board.boardMap[newY][newX].getItem();
-				return player.getKey(thisDoor.getColor());
+				if (player.getKey(thisDoor.getColor())) {
+					board.boardMap[newY][newX].addItem(board.boardMap[oldLocation.y][oldLocation.x].addItem(null));
+					player.move(newLocation);
+					return true;
+				}
+				return false;
 			}
 			else if(board.boardMap[newY][newX].getItem() instanceof ExitLockItem) { //FreeTile obstacle if player does not have enough treasure for the ExitLockDoor Item in the Tile.
 				if(chipsRemaining() <= 0) {
+					board.boardMap[newY][newX].addItem(board.boardMap[oldLocation.y][oldLocation.x].addItem(null));
+					player.move(newLocation);
 					return true;
 				}
 				else {

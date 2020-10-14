@@ -32,6 +32,10 @@ public class KeyItem extends Item{
 				return false;
 			}
 		}
+
+	public String getColor() {
+		return this.color;
+	}
 		
 		/*
 		 * Returns the print string for printBoard() calls.
