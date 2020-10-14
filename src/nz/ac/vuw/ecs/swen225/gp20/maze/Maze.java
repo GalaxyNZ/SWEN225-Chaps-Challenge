@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
@@ -26,6 +27,11 @@ public class Maze {
 	
 	public Maze(String mapString) {
 		board = new Board(mapString);
+		player = new Player(board.findPlayer(), board.getChips());
+	}
+	
+	public Maze (Map<?,?> boardMap) {
+		board = new Board(boardMap);
 		player = new Player(board.findPlayer(), board.getChips());
 	}
 	

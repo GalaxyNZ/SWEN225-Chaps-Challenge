@@ -5,6 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 /*
  * This class represents the physical board of the game, and contains the 2D array of all Tiles as well as the Items
@@ -38,6 +39,20 @@ public class Board {
 		boardMap = new Tile[ySize][xSize];
 		delimitedInput = getKeyInfo(delimitedInput);
 		makeTiles(delimitedInput, xSize, ySize);
+	}
+	
+	public Board(Map<?,?> map) {
+		xSize = (int) Double.parseDouble(map.get("xSize").toString());
+        ySize = (int) Double.parseDouble(map.get("ySize").toString());
+        tileInformation = map.get("tileInfo").toString();
+        numChips = (int) Double.parseDouble(map.get("numChips").toString());
+        boardMap = new Tile[ySize][xSize];
+        GKMax = (int) Double.parseDouble(map.get("SETGK").toString());
+        BKMax = (int) Double.parseDouble(map.get("SETBK").toString());
+        YKMax = (int) Double.parseDouble(map.get("SETRK").toString());
+        RKMax = (int) Double.parseDouble(map.get("SETYK").toString());
+        ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(map.get("board").toString().split("[,]")));
+        makeTiles(delimitedInput, xSize, ySize);
 	}
 	
 	/*
