@@ -56,9 +56,10 @@ public class Persistence {
             reader.close();
             boardWidth = (int) Double.parseDouble(map.get("xSize").toString());
             boardHeight = (int) Double.parseDouble(map.get("ySize").toString());
-            Board board = new Board(boardWidth, boardHeight);
-            readBoard(board);
-            maze = new Maze(board, player);
+            //Board board = new Board(boardWidth, boardHeight);
+            //readBoard(board);
+            //maze = new Maze(board, player);
+            maze = new Maze(map);
 
 
         } catch (Exception ex) {
@@ -91,7 +92,7 @@ public class Persistence {
                     board.setTileAt(x, y, new FreeTile(location, new ExitLockItem(numChips)));
                     break;
                 case "i":
-                    board.setTileAt(x, y, new InfoTile(location));
+                    //board.setTileAt(x, y, new InfoTile(location));
                     break;
                 case "T":
                     board.setTileAt(x, y, new FreeTile(location, new TreasureItem()));

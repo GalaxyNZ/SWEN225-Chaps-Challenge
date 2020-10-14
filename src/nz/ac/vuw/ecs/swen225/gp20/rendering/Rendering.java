@@ -35,8 +35,8 @@ public class Rendering {
         g2.drawImage(new ImageIcon("res/Background.png").getImage(), -(int)(size.width*0.1)/2,-(int)(size.height*0.1)/2, (int)(size.width*1.1), (int)(size.height*1.1), null);
 
         if(m != null){
-            findPlayerPos(m.getBoard());
-            findChunk(g2, m.getBoard());
+            findPlayerPos(m);
+            findChunk(g2, m);
         }
                 switch (actor) {
                     case "Down":
@@ -58,12 +58,12 @@ public class Rendering {
                 }
     }
 
-    public void update(Graphics g, Dimension d, Board b){//board
+    public void update(Graphics g, Dimension d, Maze m){//board
 
             size = d;
             center = new Point(size.width/2, size.height/2);
 
-            findPlayerPos(b);//board
+            findPlayerPos(m);//board
             checkPosition(position);
             determineAction();
             draw(g);
@@ -131,10 +131,10 @@ public class Rendering {
             count = 0;
         }
     }
-    private void findChunk(Graphics2D g, Board b){
+    private void findChunk(Graphics2D g, Maze m){
         int chunkSize = 3 + 2*(((size.width/2)-35)/70);
         int chunkCenter = (((chunkSize * 70) - size.width)/2)+1;//Center is always off by 1
-        drawBackgroundInChunk(g, chunkSize, chunkCenter, b);
+        drawBackgroundInChunk(g, chunkSize, chunkCenter, m);
 
     }
     private void checkPosition(Point p){
@@ -172,10 +172,11 @@ public class Rendering {
         }
 
     }
-    private void findPlayerPos(Board b){//Board here
-        for(int j = 0; j < b.getHeight(); j++){
-            for(int i = 0; i < b.getWidth(); i++) {
-                 String tileChar = b.getTile( i,  j).toString();
+    private void findPlayerPos(Maze m){//Board here
+        for(int j = 0; j < m.getBoardSize().y; j++){
+            for(int i = 0; i < m.getBoardSize().x; i++) {
+                Tile t = m.getBoardTile(new Point(i,  j));
+                 String tileChar = t.toString();
                     if(tileChar.equals("X")){
                         position = new Point(i,j);
                     }
@@ -183,14 +184,14 @@ public class Rendering {
         //nested for loop
     }
 
-    private void drawBackgroundInChunk(Graphics2D g, int chunkSize, int chunkCenter, Board b){
+    private void drawBackgroundInChunk(Graphics2D g, int chunkSize, int chunkCenter, Maze m){
         int indexX = position.x - chunkSize/2 ;
         int indexY = position.y - chunkSize/2 ;
 
         for(int j = 0; j < chunkSize; j++){
             for(int i = 0; i < chunkSize; i++){
-                if(indexX+i < 0 || indexX+i > b.getWidth()-1 || indexY+j < 0 || indexY+j >= b.getHeight()-1) continue;
-                String tileChar = b.getTile(indexX+i, indexY+j).toString();
+                if(indexX+i < 0 || indexX+i > m.getBoardSize().x-1 || indexY+j < 0 || indexY+j >= m.getBoardSize().y-1) continue;
+                String tileChar = m.getBoardTile(new Point(indexX+i, indexY+j)).toString();
                 g.setColor(Color.GRAY);
                 switch (tileChar) {
                     case "_":
@@ -294,13 +295,13 @@ public class Rendering {
     private void soundOnRun(){ }
 
     public void drawBoard(Graphics g, Dimension d, Maze maze) {
-        Board b = maze.getBoard();
-        int size = b.getWidth();
+       // Board b = maze.getBoard();
+        int size = maze.getBoardSize().x;
         int tileSize = (int) d.getWidth()/size;
 
-        for (int y = 0; y < b.getHeight(); y++) {
+        for (int y = 0; y < maze.getBoardSize().y; y++) {
             for (int x = 0; x < size; x++) {
-                String tileChar = b.getTile(x, y).toString();
+                String tileChar = maze.getBoardTile(new Point(x,y)).toString();
                 g.setColor(Color.GRAY);
                 switch (tileChar) {
                     case "_":

@@ -36,7 +36,7 @@ public class Main extends GUI {
 
   @Override
   protected void movePlayer(GUI.direction dir) {
-    maze.getBoard().movePlayer(dir);
+    maze.executeMove(dir);
     recorder.addMove(dir);
   }
 
