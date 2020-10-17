@@ -129,14 +129,15 @@ public abstract class GUI {
     buttons.add(right);
 
     InputMap inputMap = buttons.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), String.valueOf(KeyEvent.VK_RIGHT));
-    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), String.valueOf(KeyEvent.VK_LEFT));
-    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), String.valueOf(KeyEvent.VK_DOWN));
-    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), String.valueOf(KeyEvent.VK_UP));
-    buttons.getActionMap().put(String.valueOf(KeyEvent.VK_RIGHT), moveRight);
-    buttons.getActionMap().put(String.valueOf(KeyEvent.VK_LEFT), moveLeft);
-    buttons.getActionMap().put(String.valueOf(KeyEvent.VK_DOWN), moveDown);
-    buttons.getActionMap().put(String.valueOf(KeyEvent.VK_UP), moveUp);
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), "right");
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, true), "left");
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), "down");
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, true), "up");
+    buttons.getActionMap().put("right", moveRight);
+    buttons.getActionMap().put("left", moveLeft);
+    buttons.getActionMap().put("down", moveDown);
+    buttons.getActionMap().put("up", moveUp);
+    buttons.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
 
 
     JPanel info = new JPanel(new GridLayout(5, 0, 0, 0));
