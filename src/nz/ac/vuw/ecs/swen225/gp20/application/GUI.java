@@ -66,14 +66,87 @@ public abstract class GUI {
     lvl.setBorder(border);
     lvl.add(lvlText);
 
+    Action moveUp = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        movePlayer(direction.UP);
+      }
+    };
 
-    JPanel info = new JPanel(new GridLayout(4, 0, 0, 0));
+    Action moveDown = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        movePlayer(direction.DOWN);
+      }
+    };
+
+    Action moveRight = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        movePlayer(direction.RIGHT);
+      }
+    };
+
+    Action moveLeft = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        movePlayer(direction.LEFT);
+      }
+    };
+
+    JButton up = new JButton("Up");
+    up.setMnemonic(KeyEvent.VK_UP);
+    up.setFocusPainted(false);
+    up.addActionListener(moveUp);
+
+    JButton down = new JButton("Down");
+    down.setMnemonic(KeyEvent.VK_DOWN);
+    down.setFocusPainted(false);
+    down.addActionListener(moveDown);
+    //down.addActionListener(ev -> movePlayer(direction.DOWN));
+
+    JButton left = new JButton("Left");
+    left.setMnemonic(KeyEvent.VK_LEFT);
+    left.setFocusPainted(false);
+    left.addActionListener(moveLeft);
+    //left.addActionListener(ev -> movePlayer(direction.LEFT));
+
+    JButton right = new JButton("Right");
+    right.setFocusPainted(false);
+    right.setMnemonic(KeyEvent.VK_RIGHT);
+    right.addActionListener(moveRight);
+    //right.addActionListener(ev -> movePlayer(direction.RIGHT));
+
+
+    JPanel buttons = new JPanel(new GridLayout(2, 3, 5, 5));
+    buttons.setBackground(Color.LIGHT_GRAY);
+    buttons.setBorder(border);
+    buttons.add(new JButton());
+    buttons.add(up);
+    buttons.add(new JButton());
+    buttons.add(left);
+    buttons.add(down);
+    buttons.add(right);
+
+    InputMap inputMap = buttons.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), String.valueOf(KeyEvent.VK_RIGHT));
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), String.valueOf(KeyEvent.VK_LEFT));
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), String.valueOf(KeyEvent.VK_DOWN));
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), String.valueOf(KeyEvent.VK_UP));
+    buttons.getActionMap().put(String.valueOf(KeyEvent.VK_RIGHT), moveRight);
+    buttons.getActionMap().put(String.valueOf(KeyEvent.VK_LEFT), moveLeft);
+    buttons.getActionMap().put(String.valueOf(KeyEvent.VK_DOWN), moveDown);
+    buttons.getActionMap().put(String.valueOf(KeyEvent.VK_UP), moveUp);
+
+
+    JPanel info = new JPanel(new GridLayout(5, 0, 0, 0));
     info.setBackground(Color.LIGHT_GRAY);
     info.setBorder(border);
     info.add(lvl);
     info.add(time);
     info.add(chips);
     info.add(items);
+    info.add(buttons);
 
     JPanel display = new JPanel();
     display.setBackground(new Color(0,204,0));
@@ -189,7 +262,7 @@ public abstract class GUI {
     level.add(levelOne);
     level.add(levelTwo);
 
-    JMenuItem up = new JMenuItem("Press the UP key to move up");
+    /*JMenuItem up = new JMenuItem("Press the UP key to move up");
     KeyStroke upKey = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0);
     up.setAccelerator(upKey);
     up.addActionListener(e -> {
@@ -219,14 +292,14 @@ public abstract class GUI {
     left.addActionListener(e -> {
       movePlayer(direction.LEFT);
       redraw();
-    });
+    });*/
 
     JMenu help = new JMenu("Help");
     help.setPreferredSize(new Dimension(45, 15));
-    help.add(up);
+    /*help.add(up);
     help.add(down);
     help.add(right);
-    help.add(left);
+    help.add(left);*/
 
     JMenuBar controls = new JMenuBar();
     controls.add(menu);
