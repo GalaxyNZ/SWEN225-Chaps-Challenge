@@ -75,7 +75,7 @@ public class Main extends GUI {
     System.out.println("Loads a saved game");
     if (timer != null) timer.stop();
     Persistence persistence = new Persistence();
-    maze = persistence.selctFile();
+    maze = persistence.selectFile();
     startTimer(timeLeft);
   }
 

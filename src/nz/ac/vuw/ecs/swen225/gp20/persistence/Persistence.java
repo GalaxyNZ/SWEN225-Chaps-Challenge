@@ -26,7 +26,7 @@ public class Persistence {
     Player player;
     ArrayList<String> moves = new ArrayList<>();
 
-    public Maze selctFile() {
+    public Maze selectFile() {
 
         String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/levels/";
 
