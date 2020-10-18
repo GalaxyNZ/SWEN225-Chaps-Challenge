@@ -15,6 +15,7 @@ public class Main extends GUI {
   private Timer timer;
   private Rendering renderer;
   private Record recorder;
+  private Persistence p;
   Maze maze;
 
 
@@ -25,6 +26,7 @@ public class Main extends GUI {
   public Main() {
     renderer = new Rendering();
     recorder = new Record();
+    p = new Persistence();
   }
 
   @Override
@@ -53,6 +55,7 @@ public class Main extends GUI {
   @Override
   protected void exitSaveGame() {
     System.out.println("Save and exit");
+    p.saveGame(maze);
   }
 
   @Override

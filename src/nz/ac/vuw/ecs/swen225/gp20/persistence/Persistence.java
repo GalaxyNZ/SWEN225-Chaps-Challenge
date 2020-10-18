@@ -2,6 +2,9 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.Gson;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.Record;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -9,6 +12,9 @@ import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -18,6 +24,7 @@ public class Persistence {
     int boardWidth;
     int boardHeight;
     Player player;
+    ArrayList<String> moves = new ArrayList<>();
 
     public Maze selctFile() {
 
@@ -51,6 +58,7 @@ public class Persistence {
             for (Map.Entry<?, ?> entry : map.entrySet()) {
                 String varName = entry.getKey().toString();
                 System.out.println(entry.getKey() + " = " + entry.getValue());
+
             }
 
             reader.close();
@@ -68,6 +76,37 @@ public class Persistence {
         return maze;
 
     }
+
+    public void saveGame(Maze maze) {
+
+        JSONObject file = new JSONObject();
+
+        file.put("xSize", maze.getBoardSize().getX());
+        file.put("ySize", maze.getBoardSize().getY());
+        file.put("tileInfo", "something");
+        file.put("SETGK", 3);
+        file.put("SETBK", 2);
+        file.put("SETYK", 1);
+        file.put("SETRK", 2);
+        file.put("board", maze.toString());
+
+
+        try (FileWriter saveFile = new FileWriter(fileName() + ".json")) {
+
+            saveFile.write(file.toJSONString());
+            saveFile.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String fileName(){
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+        return dateFormat.format(date);
+    }
+
 
     public void readBoard(Board board) {
         Scanner sc = new Scanner(map.get("board").toString()).useDelimiter(",");
