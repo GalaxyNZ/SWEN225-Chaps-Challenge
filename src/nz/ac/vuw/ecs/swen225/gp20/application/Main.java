@@ -31,12 +31,16 @@ public class Main extends GUI {
   protected void redraw(Graphics g, Dimension d) {
     g.setColor(Color.LIGHT_GRAY);
     g.fillRect(0, 0, d.width, d.height);
-    if (maze != null) renderer.testDrawingAnimation(g,"Down",d,maze);
+    if (maze != null) renderer.testDrawingAnimation(g, "Down", d, maze);
   }
 
   @Override
   protected void movePlayer(GUI.direction dir) {
+    if (maze == null) return;
     maze.executeMove(dir);
+    if (maze.levelWonChecker()) {
+      // Player has won
+    }
     recorder.addMove(dir);
   }
 
@@ -44,6 +48,11 @@ public class Main extends GUI {
   protected void newGame(JLabel timeLeft) {
     System.out.println("Starts new game at level 1");
     startTimer(timeLeft);
+  }
+
+  @Override
+  protected void exitSaveGame() {
+    System.out.println("Save and exit");
   }
 
   @Override
@@ -100,11 +109,14 @@ public class Main extends GUI {
       if (!gamePaused) {
         timeLeft.setText(String.valueOf(String.format("%.1f", timePerLevel - timeElapsed)));
         timeElapsed += 0.1f;
+        if (timeElapsed - (int) timeElapsed == 0) {
+          // Move bugs
+        }
         if (timePerLevel - timeElapsed < 30) timeLeft.setForeground(new Color(227, 115, 14));
         if (timePerLevel - timeElapsed < 15) timeLeft.setForeground(Color.RED);
         if (timePerLevel - timeElapsed < 0) timer.stop();
 
-        if(renderer.updateFrame(String.format("%.1f", timeElapsed))) redraw();
+        if (renderer.updateFrame(String.format("%.1f", timeElapsed))) redraw();
       }
     });
     timer.start();

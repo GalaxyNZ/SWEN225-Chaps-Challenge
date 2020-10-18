@@ -1,10 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 public abstract class GUI {
 
@@ -94,28 +96,86 @@ public abstract class GUI {
       }
     };
 
-    JButton up = new JButton("Up");
+    JButton up = new JButton();
+    up.setName("up");
+    up.setBackground(Color.LIGHT_GRAY);
     up.setMnemonic(KeyEvent.VK_UP);
     up.setFocusPainted(false);
     up.addActionListener(moveUp);
 
-    JButton down = new JButton("Down");
+    JButton down = new JButton();
+    down.setName("down");
+    down.setBackground(Color.LIGHT_GRAY);
     down.setMnemonic(KeyEvent.VK_DOWN);
     down.setFocusPainted(false);
     down.addActionListener(moveDown);
     //down.addActionListener(ev -> movePlayer(direction.DOWN));
 
-    JButton left = new JButton("Left");
+    JButton left = new JButton();
+    left.setName("left");
+    left.setBackground(Color.LIGHT_GRAY);
     left.setMnemonic(KeyEvent.VK_LEFT);
     left.setFocusPainted(false);
     left.addActionListener(moveLeft);
     //left.addActionListener(ev -> movePlayer(direction.LEFT));
 
-    JButton right = new JButton("Right");
+    JButton right = new JButton();
+
+    //right.setIcon(new ImageIcon("right.png"));
+    right.setName("right");
+    right.setBackground(Color.LIGHT_GRAY);
     right.setFocusPainted(false);
     right.setMnemonic(KeyEvent.VK_RIGHT);
     right.addActionListener(moveRight);
     //right.addActionListener(ev -> movePlayer(direction.RIGHT));
+
+    /*right.addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentResized(ComponentEvent e) {
+        try {
+          Image img = ImageIO.read(getClass().getResource("/right.png"));
+          drawArrow(img, e);
+        } catch (IOException ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
+
+    left.addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentResized(ComponentEvent e) {
+        try {
+          Image img = ImageIO.read(getClass().getResource("/left.png"));
+          drawArrow(img, e);
+        } catch (IOException ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
+
+    down.addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentResized(ComponentEvent e) {
+        try {
+          Image img = ImageIO.read(getClass().getResource("/down.png"));
+          drawArrow(img, e);
+        } catch (IOException ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
+
+    up.addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentResized(ComponentEvent e) {
+        try {
+          Image img = ImageIO.read(getClass().getResource("/up.png"));
+          drawArrow(img, e);
+        } catch (IOException ex) {
+          ex.printStackTrace();
+        }
+      }
+    });*/
 
 
     JPanel buttons = new JPanel(new GridLayout(2, 3, 5, 5));
@@ -127,6 +187,30 @@ public abstract class GUI {
     buttons.add(left);
     buttons.add(down);
     buttons.add(right);
+
+    buttons.addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentResized(ComponentEvent e) {
+        try {
+          Component[] comp = buttons.getComponents();
+          for (int i = 0; i < comp.length; i++) {
+            if (comp[i] instanceof JButton) {
+              JButton btn = (JButton) comp[i];
+              if (btn.getName() == null) continue;
+              Dimension size = btn.getSize();
+              Insets insets = btn.getInsets();
+              size.width -= insets.left + insets.right;
+              size.height -= insets.top + insets.bottom;
+              Image img = ImageIO.read(getClass().getResource("/" + btn.getName() + ".png"));
+              Image scaled = img.getScaledInstance(size.width, size.height, java.awt.Image.SCALE_SMOOTH);
+              btn.setIcon(new ImageIcon(scaled));
+            }
+          }
+        } catch (IOException ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
 
     InputMap inputMap = buttons.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), "right");
@@ -401,6 +485,8 @@ public abstract class GUI {
    */
   protected abstract void newGame(JLabel timeLeft);
 
+  protected abstract void exitSaveGame();
+
   /**
    * Helper method used to scale the labels and the text
    * inside.
@@ -424,9 +510,6 @@ public abstract class GUI {
    * Saves the current state of the game to a JSON file
    * and then closes the game.
    */
-  private void exitSaveGame() {
-    System.out.println("Save and exit");
-  }
 
   /**
    * Exits the game when the player chooses to, but
