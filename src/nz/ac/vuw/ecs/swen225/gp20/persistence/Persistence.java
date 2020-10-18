@@ -45,7 +45,7 @@ public class Persistence {
     }
 
     public Maze newGame(){
-        return loadFile(path +"level1");
+        return loadFile(path +"level1.json");
     }
 
     public Maze loadFile(String file) { //read
