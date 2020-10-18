@@ -49,6 +49,7 @@ public class Main extends GUI {
   @Override
   protected void newGame(JLabel timeLeft) {
     System.out.println("Starts new game at level 1");
+    maze = p.newGame();
     startTimer(timeLeft);
   }
 
