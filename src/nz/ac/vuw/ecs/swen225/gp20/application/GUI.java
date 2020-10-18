@@ -96,94 +96,70 @@ public abstract class GUI {
       }
     };
 
+    Action startRecord = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        startRec();
+      }
+    };
+
+    Action stopRecord = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        endRec();
+      }
+    };
+
     JButton up = new JButton();
+    up.setBorderPainted(false);
     up.setName("up");
     up.setBackground(Color.LIGHT_GRAY);
-    up.setMnemonic(KeyEvent.VK_UP);
     up.setFocusPainted(false);
     up.addActionListener(moveUp);
 
     JButton down = new JButton();
+    down.setBorderPainted(false);
     down.setName("down");
     down.setBackground(Color.LIGHT_GRAY);
-    down.setMnemonic(KeyEvent.VK_DOWN);
     down.setFocusPainted(false);
     down.addActionListener(moveDown);
-    //down.addActionListener(ev -> movePlayer(direction.DOWN));
 
     JButton left = new JButton();
+    left.setBorderPainted(false);
     left.setName("left");
     left.setBackground(Color.LIGHT_GRAY);
-    left.setMnemonic(KeyEvent.VK_LEFT);
     left.setFocusPainted(false);
     left.addActionListener(moveLeft);
-    //left.addActionListener(ev -> movePlayer(direction.LEFT));
 
     JButton right = new JButton();
-
-    //right.setIcon(new ImageIcon("right.png"));
+    right.setBorderPainted(false);
     right.setName("right");
     right.setBackground(Color.LIGHT_GRAY);
     right.setFocusPainted(false);
-    right.setMnemonic(KeyEvent.VK_RIGHT);
     right.addActionListener(moveRight);
-    //right.addActionListener(ev -> movePlayer(direction.RIGHT));
 
-    /*right.addComponentListener(new ComponentAdapter() {
-      @Override
-      public void componentResized(ComponentEvent e) {
-        try {
-          Image img = ImageIO.read(getClass().getResource("/right.png"));
-          drawArrow(img, e);
-        } catch (IOException ex) {
-          ex.printStackTrace();
-        }
-      }
-    });
+    JButton record = new JButton();
+    record.setBorderPainted(false);
+    record.setToolTipText("Start recording");
+    record.setName("record");
+    record.setBackground(Color.LIGHT_GRAY);
+    record.setFocusPainted(false);
+    record.addActionListener(startRecord);
 
-    left.addComponentListener(new ComponentAdapter() {
-      @Override
-      public void componentResized(ComponentEvent e) {
-        try {
-          Image img = ImageIO.read(getClass().getResource("/left.png"));
-          drawArrow(img, e);
-        } catch (IOException ex) {
-          ex.printStackTrace();
-        }
-      }
-    });
-
-    down.addComponentListener(new ComponentAdapter() {
-      @Override
-      public void componentResized(ComponentEvent e) {
-        try {
-          Image img = ImageIO.read(getClass().getResource("/down.png"));
-          drawArrow(img, e);
-        } catch (IOException ex) {
-          ex.printStackTrace();
-        }
-      }
-    });
-
-    up.addComponentListener(new ComponentAdapter() {
-      @Override
-      public void componentResized(ComponentEvent e) {
-        try {
-          Image img = ImageIO.read(getClass().getResource("/up.png"));
-          drawArrow(img, e);
-        } catch (IOException ex) {
-          ex.printStackTrace();
-        }
-      }
-    });*/
-
+    JButton stopRec = new JButton();
+    stopRec.setBorderPainted(false);
+    stopRec.setToolTipText("Stop recording");
+    stopRec.setName("stop_record");
+    stopRec.setBackground(Color.LIGHT_GRAY);
+    stopRec.setFocusPainted(false);
+    stopRec.addActionListener(stopRecord);
 
     JPanel buttons = new JPanel(new GridLayout(2, 3, 5, 5));
     buttons.setBackground(Color.LIGHT_GRAY);
     buttons.setBorder(border);
-    buttons.add(new JButton());
+    buttons.add(stopRec);
     buttons.add(up);
-    buttons.add(new JButton());
+    buttons.add(record);
     buttons.add(left);
     buttons.add(down);
     buttons.add(right);
@@ -201,7 +177,7 @@ public abstract class GUI {
               Insets insets = btn.getInsets();
               size.width -= insets.left + insets.right;
               size.height -= insets.top + insets.bottom;
-              Image img = ImageIO.read(getClass().getResource("/" + btn.getName() + ".png"));
+              Image img = ImageIO.read(getClass().getResource("/assets/" + btn.getName() + ".png"));
               Image scaled = img.getScaledInstance(size.width, size.height, java.awt.Image.SCALE_SMOOTH);
               btn.setIcon(new ImageIcon(scaled));
             }
@@ -217,10 +193,14 @@ public abstract class GUI {
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, true), "left");
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), "down");
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, true), "up");
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, 0, true), "record");
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, true), "stop");
     buttons.getActionMap().put("right", moveRight);
     buttons.getActionMap().put("left", moveLeft);
     buttons.getActionMap().put("down", moveDown);
     buttons.getActionMap().put("up", moveUp);
+    buttons.getActionMap().put("record", startRecord);
+    buttons.getActionMap().put("stop", stopRecord);
     buttons.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
 
 
@@ -286,6 +266,14 @@ public abstract class GUI {
     load.setAccelerator(lo);
     load.addActionListener(ev -> {
       loadGame(timeLeft);
+      redraw();
+    });
+
+    JMenuItem replay = new JMenuItem("Save & Exit");
+    KeyStroke rep = KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_DOWN_MASK);
+    replay.setAccelerator(rep);
+    replay.addActionListener(ev -> {
+      replayGame();
       redraw();
     });
 
@@ -431,6 +419,11 @@ public abstract class GUI {
     frame.pack();
     frame.setVisible(true);
   }
+
+  /**
+   * Replays the game from a save.
+   */
+  protected abstract void replayGame();
 
   /**
    * Redraws the entire board when called.

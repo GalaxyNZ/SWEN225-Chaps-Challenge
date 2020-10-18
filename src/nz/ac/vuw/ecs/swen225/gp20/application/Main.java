@@ -60,6 +60,11 @@ public class Main extends GUI {
   }
 
   @Override
+  protected void replayGame() {
+
+  }
+
+  @Override
   protected void resumeGame() {
     System.out.println("Resume the game");
     gamePaused = false;
