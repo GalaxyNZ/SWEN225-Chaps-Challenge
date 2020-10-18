@@ -27,7 +27,7 @@ public class Persistence {
     String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/levels/";
     String selectedFile = "";
 
-    public Maze selctFile() {
+    public Maze selectFile() {
 
         JFileChooser chooser = new JFileChooser(path);
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
