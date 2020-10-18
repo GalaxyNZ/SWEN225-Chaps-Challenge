@@ -24,11 +24,11 @@ public class Persistence {
     int boardWidth;
     int boardHeight;
     Player player;
-    ArrayList<String> moves = new ArrayList<>();
+    String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/levels/";
+    String selectedFile = "";
 
     public Maze selctFile() {
 
-        String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/levels/";
 
         JFileChooser chooser = new JFileChooser(path);
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -36,8 +36,17 @@ public class Persistence {
         chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
+            selectedFile += chooser.getSelectedFile().toString();
             return loadFile(chooser.getSelectedFile().toString());
         } else return null;
+    }
+
+    public Maze restart(){
+        return loadFile(selectedFile);
+    }
+
+    public Maze newGame(){
+        return loadFile(path +"level1");
     }
 
     public Maze loadFile(String file) { //read
