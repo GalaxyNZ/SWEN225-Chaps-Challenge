@@ -29,7 +29,6 @@ public class Persistence {
 
     public Maze selctFile() {
 
-
         JFileChooser chooser = new JFileChooser(path);
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "JSON files", "json");
@@ -100,7 +99,7 @@ public class Persistence {
         file.put("board", maze.toString());
 
 
-        try (FileWriter saveFile = new FileWriter(fileName() + ".json")) {
+        try (FileWriter saveFile = new FileWriter(path + fileName() + ".json")) {
 
             saveFile.write(file.toJSONString());
             saveFile.flush();
