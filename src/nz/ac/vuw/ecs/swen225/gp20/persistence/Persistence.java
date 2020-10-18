@@ -88,6 +88,12 @@ public class Persistence {
     public void saveGame(Maze maze) {
 
         JSONObject file = new JSONObject();
+        JSONArray playerInv = new JSONArray();
+
+
+        for(Item i: maze.getPlayerInv()){
+         playerInv.add(i.toString());
+        }
 
         file.put("xSize", maze.getBoardSize().getX());
         file.put("ySize", maze.getBoardSize().getY());
@@ -96,6 +102,8 @@ public class Persistence {
         file.put("SETBK", 2);
         file.put("SETYK", 1);
         file.put("SETRK", 2);
+        file.put("numChips", maze.chipsRemaining());
+        file.put("playerInv", playerInv);
         file.put("board", maze.toString());
 
 
