@@ -108,8 +108,15 @@ public class Persistence {
 
 
         try (FileWriter saveFile = new FileWriter(path + fileName() + ".json")) {
+            String fileString = file.toJSONString();
+            for (int i = 0; i < fileString.length(); i++) {
+                char next = fileString.charAt(i);
+                if (next == ',' || next == '{') saveFile.write(next + "\n\t");
+                else if (next == '}') saveFile.write("\n" + next);
+                else saveFile.write(next);
+            }
 
-            saveFile.write(file.toJSONString());
+            //saveFile.write(file.toJSONString());
             saveFile.flush();
 
         } catch (IOException e) {
