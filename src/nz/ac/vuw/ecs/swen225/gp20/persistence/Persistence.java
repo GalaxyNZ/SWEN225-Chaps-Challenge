@@ -82,8 +82,41 @@ public class Persistence {
             ex.printStackTrace();
         }
         return maze;
-
     }
+
+    public Maze loadJSONString(String file) {
+
+        Maze maze = null;
+
+        try {
+            // create Gson instance
+            Gson gson = new Gson();
+
+            //convert to Gson
+            // convert JSON file to map
+            map = gson.fromJson(file, Map.class);
+
+            // print map entries
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                String varName = entry.getKey().toString();
+                System.out.println(entry.getKey() + " = " + entry.getValue());
+
+            }
+
+            boardWidth = (int) Double.parseDouble(map.get("xSize").toString());
+            boardHeight = (int) Double.parseDouble(map.get("ySize").toString());
+            //Board board = new Board(boardWidth, boardHeight);
+            //readBoard(board);
+            //maze = new Maze(board, player);
+            maze = new Maze(map);
+
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+            return maze;
+    }
+
 
     public void saveGame(Maze maze) {
 
