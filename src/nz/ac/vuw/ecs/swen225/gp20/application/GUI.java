@@ -485,6 +485,12 @@ public abstract class GUI {
    */
   protected abstract void newGame(JLabel timeLeft);
 
+
+  /**
+   * Saves the current state of the game to a JSON file
+   * and then closes the game.
+   */
+
   protected abstract void exitSaveGame();
 
   /**
@@ -505,11 +511,6 @@ public abstract class GUI {
   private void restartRound() {
     System.out.println("Restarts current level");
   }
-
-  /**
-   * Saves the current state of the game to a JSON file
-   * and then closes the game.
-   */
 
   /**
    * Exits the game when the player chooses to, but
