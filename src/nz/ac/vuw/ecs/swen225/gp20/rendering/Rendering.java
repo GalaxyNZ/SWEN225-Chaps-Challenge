@@ -9,13 +9,7 @@ import java.awt.*;
 
 
 /**
- * FPS = 5fps
  *
- * Order of act-
- * 1.init class (done once)  or update board
- * 2.find player position and previous position
- * 3.determine the action and (maybe)change the action
- * 4.draw
  */
 public class Rendering {
     private Dimension size;
@@ -35,7 +29,8 @@ public class Rendering {
         g2.drawImage(new ImageIcon("res/Background.png").getImage(), -(int)(size.width*0.1)/2,-(int)(size.height*0.1)/2, (int)(size.width*1.1), (int)(size.height*1.1), null);
 
         if(m != null){
-            findPlayerPos(m.getBoard());
+            prev = position;
+            position = m.getBoard().findPlayer();
             findChunk(g2, m.getBoard());
         }
                 switch (actor) {
@@ -54,9 +49,11 @@ public class Rendering {
         if(m == null) return;
         size = d;
         center = new Point(size.width/2, size.height/2);
-        findPlayerPos(m.getBoard());//board
+        prev = position;
+        position = m.getBoard().findPlayer();
         determineAction();
         draw(g);
+
     }
 
     //Getter Method
@@ -125,10 +122,6 @@ public class Rendering {
         drawBackgroundInChunk(g, chunkSize, chunkCenter, b);
 
     }
-    private void checkPosition(Point p){
-        prev = position;
-        position = p;
-    }
     private void draw(Graphics g){
         Graphics2D g2 = (Graphics2D) g;
         count++;
@@ -156,71 +149,105 @@ public class Rendering {
         }
 
     }
-    private void findPlayerPos(Board b){//Board here
-        for(int j = 0; j < b.getHeight(); j++){
-            for(int i = 0; i < b.getWidth(); i++) {
-                 String tileChar = b.getTile( i,  j).toString();
-                    if(tileChar.equals("X")){
-                        checkPosition(new Point(i,j));
-                    }
-            }}
-        //nested for loop
-    }
-
     private void drawBackgroundInChunk(Graphics2D g, int chunkSize, int chunkCenter, Board b){
         int indexX = position.x - chunkSize/2 ;
         int indexY = position.y - chunkSize/2 ;
 
         for(int j = 0; j < chunkSize; j++){
             for(int i = 0; i < chunkSize; i++){
-                if(indexX+i < 0 || indexX+i > b.getWidth()-1 || indexY+j < 0 || indexY+j >= b.getHeight()-1) continue;
+                int x = indexX+i, y = indexY+j;
+                if(x < 0 || x >= b.getWidth() || y < 0 || y >= b.getHeight()) continue;
+
                 Point defaultP = new Point((i* 70)-chunkCenter,(j* 70)-chunkCenter);
                 int wh = 70;
                 String tileChar = b.getTile(indexX+i,indexY+j).toString();
+
                 switch (tileChar) {
                     case "#":
-                        new TileDesigns(g,defaultP,wh,Classification.Wall);
-                        break;
+                        String tile = "";
+                        if(checkTile(x,y+1,b)) tile += Classification.D.toString();
+                        if(checkTile(x,y-1,b)) tile += Classification.U.toString();
+                        if(checkTile(x-1,y,b)) tile += Classification.L.toString();
+                        if(checkTile(x+1,y,b)) tile += Classification.R.toString();
+                        switch(tile){
+                            case "U":
+                                new TileDesigns(g,defaultP,wh,Classification.U);
+                                continue;
+                            case "D":
+                                new TileDesigns(g,defaultP,wh,Classification.D);
+                                continue;
+                            case "L":
+                                new TileDesigns(g,defaultP,wh,Classification.L);
+                                continue;
+                            case "R":
+                                new TileDesigns(g,defaultP,wh,Classification.R);
+                                continue;
+                            case "DU":
+                                new TileDesigns(g,defaultP,wh,Classification.DU);
+                                continue;
+                            case "LR":
+                                new TileDesigns(g,defaultP,wh,Classification.LR);
+                                continue;
+                            case "DUL":
+                                new TileDesigns(g,defaultP,wh,Classification.DUL);
+                                continue;
+                            case "DUR":
+                                new TileDesigns(g,defaultP,wh,Classification.DUR);
+                                continue;
+                            case "DLR":
+                                new TileDesigns(g,defaultP,wh,Classification.DLR);
+                                continue;
+                            case "ULR":
+                                new TileDesigns(g,defaultP,wh,Classification.ULR);
+                                continue;
+                            case "DULR":
+                                new TileDesigns(g,defaultP,wh,Classification.DULR);
+                        }
+                        continue;
                     case "%":
                         new TileDesigns(g,defaultP,wh,Classification.Exit);
-                        break;
+                        continue;
                     case "E":
                         new TileDesigns(g,defaultP,wh,Classification.ELI);
-                        break;
+                        continue;
                     case "i":
                         g.setColor(new Color(92, 12, 144));
-                        break;
+                        continue;
                     case "T":
                         g.setColor(Color.darkGray);
-                        break;
+                        continue;
                     case "G":
                         g.setColor(Color.GREEN);
-                        break;
+                        continue;
                     case "g":
                         g.setColor(new Color(13, 120, 6, 255));
-                        break;
+                        continue;
                     case "R":
                         g.setColor(Color.RED);
-                        break;
+                        continue;
                     case "r":
                         g.setColor(Color.pink);
-                        break;
+                        continue;
                     case "Y":
                         g.setColor(Color.ORANGE);
-                        break;
+                        continue;
                     case "y":
                         g.setColor(Color.YELLOW);
-                        break;
+                        continue;
                     case "B":
                         g.setColor(Color.BLUE);
-                        break;
+                        continue;
                     case "b":
                         g.setColor(Color.CYAN);
-                        break;
+                        continue;
                     default:
                 }
             }
         }
+    }
+    private boolean checkTile(int x, int y, Board b){
+        if(x < 0 || x >= b.getWidth() || y < 0 || y >= b.getHeight()) return false;
+        return b.getTile(x,y ).toString().equals("#");
     }
     private boolean still(Graphics2D g, String str){
         try{
