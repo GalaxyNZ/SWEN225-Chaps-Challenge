@@ -112,6 +112,7 @@ public class Persistence {
 
 
         } catch (Exception ex) {
+            System.out.println("something went wrong");
             ex.printStackTrace();
         }
             return maze;
