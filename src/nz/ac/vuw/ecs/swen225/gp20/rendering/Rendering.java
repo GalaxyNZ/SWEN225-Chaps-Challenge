@@ -30,6 +30,7 @@ public class Rendering {
         if(m != null){
             prev = position;
             position = m.getPlayerLocation();
+            System.out.println(position);
             findChunk(g2);
         }
                 switch (actor) {
@@ -255,7 +256,7 @@ public class Rendering {
     private boolean still(Graphics2D g, String str){
         try{
             Image im = new ImageIcon("res/" + str + "-i" + count +".png").getImage();
-            g.drawImage(im, size.width/2 - 32,size.height/2 - 32,64,64, null);
+            g.drawImage(im, size.width/2 - 35,size.height/2 - 35,70,70, null);
 
         }catch (Exception ignored){}
         return false;
