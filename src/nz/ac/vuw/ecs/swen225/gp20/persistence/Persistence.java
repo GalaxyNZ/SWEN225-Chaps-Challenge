@@ -26,6 +26,7 @@ public class Persistence {
     Player player;
     String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/levels/";
     String selectedFile = "";
+    int fileCount = 0;
 
     public Maze selectFile() {
 
@@ -48,8 +49,14 @@ public class Persistence {
         return loadFile(path +"level1.json");
     }
 
+    public int getLevelAmount(){ return fileCount; }
+
     public Maze loadFile(String file) { //read
         Maze maze = null;
+
+        File directory = new File(path);
+        fileCount = directory.list().length;
+        System.out.println("File Count:"+fileCount);
 
         try {
             // create Gson instance
@@ -108,8 +115,15 @@ public class Persistence {
 
 
         try (FileWriter saveFile = new FileWriter(path + fileName() + ".json")) {
+            String fileString = file.toJSONString();
+            for (int i = 0; i < fileString.length(); i++) {
+                char next = fileString.charAt(i);
+                if (next == ',' || next == '{') saveFile.write(next + "\n\t");
+                else if (next == '}') saveFile.write("\n" + next);
+                else saveFile.write(next);
+            }
 
-            saveFile.write(file.toJSONString());
+            //saveFile.write(file.toJSONString());
             saveFile.flush();
 
         } catch (IOException e) {
