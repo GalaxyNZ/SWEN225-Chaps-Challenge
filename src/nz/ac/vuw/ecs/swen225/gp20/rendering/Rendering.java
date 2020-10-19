@@ -167,46 +167,40 @@ public class Rendering {
                         if(checkTile(x,y-1,b)) tile += Classification.U.toString();
                         if(checkTile(x-1,y,b)) tile += Classification.L.toString();
                         if(checkTile(x+1,y,b)) tile += Classification.R.toString();
-                        TileDesigns td;
                         switch(tile){
-                            
                             case "U":
-                               td = new TileDesigns(g,defaultP,wh,Classification.U);
-                                break;
+                                new TileDesigns(g,defaultP,wh,Classification.U);
+                                continue;
                             case "D":
-                                td =new TileDesigns(g,defaultP,wh,Classification.D);
-                                break;
+                                new TileDesigns(g,defaultP,wh,Classification.D);
+                                continue;
                             case "L":
-                                td =new TileDesigns(g,defaultP,wh,Classification.L);
-                                break;
+                                new TileDesigns(g,defaultP,wh,Classification.L);
+                                continue;
                             case "R":
-                                td =new TileDesigns(g,defaultP,wh,Classification.R);
-                                break;
+                                new TileDesigns(g,defaultP,wh,Classification.R);
+                                continue;
                             case "DU":
-                                td =new TileDesigns(g,defaultP,wh,Classification.DU);
-                                break;
+                                new TileDesigns(g,defaultP,wh,Classification.DU);
+                                continue;
                             case "LR":
-                                td =new TileDesigns(g,defaultP,wh,Classification.LR);
-                                break;
+                                new TileDesigns(g,defaultP,wh,Classification.LR);
+                                continue;
                             case "DUL":
-                                td =new TileDesigns(g,defaultP,wh,Classification.DUL);
-                                break;
+                                new TileDesigns(g,defaultP,wh,Classification.DUL);
+                                continue;
                             case "DUR":
-                                td =new TileDesigns(g,defaultP,wh,Classification.DUR);
-                                break;
+                                new TileDesigns(g,defaultP,wh,Classification.DUR);
+                                continue;
                             case "DLR":
-                                td =new TileDesigns(g,defaultP,wh,Classification.DLR);
-                                break;
+                                new TileDesigns(g,defaultP,wh,Classification.DLR);
+                                continue;
                             case "ULR":
-                                td =new TileDesigns(g,defaultP,wh,Classification.ULR);
-                                break;
+                                new TileDesigns(g,defaultP,wh,Classification.ULR);
+                                continue;
                             case "DULR":
-                                td =new TileDesigns(g,defaultP,wh,Classification.DULR);
-                                break;
-                            default:
-                                throw new IllegalStateException("Unexpected value: " + tile);
+                                new TileDesigns(g,defaultP,wh,Classification.DULR);
                         }
-                        td.wallTile(null,null,null);
                         continue;
                     case "%":
                         new TileDesigns(g,defaultP,wh,Classification.Exit);
