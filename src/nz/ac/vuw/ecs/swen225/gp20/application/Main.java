@@ -109,6 +109,7 @@ public class Main extends GUI {
     if (timer != null) timer.stop();
     Persistence persistence = new Persistence();
     maze = persistence.selectFile();
+    currentState = states.RUNNING;
     startTimer(timeLeft);
   }
 
