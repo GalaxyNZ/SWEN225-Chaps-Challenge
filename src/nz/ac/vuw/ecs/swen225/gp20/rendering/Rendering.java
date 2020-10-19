@@ -14,7 +14,7 @@ import java.awt.*;
 public class Rendering {
     private Dimension size;
     private Point position, prev;
-    private int count  = 0, frames = 5;
+    private int count  = 0, frames = 5,aniValX = 0, aniValY = 0;
     private String  prevTime = "";
     private boolean acting = false;
     private Classification action = Classification.Down, lastAct = Classification.Down;
@@ -116,7 +116,7 @@ public class Rendering {
     }
     private void findChunk(Graphics2D g, Board b){
         int chunkSize = 3 + 2*(((size.width/2)-35)/70);
-        int center = (((chunkSize * 70) - size.width)/2)+1;//Center is always off by 1
+        int center = (((chunkSize * 70) - size.width)/2);
         drawBackgroundInChunk(g, chunkSize, center, b);
 
     }
@@ -148,15 +148,15 @@ public class Rendering {
 
     }
     private void drawBackgroundInChunk(Graphics2D g, int chunkSize, int center, Board b){
-        int indexX = position.x - chunkSize/2 ;
-        int indexY = position.y - chunkSize/2 ;
+        int indexX = aniValX ==0?position.x:prev.x - chunkSize/2 ;
+        int indexY = aniValY ==0?position.y:prev.y  - chunkSize/2 ;
 
-        for(int j = 0; j < chunkSize; j++){
-            for(int i = 0; i < chunkSize; i++){
+        for(int j = 0; j < chunkSize +(aniValY != 0?1:0); j++){
+            for(int i = 0; i < chunkSize+(aniValX != 0?1:0); i++){
                 int x = indexX+i, y = indexY+j;
                 if(x < 0 || x >= b.getWidth() || y < 0 || y >= b.getHeight()) continue;
 
-                Point defaultP = new Point((i* 70)-center,(j* 70)-center);
+                Point defaultP = new Point((i* 70)-center-aniValX,(j* 70)-center-aniValY);
                 int wh = 70;
                 String tileChar = b.getTile(x,y).toString();
 
@@ -169,44 +169,44 @@ public class Rendering {
                         if(checkTile(x+1,y,b)) tile += Classification.R.toString();
                         switch(tile){
                             case "U":
-                                new TileDesigns(g,defaultP,wh,Classification.U);
+                                new TileDesigns(g,defaultP,wh, size,Classification.U);
                                 continue;
                             case "D":
-                                new TileDesigns(g,defaultP,wh,Classification.D);
+                                new TileDesigns(g,defaultP,wh,size,Classification.D);
                                 continue;
                             case "L":
-                                new TileDesigns(g,defaultP,wh,Classification.L);
+                                new TileDesigns(g,defaultP, wh,size,Classification.L);
                                 continue;
                             case "R":
-                                new TileDesigns(g,defaultP,wh,Classification.R);
+                                new TileDesigns(g,defaultP,wh, size,Classification.R);
                                 continue;
                             case "DU":
-                                new TileDesigns(g,defaultP,wh,Classification.DU);
+                                new TileDesigns(g,defaultP,wh,size,Classification.DU);
                                 continue;
                             case "LR":
-                                new TileDesigns(g,defaultP,wh,Classification.LR);
+                                new TileDesigns(g,defaultP,wh,size,Classification.LR);
                                 continue;
                             case "DUL":
-                                new TileDesigns(g,defaultP,wh,Classification.DUL);
+                                new TileDesigns(g,defaultP,wh, size,Classification.DUL);
                                 continue;
                             case "DUR":
-                                new TileDesigns(g,defaultP,wh,Classification.DUR);
+                                new TileDesigns(g,defaultP,wh, size,Classification.DUR);
                                 continue;
                             case "DLR":
-                                new TileDesigns(g,defaultP,wh,Classification.DLR);
+                                new TileDesigns(g,defaultP,wh, size,Classification.DLR);
                                 continue;
                             case "ULR":
-                                new TileDesigns(g,defaultP,wh,Classification.ULR);
+                                new TileDesigns(g,defaultP,wh,size,Classification.ULR);
                                 continue;
                             case "DULR":
-                                new TileDesigns(g,defaultP,wh,Classification.DULR);
+                                new TileDesigns(g,defaultP,wh,size,Classification.DULR);
                         }
                         continue;
                     case "%":
-                        new TileDesigns(g,defaultP,wh,Classification.Exit);
+                        new TileDesigns(g,defaultP,wh,size,Classification.Exit);
                         continue;
                     case "E":
-                        new TileDesigns(g,defaultP,wh,Classification.ELI);
+                        new TileDesigns(g,defaultP,wh,size,Classification.ELI);
                         continue;
                     case "i":
                         g.setColor(new Color(92, 12, 144));

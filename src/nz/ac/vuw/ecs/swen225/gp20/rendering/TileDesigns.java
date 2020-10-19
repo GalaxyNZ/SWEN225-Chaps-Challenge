@@ -4,11 +4,11 @@ import java.awt.*;
 
 public class TileDesigns {
 
-    public TileDesigns(Graphics2D g, Point p, int wh, Classification cl){
+    public TileDesigns(Graphics2D g, Point p, int wh, Dimension s, Classification cl){
 
         switch (cl){
             default:
-                wallTile(g,p,wh,cl);
+                wallTile(g,p,wh,s,cl);
                 break;
             case Floor:
                 floorTile(g,p,wh);
@@ -22,7 +22,9 @@ public class TileDesigns {
 
         }
     }
-    private void wallTile(Graphics2D g, Point p, int wh, Classification cl){
+    private void wallTile(Graphics2D g, Point p, int wh, Dimension s, Classification cl){
+        int center = s.height/2;
+
         g.setColor(Color.GRAY);
         g.fillRect(p.x,p.y,wh, wh);
         switch(cl){
