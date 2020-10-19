@@ -93,6 +93,11 @@ public class Main extends GUI {
   }
 
   @Override
+  protected void iterateReplay() {
+
+  }
+
+  @Override
   protected void resumeGame() {
     System.out.println("Resume the game");
     gamePaused = false;
@@ -106,16 +111,17 @@ public class Main extends GUI {
 
   @Override
   protected void loadGame(JLabel timeLeft) {
+    if (timer != null) timer.stop();
     Maze newMaze = p.selectFile();
-    if (newMaze == null) return;
-    if (currentState == states.INTIAL) {
-      maze = newMaze;
-      startTimer(timeLeft);
-    } else {
-      if (timer != null) timer.stop();
-      maze = newMaze;
-      timer.start();
+
+    if (newMaze == null) {
+      if (timer != null) timer.start();
+      return;
     }
+
+    maze = newMaze;
+    if (currentState == states.INTIAL) startTimer(timeLeft);
+    else timer.start();
     currentState = states.RUNNING;
   }
 

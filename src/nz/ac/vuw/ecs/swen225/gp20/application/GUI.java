@@ -43,7 +43,6 @@ public abstract class GUI {
     JLabel timeText = new JLabel("Time");
     JLabel timeLeft = new JLabel("60.0");
 
-
     JPanel time = new JPanel(gl);
     time.setBackground(Color.LIGHT_GRAY);
     time.setBorder(border);
@@ -57,7 +56,7 @@ public abstract class GUI {
     chips.setBorder(border);
     chips.add(chipsText);
 
-    JLabel chipsRemaining = new JLabel();
+    JLabel chipsRemaining = new JLabel("0");
     chips.add(chipsRemaining, BorderLayout.CENTER);
 
     JLabel itemsText = new JLabel("Items");
@@ -95,11 +94,13 @@ public abstract class GUI {
 
 
     JLabel lvlText = new JLabel("Level");
+    JLabel lvlNumber = new JLabel("0");
 
     JPanel lvl = new JPanel(gl);
     lvl.setBackground(Color.LIGHT_GRAY);
     lvl.setBorder(border);
     lvl.add(lvlText);
+    lvl.add(lvlNumber);
 
     Action moveUp = new AbstractAction() {
       @Override
@@ -313,14 +314,6 @@ public abstract class GUI {
       redraw();
     });
 
-    JMenuItem replay = new JMenuItem("Save & Exit");
-    KeyStroke rep = KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_DOWN_MASK);
-    replay.setAccelerator(rep);
-    replay.addActionListener(ev -> {
-      replayGame();
-      redraw();
-    });
-
 
     JMenu menu = new JMenu("Menu");
     menu.setPreferredSize(new Dimension(45, 15));
@@ -359,6 +352,20 @@ public abstract class GUI {
       redraw();
     });
 
+    JMenuItem replay = new JMenuItem("Replay");
+    //KeyStroke rep = KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_DOWN_MASK);
+    //replay.setAccelerator(rep);
+    replay.addActionListener(ev -> {
+      replayGame();
+      redraw();
+    });
+
+    JMenuItem iterateRep = new JMenuItem("Iterate Replay");
+    iterateRep.addActionListener(ev -> {
+      iterateReplay();
+      redraw();
+    });
+
 
 
     JMenu options = new JMenu("Options");
@@ -367,12 +374,14 @@ public abstract class GUI {
     options.add(pause);
     options.add(recStart);
     options.add(recEnd);
+    options.add(replay);
+    options.add(iterateRep);
 
     JMenuItem levelOne = new JMenuItem("Level One");
     levelOne.addActionListener(ev -> System.out.println("Play Level One"));
 
     JMenuItem levelTwo = new JMenuItem("Level Two");
-    load.addActionListener(ev -> System.out.println("Play Level Two"));
+    levelTwo.addActionListener(ev -> System.out.println("Play Level Two"));
 
     JMenu level = new JMenu("Level");
     level.setPreferredSize(new Dimension(45, 15));
@@ -415,6 +424,7 @@ public abstract class GUI {
         setJLabel(timeText, textFontSize);
         setJLabel(timeLeft, infoFontSize);
         setJLabel(itemsText, textFontSize);
+        setJLabel(lvlNumber, infoFontSize);
       }
     });
 
@@ -427,6 +437,8 @@ public abstract class GUI {
     frame.pack();
     frame.setVisible(true);
   }
+
+  protected abstract void iterateReplay();
 
   private void updateChips(JLabel chipsRemaining) {
     chipsRemaining.setText(Integer.toString(getChipsRemaining()));
