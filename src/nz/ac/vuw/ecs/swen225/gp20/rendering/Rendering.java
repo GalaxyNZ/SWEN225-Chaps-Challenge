@@ -30,7 +30,7 @@ public class Rendering {
         if(m != null){
             prev = position;
             position = m.getPlayerLocation();
-            findChunk(g2, m.getBoard());
+            findChunk(g2);
         }
                 switch (actor) {
                     case "Down":
@@ -114,11 +114,11 @@ public class Rendering {
             count = 0;
         }
     }
-    private void findChunk(Graphics2D g, Board b){
+    private void findChunk(Graphics2D g){
         int chunkSize = 3 + 2*(((size.width/2)-35)/70);
         int center = (((chunkSize * 70) - size.width)/2);
-        drawBackgroundInChunk(g, chunkSize, center, b, false);
-        drawBackgroundInChunk(g, chunkSize, center, b, true);
+        drawBackgroundInChunk(g, chunkSize, center, false);
+        drawBackgroundInChunk(g, chunkSize, center, true);
 
     }
     private void draw(Graphics g){
@@ -148,14 +148,14 @@ public class Rendering {
         }
 
     }
-    private void drawBackgroundInChunk(Graphics2D g, int chunkSize, int center, Board b, boolean draw){
+    private void drawBackgroundInChunk(Graphics2D g, int chunkSize, int center, boolean draw){
         int indexX = prev == null ? position.x :(aniValX ==0? position.x:prev.x) - chunkSize/2 ;
         int indexY = prev == null ? position.y: (aniValY ==0? position.y:prev.y)  - chunkSize/2 ;
 
         for(int j = 0; j < chunkSize +(aniValY != 0?1:0); j++){
             for(int i = 0; i < chunkSize+(aniValX != 0?1:0); i++){
                 int x = indexX+i, y = indexY+j;
-                if(x < 0 || x >= b.getWidth() || y < 0 || y >= b.getHeight()) continue;
+                if(x < 0 || x >= m.getBoardSize().x || y < 0 || y >= m.getBoardSize().y) continue;
 
                 Point defaultP = new Point((i* 70)-center-aniValX,(j* 70)-center-aniValY);
                 int wh = 70;
@@ -168,10 +168,10 @@ public class Rendering {
                         break;
                     case "#":
                         String tile = "";
-                        if(checkTile(x,y+1,b)) tile += CL.D.toString();
-                        if(checkTile(x,y-1,b)) tile += CL.U.toString();
-                        if(checkTile(x-1,y,b)) tile += CL.L.toString();
-                        if(checkTile(x+1,y,b)) tile += CL.R.toString();
+                        if(checkTile(x,y+1)) tile += CL.D.toString();
+                        if(checkTile(x,y-1)) tile += CL.U.toString();
+                        if(checkTile(x-1,y)) tile += CL.L.toString();
+                        if(checkTile(x+1,y)) tile += CL.R.toString();
                         switch(tile){
                             case "U":
                                 new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.U, draw);
@@ -248,8 +248,8 @@ public class Rendering {
             }
         }
     }
-    private boolean checkTile(int x, int y, Board b){
-        if(x < 0 || x >= b.getWidth() || y < 0 || y >= b.getHeight()) return false;
+    private boolean checkTile(int x, int y){
+        if(x < 0 || x >= m.getBoardSize().x || y < 0 || y >= m.getBoardSize().y) return false;
         return m.getBoardTile(new Point(x,y)).toString().equals("#");
     }
     private boolean still(Graphics2D g, String str){
