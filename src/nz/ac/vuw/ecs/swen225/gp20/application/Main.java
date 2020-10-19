@@ -62,6 +62,7 @@ public class Main extends GUI {
 
   @Override
   protected int getChipsRemaining() {
+    if (currentState == states.INTIAL) return 0;
     return maze.chipsRemaining();
   }
 
@@ -105,12 +106,17 @@ public class Main extends GUI {
 
   @Override
   protected void loadGame(JLabel timeLeft) {
-    System.out.println("Loads a saved game");
-    if (timer != null) timer.stop();
-    Persistence persistence = new Persistence();
-    maze = persistence.selectFile();
+    Maze newMaze = p.selectFile();
+    if (newMaze == null) return;
+    if (currentState == states.INTIAL) {
+      maze = p.selectFile();
+      startTimer(timeLeft);
+    } else {
+      if (timer != null) timer.stop();
+      maze = newMaze;
+      timer.start();
+    }
     currentState = states.RUNNING;
-    startTimer(timeLeft);
   }
 
   @Override
