@@ -37,7 +37,6 @@ public class FreeTile extends Tile{
 	
 	/*
 	 * Updates Tile to either contain an Item or null. Returns the old item in-case it needs to be added to Chap's inventory.
-	 * TODO: Possible change to Item system? Avoid returning null values and work off of an Item Boolean call?
 	 */
 	
 	public Item addItem(Item newItem) {
@@ -65,7 +64,6 @@ public class FreeTile extends Tile{
 	
 	/*
 	 * Allows the move through boolean of this tile to be changed (If Player has all the keys or treasure).
-	 * TODO: This method only applies to FreeTile, maybe make it limited to that Tile type? Re-implement with Door check system.
 	 */
 	
 	public void changeObstacle(Boolean newState) {

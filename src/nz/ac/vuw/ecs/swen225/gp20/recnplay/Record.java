@@ -40,14 +40,14 @@ public class Record {
     }
     //}
 
-    file.put("xSize", maze.getBoard().getWidth());
-    file.put("ySize", maze.getBoard().getHeight());
-    file.put("tileInfo", maze.getBoard().getInfo());
+    file.put("xSize", maze.getBoardSize().getX());
+    file.put("ySize", maze.getBoardSize().getY());
+    file.put("tileInfo", "something");
     file.put("SETGK", 3);
     file.put("SETBK", 2);
     file.put("SETYK", 1);
     file.put("SETRK", 2);
-    file.put("board", maze.getBoard().toString());
+    file.put("board", maze.toString());
     file.put("moves", moves);
 
     try (FileWriter recFile = new FileWriter(fileName() + ".json")) {

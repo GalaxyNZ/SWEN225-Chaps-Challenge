@@ -1,10 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 public abstract class GUI {
 
@@ -66,14 +68,150 @@ public abstract class GUI {
     lvl.setBorder(border);
     lvl.add(lvlText);
 
+    Action moveUp = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        movePlayer(direction.UP);
+      }
+    };
 
-    JPanel info = new JPanel(new GridLayout(4, 0, 0, 0));
+    Action moveDown = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        movePlayer(direction.DOWN);
+      }
+    };
+
+    Action moveRight = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        movePlayer(direction.RIGHT);
+      }
+    };
+
+    Action moveLeft = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        movePlayer(direction.LEFT);
+      }
+    };
+
+    Action startRecord = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        startRec();
+      }
+    };
+
+    Action stopRecord = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        endRec();
+      }
+    };
+
+    JButton up = new JButton();
+    up.setBorderPainted(false);
+    up.setName("up");
+    up.setBackground(Color.LIGHT_GRAY);
+    up.setFocusPainted(false);
+    up.addActionListener(moveUp);
+
+    JButton down = new JButton();
+    down.setBorderPainted(false);
+    down.setName("down");
+    down.setBackground(Color.LIGHT_GRAY);
+    down.setFocusPainted(false);
+    down.addActionListener(moveDown);
+
+    JButton left = new JButton();
+    left.setBorderPainted(false);
+    left.setName("left");
+    left.setBackground(Color.LIGHT_GRAY);
+    left.setFocusPainted(false);
+    left.addActionListener(moveLeft);
+
+    JButton right = new JButton();
+    right.setBorderPainted(false);
+    right.setName("right");
+    right.setBackground(Color.LIGHT_GRAY);
+    right.setFocusPainted(false);
+    right.addActionListener(moveRight);
+
+    JButton record = new JButton();
+    record.setBorderPainted(false);
+    record.setToolTipText("Start recording");
+    record.setName("record");
+    record.setBackground(Color.LIGHT_GRAY);
+    record.setFocusPainted(false);
+    record.addActionListener(startRecord);
+
+    JButton stopRec = new JButton();
+    stopRec.setBorderPainted(false);
+    stopRec.setToolTipText("Stop recording");
+    stopRec.setName("stop_record");
+    stopRec.setBackground(Color.LIGHT_GRAY);
+    stopRec.setFocusPainted(false);
+    stopRec.addActionListener(stopRecord);
+
+    JPanel buttons = new JPanel(new GridLayout(2, 3, 5, 5));
+    buttons.setBackground(Color.LIGHT_GRAY);
+    buttons.setBorder(border);
+    buttons.add(stopRec);
+    buttons.add(up);
+    buttons.add(record);
+    buttons.add(left);
+    buttons.add(down);
+    buttons.add(right);
+
+    buttons.addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentResized(ComponentEvent e) {
+        try {
+          Component[] comp = buttons.getComponents();
+          for (int i = 0; i < comp.length; i++) {
+            if (comp[i] instanceof JButton) {
+              JButton btn = (JButton) comp[i];
+              if (btn.getName() == null) continue;
+              Dimension size = btn.getSize();
+              Insets insets = btn.getInsets();
+              size.width -= insets.left + insets.right;
+              size.height -= insets.top + insets.bottom;
+              Image img = ImageIO.read(getClass().getResource("/assets/" + btn.getName() + ".png"));
+              Image scaled = img.getScaledInstance(size.width, size.height, java.awt.Image.SCALE_SMOOTH);
+              btn.setIcon(new ImageIcon(scaled));
+            }
+          }
+        } catch (IOException ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
+
+    InputMap inputMap = buttons.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), "right");
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, true), "left");
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), "down");
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, true), "up");
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, 0, true), "record");
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, true), "stop");
+    buttons.getActionMap().put("right", moveRight);
+    buttons.getActionMap().put("left", moveLeft);
+    buttons.getActionMap().put("down", moveDown);
+    buttons.getActionMap().put("up", moveUp);
+    buttons.getActionMap().put("record", startRecord);
+    buttons.getActionMap().put("stop", stopRecord);
+    buttons.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
+
+
+    JPanel info = new JPanel(new GridLayout(5, 0, 0, 0));
     info.setBackground(Color.LIGHT_GRAY);
     info.setBorder(border);
     info.add(lvl);
     info.add(time);
     info.add(chips);
     info.add(items);
+    info.add(buttons);
 
     JPanel display = new JPanel();
     display.setBackground(new Color(0,204,0));
@@ -128,6 +266,14 @@ public abstract class GUI {
     load.setAccelerator(lo);
     load.addActionListener(ev -> {
       loadGame(timeLeft);
+      redraw();
+    });
+
+    JMenuItem replay = new JMenuItem("Save & Exit");
+    KeyStroke rep = KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_DOWN_MASK);
+    replay.setAccelerator(rep);
+    replay.addActionListener(ev -> {
+      replayGame();
       redraw();
     });
 
@@ -189,44 +335,8 @@ public abstract class GUI {
     level.add(levelOne);
     level.add(levelTwo);
 
-    JMenuItem up = new JMenuItem("Press the UP key to move up");
-    KeyStroke upKey = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0);
-    up.setAccelerator(upKey);
-    up.addActionListener(e -> {
-      movePlayer(direction.UP);
-      redraw();
-    });
-
-    JMenuItem down = new JMenuItem("Press the DOWN key to move down");
-    KeyStroke downKey = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0);
-    down.setAccelerator(downKey);
-    down.addActionListener(e -> {
-      movePlayer(direction.DOWN);
-      redraw();
-    });
-
-    JMenuItem right = new JMenuItem("Press the RIGHT key to move right");
-    KeyStroke rightKey = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
-    right.setAccelerator(rightKey);
-    right.addActionListener(e -> {
-      movePlayer(direction.RIGHT);
-      redraw();
-    });
-
-    JMenuItem left = new JMenuItem("Press the LEFT key to move left");
-    KeyStroke leftKey = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
-    left.setAccelerator(leftKey);
-    left.addActionListener(e -> {
-      movePlayer(direction.LEFT);
-      redraw();
-    });
-
     JMenu help = new JMenu("Help");
     help.setPreferredSize(new Dimension(45, 15));
-    help.add(up);
-    help.add(down);
-    help.add(right);
-    help.add(left);
 
     JMenuBar controls = new JMenuBar();
     controls.add(menu);
@@ -273,6 +383,11 @@ public abstract class GUI {
     frame.pack();
     frame.setVisible(true);
   }
+
+  /**
+   * Replays the game from a save.
+   */
+  protected abstract void replayGame();
 
   /**
    * Redraws the entire board when called.
@@ -327,6 +442,14 @@ public abstract class GUI {
    */
   protected abstract void newGame(JLabel timeLeft);
 
+
+  /**
+   * Saves the current state of the game to a JSON file
+   * and then closes the game.
+   */
+
+  protected abstract void exitSaveGame();
+
   /**
    * Helper method used to scale the labels and the text
    * inside.
@@ -344,14 +467,6 @@ public abstract class GUI {
    */
   private void restartRound() {
     System.out.println("Restarts current level");
-  }
-
-  /**
-   * Saves the current state of the game to a JSON file
-   * and then closes the game.
-   */
-  private void exitSaveGame() {
-    System.out.println("Save and exit");
   }
 
   /**

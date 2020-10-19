@@ -7,12 +7,11 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 public class KeyItem extends Item{
 	
 		public String color;
-		public int used = 0;
-		public int maxUses;
+		private int used = 0;
+		private int maxUses;
 		
 		/*
 		 * Constructor method, establishes this keys color and how many doors of that color it can open before being deleted from player inventory.
-		 * TODO: Re-implement key and door check system.
 		 */
 		
 		public KeyItem(String color, int maxUses) {
@@ -24,9 +23,19 @@ public class KeyItem extends Item{
 		 * Increments the number of times this key has been used to unlock a door.
 		 */
 		
-		public void increment() {
+		public boolean increment() {
 			used++;
+			if(used >= maxUses) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
+
+	public String getColor() {
+		return this.color;
+	}
 		
 		/*
 		 * Returns the print string for printBoard() calls.

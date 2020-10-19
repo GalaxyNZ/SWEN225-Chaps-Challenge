@@ -2,8 +2,10 @@ package test.nz.ac.vuw.ecs.swen225.gp20.monkey;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Board;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import org.junit.jupiter.api.Test;
 
 public class FixedTests {
@@ -50,11 +52,12 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        Maze maze = new Maze(map);
+        Persistence p = new Persistence();
+        Maze maze = p.loadFile(map);
 
-        assertEquals(expected, maze.getBoard().toString());
-        assertEquals(0, maze.getPlayer().getTreasure());
-        assertEquals("[]", maze.getPlayer().getInventory().toString());
+        assertEquals(expected, maze.toString());
+        assertEquals(0, maze.chipsRemaining());
+        assertEquals("[]", maze.getPlayerInv().toString());
     }
 
     @Test
@@ -95,11 +98,12 @@ public class FixedTests {
                         "|_|_|_|_|_|#|#|#|#|#|#|#|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|\n";
 
-        Maze maze = new Maze(map);
+        Persistence p = new Persistence();
+        Maze maze = p.loadFile(map);
 
-        assertEquals(expected, maze.getBoard().toString());
-        assertEquals(0, maze.getPlayer().getTreasure());
-        assertEquals("[]", maze.getPlayer().getInventory().toString());
+        assertEquals(expected, maze.toString());
+        assertEquals(0, maze.chipsRemaining());
+        assertEquals("[]", maze.getPlayerInv().toString());
     }
 
     @Test
@@ -120,11 +124,14 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        Maze maze = new Maze(map, moves);
+        Persistence p = new Persistence();
+        Maze maze = p.loadFile(map);
 
-        assertEquals(expected, maze.getBoard().toString());
-        assertEquals(0, maze.getPlayer().getTreasure());
-        assertEquals("[]", maze.getPlayer().getInventory().toString());
+        gameplayLoop(maze, moves);
+
+        assertEquals(expected, maze.toString());
+        assertEquals(0, maze.chipsRemaining());
+        assertEquals("[]", maze.getPlayerInv().toString());
     }
 
     // Restricted movement
@@ -147,11 +154,14 @@ public class FixedTests {
                         "|_|#|#|#|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        Maze maze = new Maze(map, moves);
+        Persistence p = new Persistence();
+        Maze maze = p.loadFile(map);
 
-        assertEquals(expected, maze.getBoard().toString());
-        assertEquals(0, maze.getPlayer().getTreasure());
-        assertEquals("[]", maze.getPlayer().getInventory().toString());
+        gameplayLoop(maze, moves);
+
+        assertEquals(expected, maze.toString());
+        assertEquals(0, maze.chipsRemaining());
+        assertEquals("[]", maze.getPlayerInv().toString());
     }
 
 
@@ -173,11 +183,14 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        Maze maze = new Maze(map, moves);
+        Persistence p = new Persistence();
+        Maze maze = p.loadFile(map);
 
-        assertEquals(expected, maze.getBoard().toString());
-        assertEquals(0, maze.getPlayer().getTreasure());
-        assertEquals("[]", maze.getPlayer().getInventory().toString());
+        gameplayLoop(maze, moves);
+
+        assertEquals(expected, maze.toString());
+        assertEquals(0, maze.chipsRemaining());
+        assertEquals("[]", maze.getPlayerInv().toString());
     }
 
     // DOORS and KEYS
@@ -199,11 +212,14 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        Maze maze = new Maze(map, moves);
+        Persistence p = new Persistence();
+        Maze maze = p.loadFile(map);
 
-        assertEquals(expected, maze.getBoard().toString());
-        assertEquals(0, maze.getPlayer().getTreasure());
-        assertEquals("[b]", maze.getPlayer().getInventory().toString());
+        gameplayLoop(maze, moves);
+
+        assertEquals(expected, maze.toString());
+        assertEquals(0, maze.chipsRemaining());
+        assertEquals("[b]", maze.getPlayerInv().toString());
     }
 
 
@@ -226,11 +242,14 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        Maze maze = new Maze(map, moves);
+        Persistence p = new Persistence();
+        Maze maze = p.loadFile(map);
 
-        assertEquals(expected, maze.getBoard().toString());
-        assertEquals(0, maze.getPlayer().getTreasure());
-        assertEquals("[b]", maze.getPlayer().getInventory().toString());
+        gameplayLoop(maze, moves);
+
+        assertEquals(expected, maze.toString());
+        assertEquals(0, maze.chipsRemaining());
+        assertEquals("[b]", maze.getPlayerInv().toString());
     }
 
     @Test
@@ -251,11 +270,14 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        Maze maze = new Maze(map, moves);
+        Persistence p = new Persistence();
+        Maze maze = p.loadFile(map);
 
-        assertEquals(expected, maze.getBoard().toString());
-        assertEquals(0, maze.getPlayer().getTreasure());
-        assertEquals("[]", maze.getPlayer().getInventory().toString());
+        gameplayLoop(maze, moves);
+
+        assertEquals(expected, maze.toString());
+        assertEquals(0, maze.chipsRemaining());
+        assertEquals("[]", maze.getPlayerInv().toString());
     }
 
 
@@ -280,11 +302,14 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
 
-        Maze maze = new Maze(map, moves);
+        Persistence p = new Persistence();
+        Maze maze = p.loadFile(map);
 
-        assertEquals(expected, maze.getBoard().toString());
-        assertEquals(5, maze.getPlayer().getTreasure());
-        assertEquals("[]", maze.getPlayer().getInventory().toString());
+        gameplayLoop(maze, moves);
+
+        assertEquals(expected, maze.toString());
+        assertEquals(5, maze.chipsRemaining());
+        assertEquals("[]", maze.getPlayerInv().toString());
     }
 
     @Test
@@ -306,13 +331,14 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
 
-        Maze maze = new Maze(map, moves);
+        Persistence p = new Persistence();
+        Maze maze = p.loadFile(map);
 
+        gameplayLoop(maze, moves);
 
-
-        assertEquals(expected, maze.getBoard().toString());
-        assertEquals(0, maze.getPlayer().getTreasure());
-        assertEquals("[r, g, b, y]", maze.getPlayer().getInventory().toString());
+        assertEquals(expected, maze.toString());
+        assertEquals(0, maze.chipsRemaining());
+        assertEquals("[r, g, b, y]", maze.getPlayerInv().toString());
     }
 
     @Test
@@ -334,11 +360,14 @@ public class FixedTests {
                         "|_|_|_|X|_|\n";
 
 
-        Maze maze = new Maze(map, moves);
+        Persistence p = new Persistence();
+        Maze maze = p.loadFile(map);
 
-        assertEquals(expected, maze.getBoard().toString());
-        assertEquals(0, maze.getPlayer().getTreasure());
-        assertEquals("[r, g, b, y, y, b, g, r]", maze.getPlayer().getInventory().toString());
+        gameplayLoop(maze, moves);
+
+        assertEquals(expected, maze.toString());
+        assertEquals(0, maze.chipsRemaining());
+        assertEquals("[r, g, b, y, y, b, g, r]", maze.getPlayerInv().toString());
     }
 
     // Ending Game
@@ -361,10 +390,28 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
 
-        Maze maze = new Maze(map, moves);
+        Persistence p = new Persistence();
+        Maze maze = p.loadFile(map);
 
-        assertEquals(expected, maze.getBoard().toString());
-        assertEquals(0, maze.getPlayer().getTreasure());
-        assertEquals("[E]", maze.getPlayer().getInventory().toString());
+        gameplayLoop(maze, moves);
+
+        assertEquals(expected, maze.toString());
+        assertEquals(0, maze.chipsRemaining());
+        assertEquals("[E]", maze.getPlayerInv().toString());
+    }
+
+    private void gameplayLoop(Maze maze, String[] moves) {
+        for (String s : moves) {
+            switch (s) {
+                case "s":
+                    maze.executeMove(GUI.direction.DOWN);
+                case "w":
+                    maze.executeMove(GUI.direction.UP);
+                case "a":
+                    maze.executeMove(GUI.direction.LEFT);
+                case "d":
+                    maze.executeMove(GUI.direction.RIGHT);
+            }
+        }
     }
 }

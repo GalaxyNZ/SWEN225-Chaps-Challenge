@@ -35,7 +35,7 @@ public class ExitTile extends Tile{
 	
 	/*
 	 * Updates Tile to either contain an Item or null. Returns the old item in-case it needs to be added to Chap's inventory.
-	 * TODO: Possible change to Item system? Avoid returning null values and work off of an Item Boolean call?
+	 * Not relevant to ExitTile but kept in for movement validation checks and easier error tracking.
 	 */
 	
 	public Item addItem(Item newItem) {

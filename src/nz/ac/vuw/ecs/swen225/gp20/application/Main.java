@@ -15,7 +15,13 @@ public class Main extends GUI {
   private Timer timer;
   private Rendering renderer;
   private Record recorder;
+  private Persistence p;
   Maze maze;
+  private enum states {
+    INTIAL,
+    RUNNING
+  }
+  private states currentState;
 
 
   public static void main(String... args) {
@@ -25,25 +31,51 @@ public class Main extends GUI {
   public Main() {
     renderer = new Rendering();
     recorder = new Record();
+    p = new Persistence();
+    currentState = states.INTIAL;
   }
 
   @Override
   protected void redraw(Graphics g, Dimension d) {
     g.setColor(Color.LIGHT_GRAY);
     g.fillRect(0, 0, d.width, d.height);
-    if (maze != null) renderer.testDrawingAnimation(g,"Down",d,maze);
+    if (maze != null) renderer.testDrawingAnimation(g, "Down", d, maze);
   }
 
   @Override
   protected void movePlayer(GUI.direction dir) {
-    maze.getBoard().movePlayer(dir);
+    if (currentState == states.INTIAL) return;
+    maze.executeMove(dir);
+    if (maze.levelWonChecker()) {
+      // Player has won
+    }
     recorder.addMove(dir);
   }
 
   @Override
   protected void newGame(JLabel timeLeft) {
     System.out.println("Starts new game at level 1");
+    maze = p.newGame();
+    currentState = states.RUNNING;
     startTimer(timeLeft);
+  }
+
+  @Override
+  protected void exitSaveGame() {
+    if (currentState == states.INTIAL) return;
+    System.out.println("Save and exit");
+    int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit? Your game will be saved", "Save & Exit Game",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+    if (result == JOptionPane.OK_OPTION) {
+      p.saveGame(maze);
+      System.exit(0); // cleanly end the program.
+    }
+  }
+
+  @Override
+  protected void replayGame() {
+
   }
 
   @Override
@@ -63,7 +95,7 @@ public class Main extends GUI {
     System.out.println("Loads a saved game");
     if (timer != null) timer.stop();
     Persistence persistence = new Persistence();
-    maze = persistence.selctFile();
+    maze = persistence.selectFile();
     startTimer(timeLeft);
   }
 
@@ -76,6 +108,7 @@ public class Main extends GUI {
 
   @Override
   protected void startRec() {
+    if (currentState == states.INTIAL) return;
     System.out.println("Start Recording");
     //recorder.record(maze);
   }
@@ -100,11 +133,14 @@ public class Main extends GUI {
       if (!gamePaused) {
         timeLeft.setText(String.valueOf(String.format("%.1f", timePerLevel - timeElapsed)));
         timeElapsed += 0.1f;
+        if (timeElapsed - (int) timeElapsed == 0) {
+          // Move bugs
+        }
         if (timePerLevel - timeElapsed < 30) timeLeft.setForeground(new Color(227, 115, 14));
         if (timePerLevel - timeElapsed < 15) timeLeft.setForeground(Color.RED);
         if (timePerLevel - timeElapsed < 0) timer.stop();
 
-        if(renderer.updateFrame(String.format("%.1f", timeElapsed))) redraw();
+        if (renderer.updateFrame(String.format("%.1f", timeElapsed))) redraw();
       }
     });
     timer.start();

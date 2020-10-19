@@ -8,7 +8,6 @@ public class ExitLockItem extends Item{
 	
 	/*
 	 * Constructor method, input currently unused as for now this Item is a shell.
-	 * TODO: Re-implement door check system.
 	 */
 	
 	public ExitLockItem(int numOfChips) {

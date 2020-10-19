@@ -5,6 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 /*
  * This class represents the physical board of the game, and contains the 2D array of all Tiles as well as the Items
@@ -39,11 +40,19 @@ public class Board {
 		delimitedInput = getKeyInfo(delimitedInput);
 		makeTiles(delimitedInput, xSize, ySize);
 	}
-
-	public Board(int x, int y) {
-		xSize = x;
-		ySize = y;
-		boardMap = new Tile[y][x];
+	
+	public Board(Map<?,?> map) {
+		xSize = (int) Double.parseDouble(map.get("xSize").toString());
+        ySize = (int) Double.parseDouble(map.get("ySize").toString());
+        tileInformation = map.get("tileInfo").toString();
+        numChips = (int) Double.parseDouble(map.get("numChips").toString());
+        boardMap = new Tile[ySize][xSize];
+        GKMax = (int) Double.parseDouble(map.get("SETGK").toString());
+        BKMax = (int) Double.parseDouble(map.get("SETBK").toString());
+        YKMax = (int) Double.parseDouble(map.get("SETRK").toString());
+        RKMax = (int) Double.parseDouble(map.get("SETYK").toString());
+        ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(map.get("board").toString().split("[,]")));
+        makeTiles(delimitedInput, xSize, ySize);
 	}
 	
 	/*
@@ -53,7 +62,7 @@ public class Board {
 	
 	private ArrayList<String> getKeyInfo(ArrayList<String> input) {
 		String token = "";
-		floop: while(!token.equals("F")) { // TODO: Explain this? Idk what purpose it serves so maybe check if you need it? idk
+		while(!token.equals("F")) { 
 			token = input.get(0);
 			switch(token) {
 			case "SETGK":
@@ -73,7 +82,7 @@ public class Board {
 				YKMax = Integer.parseInt(input.remove(0));
 				break;
 			default:
-				break floop; // NOTE: Added to stop a infinite loop if no keys were present
+				break;
 			}
 		}
 		return input;
@@ -152,7 +161,7 @@ public class Board {
 			case "G":
 				return new FreeTile(location, new LockedDoorItem("G"));
 			case "I":
-				return new InfoTile(location);
+				return new InfoTile(location, tileInformation);
 			case "T":
 				return new FreeTile(location, new TreasureItem());
 			case "X":
@@ -184,10 +193,6 @@ public class Board {
 		boardMap[y][x] = tile;
 	}
 
-	public Tile getTile(int x, int y) {
-		return boardMap[y][x];
-	}
-
 	public int getWidth() {
 		return boardMap[0].length;
 	}
@@ -195,33 +200,8 @@ public class Board {
 	public int getHeight() {
 		return boardMap.length;
 	}
-
-	public void movePlayer(GUI.direction dir) {
-		Point newLocation = playerLocation;
-		switch (dir) {
-			case UP:
-				newLocation = new Point(playerLocation.x, playerLocation.y-1);
-				break;
-			case DOWN:
-				newLocation = new Point(playerLocation.x, playerLocation.y+1);
-				break;
-			case RIGHT:
-				newLocation = new Point(playerLocation.x+1, playerLocation.y);
-				break;
-			case LEFT:
-				newLocation = new Point(playerLocation.x-1, playerLocation.y);
-				break;
-		}
-		if (validMove(newLocation)) {
-			boardMap[playerLocation.y][playerLocation.x].addItem(null);
-			playerLocation = newLocation;
-			boardMap[playerLocation.y][playerLocation.x].addItem(new Chap());
-		}
-	}
-
-	public boolean validMove(Point newLocation) {
-		if (newLocation.x < 0 || newLocation.x >= boardMap[0].length || newLocation.y < 0 || newLocation.y >= boardMap.length) return false;
-		if (boardMap[newLocation.y][newLocation.x] instanceof WallTile) return false;
-		return true;
+	
+	public int getTotalChips() {
+		return numChips;
 	}
 }
