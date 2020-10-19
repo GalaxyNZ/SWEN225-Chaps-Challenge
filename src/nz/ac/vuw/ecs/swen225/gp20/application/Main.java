@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.Record;
@@ -7,6 +8,7 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.Rendering;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Main extends GUI {
   private static final float timePerLevel = 60f;
@@ -36,6 +38,12 @@ public class Main extends GUI {
   }
 
   @Override
+  protected ArrayList<Item> getItems() {
+    if (currentState == states.INTIAL || maze == null) return null;
+    return maze.getPlayerInv();
+  }
+
+  @Override
   protected void redraw(Graphics g, Dimension d) {
     g.setColor(Color.LIGHT_GRAY);
     g.fillRect(0, 0, d.width, d.height);
@@ -50,6 +58,11 @@ public class Main extends GUI {
       // Player has won
     }
     recorder.addMove(dir);
+  }
+
+  @Override
+  protected int getChipsRemaining() {
+    return maze.chipsRemaining();
   }
 
   @Override
@@ -101,6 +114,7 @@ public class Main extends GUI {
 
   @Override
   protected void endRec() {
+    if (currentState == states.INTIAL) return;
     System.out.println("End Recording");
     //recorder.stopRecording();
     recorder.record(maze);
