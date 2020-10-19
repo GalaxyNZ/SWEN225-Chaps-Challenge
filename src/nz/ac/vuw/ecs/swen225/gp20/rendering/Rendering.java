@@ -13,7 +13,7 @@ import java.awt.*;
  */
 public class Rendering {
     private Dimension size;
-    private Point position, prev, center;
+    private Point position, prev;
     private int count  = 0, frames = 5;
     private String  prevTime = "";
     private boolean acting = false;
@@ -23,7 +23,6 @@ public class Rendering {
 
     public void testDrawingAnimation (Graphics g, String actor, Dimension d, Maze m){
         size = d;
-        center = new Point(size.width/2, size.height/2);
 
         Graphics2D g2 = (Graphics2D) g;
         g2.drawImage(new ImageIcon("res/Background.png").getImage(), -(int)(size.width*0.1)/2,-(int)(size.height*0.1)/2, (int)(size.width*1.1), (int)(size.height*1.1), null);
@@ -48,7 +47,6 @@ public class Rendering {
     public void update(Graphics g, Dimension d, Maze m){//board
         if(m == null) return;
         size = d;
-        center = new Point(size.width/2, size.height/2);
         prev = position;
         position = m.getBoard().findPlayer();
         determineAction();
@@ -118,8 +116,8 @@ public class Rendering {
     }
     private void findChunk(Graphics2D g, Board b){
         int chunkSize = 3 + 2*(((size.width/2)-35)/70);
-        int chunkCenter = (((chunkSize * 70) - size.width)/2)+1;//Center is always off by 1
-        drawBackgroundInChunk(g, chunkSize, chunkCenter, b);
+        int center = (((chunkSize * 70) - size.width)/2)+1;//Center is always off by 1
+        drawBackgroundInChunk(g, chunkSize, center, b);
 
     }
     private void draw(Graphics g){
@@ -149,7 +147,7 @@ public class Rendering {
         }
 
     }
-    private void drawBackgroundInChunk(Graphics2D g, int chunkSize, int chunkCenter, Board b){
+    private void drawBackgroundInChunk(Graphics2D g, int chunkSize, int center, Board b){
         int indexX = position.x - chunkSize/2 ;
         int indexY = position.y - chunkSize/2 ;
 
@@ -158,9 +156,9 @@ public class Rendering {
                 int x = indexX+i, y = indexY+j;
                 if(x < 0 || x >= b.getWidth() || y < 0 || y >= b.getHeight()) continue;
 
-                Point defaultP = new Point((i* 70)-chunkCenter,(j* 70)-chunkCenter);
+                Point defaultP = new Point((i* 70)-center,(j* 70)-center);
                 int wh = 70;
-                String tileChar = b.getTile(indexX+i,indexY+j).toString();
+                String tileChar = b.getTile(x,y).toString();
 
                 switch (tileChar) {
                     case "#":
@@ -169,40 +167,46 @@ public class Rendering {
                         if(checkTile(x,y-1,b)) tile += Classification.U.toString();
                         if(checkTile(x-1,y,b)) tile += Classification.L.toString();
                         if(checkTile(x+1,y,b)) tile += Classification.R.toString();
+                        TileDesigns td;
                         switch(tile){
+                            
                             case "U":
-                                new TileDesigns(g,defaultP,wh,Classification.U);
-                                continue;
+                               td = new TileDesigns(g,defaultP,wh,Classification.U);
+                                break;
                             case "D":
-                                new TileDesigns(g,defaultP,wh,Classification.D);
-                                continue;
+                                td =new TileDesigns(g,defaultP,wh,Classification.D);
+                                break;
                             case "L":
-                                new TileDesigns(g,defaultP,wh,Classification.L);
-                                continue;
+                                td =new TileDesigns(g,defaultP,wh,Classification.L);
+                                break;
                             case "R":
-                                new TileDesigns(g,defaultP,wh,Classification.R);
-                                continue;
+                                td =new TileDesigns(g,defaultP,wh,Classification.R);
+                                break;
                             case "DU":
-                                new TileDesigns(g,defaultP,wh,Classification.DU);
-                                continue;
+                                td =new TileDesigns(g,defaultP,wh,Classification.DU);
+                                break;
                             case "LR":
-                                new TileDesigns(g,defaultP,wh,Classification.LR);
-                                continue;
+                                td =new TileDesigns(g,defaultP,wh,Classification.LR);
+                                break;
                             case "DUL":
-                                new TileDesigns(g,defaultP,wh,Classification.DUL);
-                                continue;
+                                td =new TileDesigns(g,defaultP,wh,Classification.DUL);
+                                break;
                             case "DUR":
-                                new TileDesigns(g,defaultP,wh,Classification.DUR);
-                                continue;
+                                td =new TileDesigns(g,defaultP,wh,Classification.DUR);
+                                break;
                             case "DLR":
-                                new TileDesigns(g,defaultP,wh,Classification.DLR);
-                                continue;
+                                td =new TileDesigns(g,defaultP,wh,Classification.DLR);
+                                break;
                             case "ULR":
-                                new TileDesigns(g,defaultP,wh,Classification.ULR);
-                                continue;
+                                td =new TileDesigns(g,defaultP,wh,Classification.ULR);
+                                break;
                             case "DULR":
-                                new TileDesigns(g,defaultP,wh,Classification.DULR);
+                                td =new TileDesigns(g,defaultP,wh,Classification.DULR);
+                                break;
+                            default:
+                                throw new IllegalStateException("Unexpected value: " + tile);
                         }
+                        td.wallTile(null,null,null);
                         continue;
                     case "%":
                         new TileDesigns(g,defaultP,wh,Classification.Exit);
@@ -252,7 +256,7 @@ public class Rendering {
     private boolean still(Graphics2D g, String str){
         try{
             Image im = new ImageIcon("res/" + str + "-i" + count +".png").getImage();
-            g.drawImage(im, center.x - 32,center.y - 32,64,64, null);
+            g.drawImage(im, size.width/2 - 32,size.height/2 - 32,64,64, null);
 
         }catch (Exception ignored){}
         return false;
