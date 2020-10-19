@@ -18,17 +18,18 @@ public class Rendering {
     private String  prevTime = "";
     private boolean acting = false;
     private CL action = CL.Down, lastAct = CL.Down;
+    Maze m;
     //private float time = 1.0f;
     public Rendering(){}
 
     public void testDrawingAnimation (Graphics g, String actor, Dimension d, Maze m){
         size = d;
-
+        this.m = m;
         Graphics2D g2 = (Graphics2D) g;
 
         if(m != null){
             prev = position;
-            position = m.getBoard().findPlayer();
+            position = m.getPlayerLocation();
             findChunk(g2, m.getBoard());
         }
                 switch (actor) {
@@ -47,7 +48,7 @@ public class Rendering {
         if(m == null) return;
         size = d;
         prev = position;
-        position = m.getBoard().findPlayer();
+        position = m.getPlayerLocation();
         determineAction();
         draw(g);
 
@@ -158,7 +159,7 @@ public class Rendering {
 
                 Point defaultP = new Point((i* 70)-center-aniValX,(j* 70)-center-aniValY);
                 int wh = 70;
-                String tileChar = b.getTile(x,y).toString();
+                String tileChar = m.getBoardTile(new Point(x,y)).toString();
 
                 switch (tileChar) {
                     case "X":
@@ -249,7 +250,7 @@ public class Rendering {
     }
     private boolean checkTile(int x, int y, Board b){
         if(x < 0 || x >= b.getWidth() || y < 0 || y >= b.getHeight()) return false;
-        return b.getTile(x,y).toString().equals("#");
+        return m.getBoardTile(new Point(x,y)).toString().equals("#");
     }
     private boolean still(Graphics2D g, String str){
         try{

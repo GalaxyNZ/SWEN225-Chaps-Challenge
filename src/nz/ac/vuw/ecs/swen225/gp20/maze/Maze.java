@@ -192,6 +192,6 @@ public class Maze {
 	public String toString() {
 		return board.toString();
 	}
-	
-	
+
+	public Board getBoard(){return board;}
 }
