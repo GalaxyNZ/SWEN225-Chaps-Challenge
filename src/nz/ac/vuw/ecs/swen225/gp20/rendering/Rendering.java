@@ -17,7 +17,7 @@ public class Rendering {
     private int count  = 0, frames = 5,aniValX = 0, aniValY = 0;
     private String  prevTime = "";
     private boolean acting = false;
-    private Classification action = Classification.Down, lastAct = Classification.Down;
+    private CL action = CL.Down, lastAct = CL.Down;
     //private float time = 1.0f;
     public Rendering(){}
 
@@ -25,7 +25,6 @@ public class Rendering {
         size = d;
 
         Graphics2D g2 = (Graphics2D) g;
-        g2.drawImage(new ImageIcon("res/Background.png").getImage(), -(int)(size.width*0.1)/2,-(int)(size.height*0.1)/2, (int)(size.width*1.1), (int)(size.height*1.1), null);
 
         if(m != null){
             prev = position;
@@ -88,26 +87,26 @@ public class Rendering {
             switch (lastAct){
                 case RunLeft:
                 case Left:
-                    changeAction(Classification.Left);
+                    changeAction(CL.Left);
                     break;
                 case RunRight:
                 case Right:
-                    changeAction(Classification.Right);
+                    changeAction(CL.Right);
                     break;
                 case RunDown:
                 case Down:
-                    changeAction(Classification.Down);
+                    changeAction(CL.Down);
                     break;
                 case RunUp:
                 case Up:
-                    changeAction(Classification.Up);
+                    changeAction(CL.Up);
 
             }
         }
 
 
     }
-    private void changeAction(Classification act){
+    private void changeAction(CL act){
         if(!acting){
             lastAct = action;
             action = act;
@@ -117,7 +116,8 @@ public class Rendering {
     private void findChunk(Graphics2D g, Board b){
         int chunkSize = 3 + 2*(((size.width/2)-35)/70);
         int center = (((chunkSize * 70) - size.width)/2);
-        drawBackgroundInChunk(g, chunkSize, center, b);
+        drawBackgroundInChunk(g, chunkSize, center, b, false);
+        drawBackgroundInChunk(g, chunkSize, center, b, true);
 
     }
     private void draw(Graphics g){
@@ -147,9 +147,9 @@ public class Rendering {
         }
 
     }
-    private void drawBackgroundInChunk(Graphics2D g, int chunkSize, int center, Board b){
-        int indexX = aniValX ==0?position.x:prev.x - chunkSize/2 ;
-        int indexY = aniValY ==0?position.y:prev.y  - chunkSize/2 ;
+    private void drawBackgroundInChunk(Graphics2D g, int chunkSize, int center, Board b, boolean draw){
+        int indexX = prev == null ? position.x :(aniValX ==0? position.x:prev.x) - chunkSize/2 ;
+        int indexY = prev == null ? position.y: (aniValY ==0? position.y:prev.y)  - chunkSize/2 ;
 
         for(int j = 0; j < chunkSize +(aniValY != 0?1:0); j++){
             for(int i = 0; i < chunkSize+(aniValX != 0?1:0); i++){
@@ -161,52 +161,56 @@ public class Rendering {
                 String tileChar = b.getTile(x,y).toString();
 
                 switch (tileChar) {
+                    case "X":
+                    case "_":
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.Floor, draw);
+                        break;
                     case "#":
                         String tile = "";
-                        if(checkTile(x,y+1,b)) tile += Classification.D.toString();
-                        if(checkTile(x,y-1,b)) tile += Classification.U.toString();
-                        if(checkTile(x-1,y,b)) tile += Classification.L.toString();
-                        if(checkTile(x+1,y,b)) tile += Classification.R.toString();
+                        if(checkTile(x,y+1,b)) tile += CL.D.toString();
+                        if(checkTile(x,y-1,b)) tile += CL.U.toString();
+                        if(checkTile(x-1,y,b)) tile += CL.L.toString();
+                        if(checkTile(x+1,y,b)) tile += CL.R.toString();
                         switch(tile){
                             case "U":
-                                new TileDesigns(g,defaultP,wh, size,Classification.U);
+                                new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.U, draw);
                                 continue;
                             case "D":
-                                new TileDesigns(g,defaultP,wh,size,Classification.D);
+                                new TileDesigns(g,defaultP,wh,chunkSize, new Point(i,j), CL.D, draw);
                                 continue;
                             case "L":
-                                new TileDesigns(g,defaultP, wh,size,Classification.L);
+                                new TileDesigns(g,defaultP, wh, chunkSize, new Point(i,j), CL.L, draw);
                                 continue;
                             case "R":
-                                new TileDesigns(g,defaultP,wh, size,Classification.R);
+                                new TileDesigns(g,defaultP,wh,  chunkSize, new Point(i,j), CL.R, draw);
                                 continue;
                             case "DU":
-                                new TileDesigns(g,defaultP,wh,size,Classification.DU);
+                                new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.DU, draw);
                                 continue;
                             case "LR":
-                                new TileDesigns(g,defaultP,wh,size,Classification.LR);
+                                new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.LR, draw);
                                 continue;
                             case "DUL":
-                                new TileDesigns(g,defaultP,wh, size,Classification.DUL);
+                                new TileDesigns(g,defaultP,wh,  chunkSize, new Point(i,j), CL.DUL, draw);
                                 continue;
                             case "DUR":
-                                new TileDesigns(g,defaultP,wh, size,Classification.DUR);
+                                new TileDesigns(g,defaultP,wh,  chunkSize, new Point(i,j), CL.DUR, draw);
                                 continue;
                             case "DLR":
-                                new TileDesigns(g,defaultP,wh, size,Classification.DLR);
+                                new TileDesigns(g,defaultP,wh,  chunkSize, new Point(i,j), CL.DLR, draw);
                                 continue;
                             case "ULR":
-                                new TileDesigns(g,defaultP,wh,size,Classification.ULR);
+                                new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.ULR, draw);
                                 continue;
                             case "DULR":
-                                new TileDesigns(g,defaultP,wh,size,Classification.DULR);
+                                new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.DULR, draw);
                         }
                         continue;
                     case "%":
-                        new TileDesigns(g,defaultP,wh,size,Classification.Exit);
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.Exit, draw);
                         continue;
                     case "E":
-                        new TileDesigns(g,defaultP,wh,size,Classification.ELI);
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.ELI, draw);
                         continue;
                     case "i":
                         g.setColor(new Color(92, 12, 144));
@@ -245,7 +249,7 @@ public class Rendering {
     }
     private boolean checkTile(int x, int y, Board b){
         if(x < 0 || x >= b.getWidth() || y < 0 || y >= b.getHeight()) return false;
-        return b.getTile(x,y ).toString().equals("#");
+        return b.getTile(x,y).toString().equals("#");
     }
     private boolean still(Graphics2D g, String str){
         try{
