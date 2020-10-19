@@ -188,8 +188,8 @@ public class Rendering {
         int indexX = position.x - chunkSize/2 ;
         int indexY = position.y - chunkSize/2 ;
 
-        for(int j = 0; j < chunkSize; j++){
-            for(int i = 0; i < chunkSize; i++){
+        for(int j = 0; j < m.getBoardSize().y; j++){
+            for(int i = 0; i < m.getBoardSize().x; i++){
                 if(indexX+i < 0 || indexX+i > m.getBoardSize().x-1 || indexY+j < 0 || indexY+j >= m.getBoardSize().y-1) continue;
                 String tileChar = m.getBoardTile(new Point(indexX+i, indexY+j)).toString();
                 g.setColor(Color.GRAY);
