@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -7,6 +9,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public abstract class GUI {
 
@@ -54,12 +57,42 @@ public abstract class GUI {
     chips.setBorder(border);
     chips.add(chipsText);
 
+    JLabel chipsRemaining = new JLabel();
+    chips.add(chipsRemaining, BorderLayout.CENTER);
+
     JLabel itemsText = new JLabel("Items");
 
     JPanel items = new JPanel(gl);
     items.setBackground(Color.LIGHT_GRAY);
     items.setBorder(border);
     items.add(itemsText);
+
+    JPanel inventory = new JPanel(new GridLayout(1,4,5,5));
+    inventory.setBackground(Color.LIGHT_GRAY);
+
+
+    JLabel itemOne = new JLabel();
+    itemOne.setVisible(false);
+    JLabel itemTwo = new JLabel();
+    itemTwo.setVisible(false);
+    JLabel itemThree = new JLabel();
+    itemThree.setVisible(false);
+    JLabel itemFour = new JLabel();
+    itemFour.setVisible(false);
+
+    inventory.add(itemOne);
+    inventory.add(itemTwo);
+    inventory.add(itemThree);
+    inventory.add(itemFour);
+    items.add(inventory);
+
+    inventory.addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentResized(ComponentEvent e) {
+        updateInventory(inventory);
+      }
+    });
+
 
     JLabel lvlText = new JLabel("Level");
 
@@ -72,6 +105,8 @@ public abstract class GUI {
       @Override
       public void actionPerformed(ActionEvent e) {
         movePlayer(direction.UP);
+        updateInventory(inventory);
+        updateChips(chipsRemaining);
       }
     };
 
@@ -79,6 +114,8 @@ public abstract class GUI {
       @Override
       public void actionPerformed(ActionEvent e) {
         movePlayer(direction.DOWN);
+        updateInventory(inventory);
+        updateChips(chipsRemaining);
       }
     };
 
@@ -86,6 +123,8 @@ public abstract class GUI {
       @Override
       public void actionPerformed(ActionEvent e) {
         movePlayer(direction.RIGHT);
+        updateInventory(inventory);
+        updateChips(chipsRemaining);
       }
     };
 
@@ -93,6 +132,8 @@ public abstract class GUI {
       @Override
       public void actionPerformed(ActionEvent e) {
         movePlayer(direction.LEFT);
+        updateInventory(inventory);
+        updateChips(chipsRemaining);
       }
     };
 
@@ -169,16 +210,16 @@ public abstract class GUI {
       public void componentResized(ComponentEvent e) {
         try {
           Component[] comp = buttons.getComponents();
-          for (int i = 0; i < comp.length; i++) {
-            if (comp[i] instanceof JButton) {
-              JButton btn = (JButton) comp[i];
+          for (Component component : comp) {
+            if (component instanceof JButton) {
+              JButton btn = (JButton) component;
               if (btn.getName() == null) continue;
               Dimension size = btn.getSize();
               Insets insets = btn.getInsets();
               size.width -= insets.left + insets.right;
               size.height -= insets.top + insets.bottom;
               Image img = ImageIO.read(getClass().getResource("/assets/" + btn.getName() + ".png"));
-              Image scaled = img.getScaledInstance(size.width, size.height, java.awt.Image.SCALE_SMOOTH);
+              Image scaled = img.getScaledInstance(size.width, size.height, Image.SCALE_SMOOTH);
               btn.setIcon(new ImageIcon(scaled));
             }
           }
@@ -234,6 +275,7 @@ public abstract class GUI {
     newGameOne.setAccelerator(NGO);
     newGameOne.addActionListener(ev -> {
       newGame(timeLeft);
+      updateChips(chipsRemaining);
       redraw();
     });
 
@@ -242,6 +284,7 @@ public abstract class GUI {
     restart.setAccelerator(res);
     restart.addActionListener(ev -> {
       restartRound();
+      updateChips(chipsRemaining);
       redraw();
     });
 
@@ -266,6 +309,7 @@ public abstract class GUI {
     load.setAccelerator(lo);
     load.addActionListener(ev -> {
       loadGame(timeLeft);
+      updateChips(chipsRemaining);
       redraw();
     });
 
@@ -367,10 +411,10 @@ public abstract class GUI {
         int textFontSize = info.getWidth()/12;setJLabel(lvlText, textFontSize);
         int infoFontSize = info.getWidth()/8;setJLabel(lvlText, textFontSize);
         setJLabel(chipsText, textFontSize);
+        setJLabel(chipsRemaining, infoFontSize);
         setJLabel(timeText, textFontSize);
         setJLabel(timeLeft, infoFontSize);
         setJLabel(itemsText, textFontSize);
-        info.updateUI();
       }
     });
 
@@ -383,6 +427,34 @@ public abstract class GUI {
     frame.pack();
     frame.setVisible(true);
   }
+
+  private void updateChips(JLabel chipsRemaining) {
+    chipsRemaining.setText(Integer.toString(getChipsRemaining()));
+  }
+
+  private void updateInventory(JPanel inventory) {
+    ArrayList<Item> items = getItems();
+    if (items == null) return;
+    Component[] components = inventory.getComponents();
+    for (int i = 0; i < components.length; i++) {
+      if (i < items.size()) {
+        String itemColour = getItems().get(i).getColor();
+        try {
+          Image img = ImageIO.read(getClass().getResource("/assets/" + itemColour + ".png"));
+          Image scaled = img.getScaledInstance(components[i].getWidth(), components[i].getHeight(), java.awt.Image.SCALE_SMOOTH);
+          if (components[i] instanceof JLabel) ((JLabel) components[i]).setIcon(new ImageIcon(scaled));
+        } catch (IOException ex) {
+          ex.printStackTrace();
+        }
+        components[i].setVisible(true);
+      }
+      else components[i].setVisible(false);
+    }
+  }
+
+  protected abstract int getChipsRemaining();
+
+  protected abstract ArrayList<Item> getItems();
 
   /**
    * Replays the game from a save.
