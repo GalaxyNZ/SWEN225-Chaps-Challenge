@@ -109,7 +109,7 @@ public class Main extends GUI {
     Maze newMaze = p.selectFile();
     if (newMaze == null) return;
     if (currentState == states.INTIAL) {
-      maze = p.selectFile();
+      maze = newMaze;
       startTimer(timeLeft);
     } else {
       if (timer != null) timer.stop();
