@@ -227,8 +227,11 @@ public class TileDesigns {
         }
     }
     private void floorTile(Graphics2D g, Point p, int wh){
-        g.setColor(Color.WHITE);
+        g.setColor(new Color(240,240,240));
         g.fillRect(p.x,p.y,wh, wh);
+        g.drawImage(new ImageIcon("res/Floor.png").getImage(), p.x,p.y, wh,wh, null);
+
+
     }
     private void infoTile(Graphics2D g, Point p, int wh){
         floorTile(g,p,wh);
