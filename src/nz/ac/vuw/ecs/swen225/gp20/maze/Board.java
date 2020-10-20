@@ -73,7 +73,38 @@ public class Board {
 	}
 	
 	public boolean moveBugs() {
-		
+		for(Point pt: bugLocations) {
+			if(boardMap[pt.y][pt.x].getItem() instanceof MonsterItem) {
+				String move = boardMap[pt.y][pt.x].getItem().getNextMove();
+				if(move != null) {
+					switch(move) {
+					case "UP":
+						return moveThisBug(pt, new Point(pt.x, pt.y-1));
+					case "DOWN":
+						return moveThisBug(pt, new Point(pt.x, pt.y+1));
+					case "LEFT":
+						return moveThisBug(pt, new Point(pt.x-1, pt.y));
+					case "RIGHT":
+						return moveThisBug(pt, new Point(pt.x+1, pt.y));
+					default:
+						return false;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/*
+	 * 
+	 */
+	
+	private boolean moveThisBug(Point oldLocation, Point newLocation) {
+		if(boardMap[newLocation.y][newLocation.x].getItem() instanceof Chap) {
+			boardMap[newLocation.y][newLocation.x].addItem(boardMap[oldLocation.y][oldLocation.x].addItem(null));
+			return true;
+		}
+		boardMap[newLocation.y][newLocation.x].addItem(boardMap[oldLocation.y][oldLocation.x].addItem(null));
 		return false;
 	}
 
