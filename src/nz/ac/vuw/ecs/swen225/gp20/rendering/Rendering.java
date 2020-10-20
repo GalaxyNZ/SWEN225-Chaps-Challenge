@@ -26,11 +26,10 @@ public class Rendering {
         size = d;
         this.m = m;
         Graphics2D g2 = (Graphics2D) g;
-
+        g2.drawImage(new ImageIcon("res/Background.png").getImage(), -(int)(size.width*0.1)/2,-(int)(size.height*0.1)/2, (int)(size.width*1.1), (int)(size.height*1.1), null);
         if(m != null){
             prev = position;
-            position = m.getPlayerLocation();
-            //System.out.println(position);
+            position =  new Point(m.getPlayerLocation().x,m.getPlayerLocation().y);
             findChunk(g2);
         }
                 switch (actor) {
@@ -160,11 +159,12 @@ public class Rendering {
 
                 Point defaultP = new Point((i* 70)-center-aniValX,(j* 70)-center-aniValY);
                 int wh = 70;
-                String tileChar = m.getBoardTile(new Point(x,y)).toString();
+                Tile t =  m.getBoardTile(new Point(x,y));
+
+                String tileChar = t == null ? "_":t.toString();
 
                 switch (tileChar) {
-                    case "X":
-                    case "_":
+                    default:
                         new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.Floor, draw);
                         break;
                     case "#":
@@ -206,52 +206,44 @@ public class Rendering {
                                 continue;
                             case "DULR":
                                 new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.DULR, draw);
+                                continue;
+                            case "DR":
+                                new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.DR, draw);
+                                continue;
+                            case "DL":
+                                new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.DL, draw);
+                                continue;
+                            case "UR":
+                                new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.UR, draw);
+                                continue;
+                            case "UL":
+                                new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.UL, draw);
+                                continue;
                         }
-                        continue;
-                    case "%":
-                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.Exit, draw);
-                        continue;
-                    case "E":
-                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.ELI, draw);
-                        continue;
-                    case "i":
-                        g.setColor(new Color(92, 12, 144));
-                        continue;
-                    case "T":
-                        g.setColor(Color.darkGray);
-                        continue;
-                    case "G":
-                        g.setColor(Color.GREEN);
-                        continue;
                     case "g":
-                        g.setColor(new Color(13, 120, 6, 255));
-                        continue;
-                    case "R":
-                        g.setColor(Color.RED);
-                        continue;
-                    case "r":
-                        g.setColor(Color.pink);
-                        continue;
-                    case "Y":
-                        g.setColor(Color.ORANGE);
-                        continue;
-                    case "y":
-                        g.setColor(Color.YELLOW);
-                        continue;
-                    case "B":
-                        g.setColor(Color.BLUE);
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.GK, draw);
                         continue;
                     case "b":
-                        g.setColor(Color.CYAN);
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.BK, draw);
                         continue;
-                    default:
+                    case "r":
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.RK, draw);
+                        continue;
+                    case "y":
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.YK, draw);
+                        continue;
+                    case "T":
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.Treasure, draw);
+
                 }
             }
         }
     }
     private boolean checkTile(int x, int y){
         if(x < 0 || x >= m.getBoardSize().x || y < 0 || y >= m.getBoardSize().y) return false;
-        return m.getBoardTile(new Point(x,y)).toString().equals("#");
+        Tile t = m.getBoardTile(new Point(x,y));
+        if( t == null) return false;
+        return t.toString().equals("#");
     }
     private boolean still(Graphics2D g, String str){
         try{
