@@ -7,6 +7,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
 import java.io.File;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -34,14 +35,17 @@ public class Replay {
   }
 
   public void autoStep(){
-    while (!moves.isEmpty()){
-      iterateStep();
-      try {
-        Thread.sleep(1000, 0);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
+    //while (!moves.isEmpty()){
+    //  iterateStep();
+
+   // }
+
+    Timer timer = new Timer(1000, e -> {
+      if (!moves.isEmpty()) {
+        iterateStep();
       }
-    }
+    });
+    timer.start();
   }
 
   public void iterateStep(){
