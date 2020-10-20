@@ -1,6 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
+import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -55,44 +55,53 @@ public class Board {
         YKMax = (int) Double.parseDouble(map.get("SETRK").toString());
         RKMax = (int) Double.parseDouble(map.get("SETYK").toString());
         setBugs(map);
-        ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(map.get("board").toString().split("[,]")));
+        ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(map.get("board").toString().split("[|]")));
         makeTiles(delimitedInput, xSize, ySize);
 	}
 	
 	private void setBugs(Map<?,?> map) {
-		if(map.containsKey("NumBugs")) {
-			int max = (int) Double.parseDouble(map.get("NumBugs").toString());
+		if(map.containsKey("numBugs")) {
+			int max = (int) Double.parseDouble(map.get("numBugs").toString());
 			for(int i = 0; i < max; i++) {
-				if(map.containsKey("" + i)) {
-					String movesetArray = map.get("" + i).toString();
-					bugMoves.put(i,new ArrayList<String>(Arrays.asList(movesetArray.split("[,]"))));					
+				if(map.containsKey("enemy" + i)) {
+					String movesetArray = map.get("enemy" + i).toString();
+					bugMoves.put(i,new ArrayList<String>(Arrays.asList(movesetArray.split("[|]"))));
 				}
 			}
 		}
 		
 	}
+
 	
 	public boolean moveBugs() {
+		System.out.println("Hello there");
+		ArrayList<Point> newBugLocations = new ArrayList<>();
 		for(Point pt: bugLocations) {
 			if(boardMap[pt.y][pt.x].getItem() instanceof MonsterItem) {
 				String move = boardMap[pt.y][pt.x].getItem().getNextMove();
 				if(move != null) {
+					System.out.println("hi");
 					switch(move) {
 					case "UP":
-						return moveThisBug(pt, new Point(pt.x, pt.y-1));
+						 moveThisBug(pt, new Point(pt.x, pt.y-1));
+						 newBugLocations.add(new Point(pt.x, pt.y-1));
 					case "DOWN":
-						return moveThisBug(pt, new Point(pt.x, pt.y+1));
+						 moveThisBug(pt, new Point(pt.x, pt.y+1));
+						newBugLocations.add(new Point(pt.x, pt.y+1));
 					case "LEFT":
-						return moveThisBug(pt, new Point(pt.x-1, pt.y));
+						 moveThisBug(pt, new Point(pt.x-1, pt.y));
+						newBugLocations.add(new Point(pt.x-1, pt.y));
 					case "RIGHT":
-						return moveThisBug(pt, new Point(pt.x+1, pt.y));
-					default:
-						return false;
+						 moveThisBug(pt, new Point(pt.x+1, pt.y));
+						newBugLocations.add(new Point(pt.x+1, pt.y));
+					//default:
+						//return false;
 					}
 				}
 			}
 		}
-		return false;
+		bugLocations = newBugLocations;
+		return true;
 	}
 	
 	/*

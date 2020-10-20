@@ -2,8 +2,8 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.util.ArrayList;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI.direction;
+import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
+import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface.Direction;
 
 public class MonsterItem extends Item{
 	
