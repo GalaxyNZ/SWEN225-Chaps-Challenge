@@ -234,7 +234,9 @@ public class Rendering {
                         continue;
                     case "T":
                         new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.Treasure, draw);
-
+                        continue;
+                    case "I":
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.Info, draw);
                 }
             }
         }

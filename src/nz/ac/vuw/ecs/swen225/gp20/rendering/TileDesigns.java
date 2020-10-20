@@ -235,6 +235,8 @@ public class TileDesigns {
     }
     private void infoTile(Graphics2D g, Point p, int wh){
         floorTile(g,p,wh);
+        g.drawImage(new ImageIcon("res/Info.png").getImage(), p.x,p.y, wh,wh, null);
+
     }
     private void treasureTile(Graphics2D g, Point p, int wh){
         floorTile(g,p,wh);
