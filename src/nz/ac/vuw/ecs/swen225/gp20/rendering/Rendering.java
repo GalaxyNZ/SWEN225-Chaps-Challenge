@@ -30,7 +30,7 @@ public class Rendering {
         if(m != null){
             prev = position;
             position = m.getPlayerLocation();
-            System.out.println(position);
+            //System.out.println(position);
             findChunk(g2);
         }
                 switch (actor) {

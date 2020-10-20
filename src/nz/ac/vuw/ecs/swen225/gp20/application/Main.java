@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
@@ -42,7 +41,6 @@ public class Main extends GraphicalUserInterface {
    */
   public Main() {
     renderer = new Rendering();
-    recorder = new Record();
     persistence = new Persistence();
     currentState = State.INITIAL;
   }
@@ -73,7 +71,9 @@ public class Main extends GraphicalUserInterface {
     if (maze.levelWonChecker()) {
       // Player has won
     }
-    recorder.addMove(dir);
+    if (recorder != null) {
+      recorder.addMove(dir);
+    }
   }
 
   @Override
@@ -161,6 +161,7 @@ public class Main extends GraphicalUserInterface {
     System.out.println("End Recording");
     //recorder.stopRecording();
     recorder.record(maze);
+    recorder = null;
   }
 
   @Override
@@ -169,6 +170,7 @@ public class Main extends GraphicalUserInterface {
       return;
     }
     System.out.println("Start Recording");
+    recorder = new Record();
     //recorder.record(maze);
   }
 

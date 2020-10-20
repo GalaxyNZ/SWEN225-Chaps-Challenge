@@ -35,7 +35,6 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
-
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 
 public abstract class GraphicalUserInterface {
@@ -74,7 +73,7 @@ public abstract class GraphicalUserInterface {
 
     GridLayout gl = new GridLayout(2, 0, 0, 0);
 
-    JLabel timeText = new JLabel("Time");
+    final JLabel timeText = new JLabel("Time");
     timeLeft = new JLabel("60.0");
 
     JPanel time = new JPanel(gl);
