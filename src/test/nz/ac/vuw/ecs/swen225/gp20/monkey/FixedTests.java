@@ -2,8 +2,7 @@ package test.nz.ac.vuw.ecs.swen225.gp20.monkey;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Board;
+import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import org.junit.jupiter.api.Test;
@@ -404,13 +403,13 @@ public class FixedTests {
         for (String s : moves) {
             switch (s) {
                 case "s":
-                    maze.executeMove(GUI.direction.DOWN);
+                    maze.executeMove(GraphicalUserInterface.Direction.DOWN);
                 case "w":
-                    maze.executeMove(GUI.direction.UP);
+                    maze.executeMove(GraphicalUserInterface.Direction.UP);
                 case "a":
-                    maze.executeMove(GUI.direction.LEFT);
+                    maze.executeMove(GraphicalUserInterface.Direction.LEFT);
                 case "d":
-                    maze.executeMove(GUI.direction.RIGHT);
+                    maze.executeMove(GraphicalUserInterface.Direction.RIGHT);
             }
         }
     }

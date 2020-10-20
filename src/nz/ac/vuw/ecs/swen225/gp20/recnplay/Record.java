@@ -1,6 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
+import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -8,8 +8,6 @@ import org.json.simple.JSONObject;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
 import java.util.Date;
 import java.util.Queue;
@@ -19,7 +17,7 @@ import java.util.Queue;
  */
 public class Record {
   //private ArrayList<String> moves = new ArrayList<>();
-  public Queue<GUI.direction> q = new ArrayDeque<>();
+  public Queue<GraphicalUserInterface.Direction> q = new ArrayDeque<>();
   private Boolean isRecording = false;
 
 
@@ -64,7 +62,7 @@ public class Record {
    * Adds moves to the queue for recording.
    * @param direction
    */
-  public void addMove(GUI.direction direction){
+  public void addMove(GraphicalUserInterface.Direction direction){
     q.add(direction);
   }
 

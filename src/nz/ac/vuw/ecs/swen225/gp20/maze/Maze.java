@@ -1,14 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.awt.Point;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Scanner;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
+import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 
 /*
  * The main class behind the gameplay, this constructs a board and is responsible for validating and executing a Players inputs from the GUI or keyboard.
@@ -40,7 +36,7 @@ public class Maze {
 	 * Returns true if movement is valid or false if movement is invalid.
 	 */
 	
-	public boolean executeMove(GUI.direction movement) {
+	public boolean executeMove(GraphicalUserInterface.Direction movement) {
 		switch(movement) {
 		case UP:
 			if(validMove(player.getLocation(), new Point(player.getLocation().x, player.getLocation().y-1))) { //Attempts move up 1 Tile.
