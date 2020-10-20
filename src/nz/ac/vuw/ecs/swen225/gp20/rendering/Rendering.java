@@ -26,7 +26,7 @@ public class Rendering {
         size = d;
         this.m = m;
         Graphics2D g2 = (Graphics2D) g;
-
+        g2.drawImage(new ImageIcon("res/Background.png").getImage(), -(int)(size.width*0.1)/2,-(int)(size.height*0.1)/2, (int)(size.width*1.1), (int)(size.height*1.1), null);
         if(m != null){
             prev = position;
             position =  new Point(m.getPlayerLocation().x,m.getPlayerLocation().y);
@@ -159,7 +159,9 @@ public class Rendering {
 
                 Point defaultP = new Point((i* 70)-center-aniValX,(j* 70)-center-aniValY);
                 int wh = 70;
-                String tileChar = m.getBoardTile(new Point(x,y)).toString();
+                Tile t =  m.getBoardTile(new Point(x,y));
+
+                String tileChar = t == null ? "_":t.toString();
 
                 switch (tileChar) {
                     default:
@@ -204,6 +206,20 @@ public class Rendering {
                                 continue;
                             case "DULR":
                                 new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.DULR, draw);
+                                continue;
+                            case "DR":
+                                new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.DR, draw);
+                                continue;
+                            case "DL":
+                                new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.DL, draw);
+                                continue;
+                            case "UR":
+                                new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.UR, draw);
+                                continue;
+                            case "UL":
+                                new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.UL, draw);
+
+
                         }
 
                 }
@@ -212,7 +228,9 @@ public class Rendering {
     }
     private boolean checkTile(int x, int y){
         if(x < 0 || x >= m.getBoardSize().x || y < 0 || y >= m.getBoardSize().y) return false;
-        return m.getBoardTile(new Point(x,y)).toString().equals("#");
+        Tile t = m.getBoardTile(new Point(x,y));
+        if( t == null) return false;
+        return t.toString().equals("#");
     }
     private boolean still(Graphics2D g, String str){
         try{

@@ -69,7 +69,13 @@ public class TileDesigns {
                             4);
                     break;
                 case DU:
+                    g.setColor(Color.GRAY);
+                    g.fillPolygon(new int[]{x1,x1,x2,x2},
+                            new int[]{p.y+wh,p.y,p.y,p.y+wh},
+                            4);
                     g.setColor(Color.BLACK);
+                    g.drawLine(x1,p.y,x1,p.y+wh);
+                    g.drawLine(x2,p.y,x2,p.y+wh);
                     g.drawLine(p.x,p.y,p.x,p.y+wh);
                     g.drawLine(p.x+wh,p.y,p.x+wh,p.y+wh);
                     break;
@@ -78,7 +84,16 @@ public class TileDesigns {
                     g.fillPolygon(new int[]{x1,x1,x2,x2},
                             new int[]{p.y+wh,p.y,p.y,p.y+wh},
                             4);
+                    g.fillPolygon(new int[]{p.x+wh,p.x+wh,x2,x2},
+                            new int[]{y1,y2,y2,y1},
+                            4);
                     g.setColor(Color.BLACK);
+                    g.drawPolyline(new int[]{x2,x2,p.x+wh},
+                            new int[]{p.y,y1,y1},
+                            3);
+                    g.drawPolyline(new int[]{x2,x2,p.x+wh},
+                            new int[]{p.y+wh,y2,y2},
+                            3);
                     g.drawLine(x1,p.y,x1,p.y+wh);
                     g.drawLine(p.x,p.y,p.x,p.y+wh);
                     break;
@@ -87,9 +102,46 @@ public class TileDesigns {
                     g.fillPolygon(new int[]{x1,x1,x2,x2},
                             new int[]{p.y+wh,p.y,p.y,p.y+wh},
                             4);
+                    g.fillPolygon(new int[]{p.x,p.x,x1,x1},
+                            new int[]{y1,y2,y2,y1},
+                            4);
                     g.setColor(Color.BLACK);
+
+                    g.drawPolyline(new int[]{x1,x1,p.x},
+                            new int[]{p.y,y1,y1},
+                            3);
+                    g.drawPolyline(new int[]{x1,x1,p.x},
+                            new int[]{p.y+wh,y2,y2},
+                            3);
                     g.drawLine(x2,p.y,x2,p.y+wh);
                     g.drawLine(p.x+wh,p.y,p.x+wh,p.y+wh);
+                    break;
+                case LR:
+                    g.setColor(Color.GRAY);
+                    g.fillPolygon(new int[]{p.x+wh,p.x,p.x,p.x+wh},
+                            new int[]{y1,y1,y2,y2},
+                            4);
+                    g.setColor(Color.BLACK);
+                    g.drawLine(p.x,y1,p.x+wh,y1);
+                    g.drawLine(p.x,y2,p.x+wh,y2);
+                    g.drawLine(p.x,p.y,p.x+wh,p.y);
+                    g.drawLine(p.x,p.y+wh,p.x+wh,p.y+wh);
+                    break;
+                case ULR:
+                    g.setColor(Color.GRAY);
+                    g.fillPolygon(new int[]{x1,x1,p.x,p.x,p.x+wh,p.x+wh,x2,x2},
+                            new int[]{p.y,y1,y1,y2,y2,y1,y1,p.y,p.y},
+                            8);
+                    g.setColor(Color.BLACK);
+
+                    g.drawPolyline(new int[]{x1,x1,p.x},
+                            new int[]{p.y,y1,y1},
+                            3);
+                    g.drawPolyline(new int[]{x2,x2,p.x+wh},
+                            new int[]{p.y,y1,y1},
+                            3);
+                    g.drawLine(p.x,y2,p.x+wh,y2);
+                    g.drawLine(p.x,p.y+wh,p.x+wh,p.y+wh);
                     break;
             }
         }
