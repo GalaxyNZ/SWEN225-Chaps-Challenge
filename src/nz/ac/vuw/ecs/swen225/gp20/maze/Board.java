@@ -5,6 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 /*
@@ -24,6 +25,8 @@ public class Board {
 	private int GKMax;
 	private int RKMax;
 	private int extraDataSize;
+	private Map<Integer, ArrayList<String>> bugMoves = new HashMap<Integer, ArrayList<String>>();
+	private ArrayList<Point> bugLocations = new ArrayList<Point>();
 	
 	/*
 	 * Constructor method. Runs mapString through a delimiter, creating an array. 
@@ -51,10 +54,29 @@ public class Board {
         BKMax = (int) Double.parseDouble(map.get("SETBK").toString());
         YKMax = (int) Double.parseDouble(map.get("SETRK").toString());
         RKMax = (int) Double.parseDouble(map.get("SETYK").toString());
+        setBugs(map);
         ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(map.get("board").toString().split("[,]")));
         makeTiles(delimitedInput, xSize, ySize);
 	}
 	
+	private void setBugs(Map<?,?> map) {
+		if(map.containsKey("NumBugs")) {
+			int max = (int) Double.parseDouble(map.get("NumBugs").toString());
+			for(int i = 0; i < max; i++) {
+				if(map.containsKey("" + i)) {
+					String movesetArray = map.get("" + i).toString();
+					bugMoves.put(i,new ArrayList<String>(Arrays.asList(movesetArray.split("[,]"))));					
+				}
+			}
+		}
+		
+	}
+	
+	public boolean moveBugs() {
+		
+		return false;
+	}
+
 	/*
 	 * After universal variables are taken from the ArrayList of delimited mapString all extra information is processed.
 	 * This method sets the amount of uses per different color of Key.
@@ -167,6 +189,15 @@ public class Board {
 			case "X":
 				playerLocation = location;
 				return new FreeTile(location, new Chap());
+			case "0":
+				bugLocations.add(location);
+				return new FreeTile(location, new MonsterItem(bugMoves.get(0), 0));
+			case "1":
+				bugLocations.add(location);
+				return new FreeTile(location, new MonsterItem(bugMoves.get(1), 1));
+			case "2":
+				bugLocations.add(location);
+				return new FreeTile(location, new MonsterItem(bugMoves.get(2), 2));
 			default:
 				System.out.println("Default Case Reached with input: '" + input + "' at location " + location.x + " - " + location.y); //Indicates an error in the mapString in Maze.java.
 				return null;

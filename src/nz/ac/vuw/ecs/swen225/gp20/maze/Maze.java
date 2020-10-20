@@ -83,6 +83,9 @@ public class Maze {
 	private boolean validMove(Point oldLocation, Point newLocation) {
 		int newX = newLocation.x;
 		int newY = newLocation.y;
+		if(newLocation.x < 0 || newLocation.x >= board.xSize || newLocation.y < 0 || newLocation.y >= board.ySize) { //Out of bounds check.
+			return false;
+		}
 		if(board.boardMap[newY][newX] instanceof WallTile) { //Walls are always an obstacle.
 			return false;
 		}
@@ -127,6 +130,10 @@ public class Maze {
 		else { //Should not be reachable, as the player should be contained within map by obstacle tiles and therefore cannot reach null location of the board.
 			return false;
 		}
+	}
+	
+	public boolean moveBugs() {		
+		return board.moveBugs();
 	}
 	
 	/*
