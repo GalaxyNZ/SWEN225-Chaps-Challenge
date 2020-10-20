@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
@@ -21,14 +22,14 @@ public class Main extends GraphicalUserInterface {
   private Rendering renderer;
   private Record recorder;
   private Persistence persistence;
+  private State currentState;
   Maze maze;
 
-  private enum State {
-    INTIAL,
-    RUNNING
+  public enum State {
+    INITIAL,
+    RUNNING,
+    GAME_OVER
   }
-
-  private State currentState;
 
 
   public static void main(String... args) {
@@ -43,12 +44,12 @@ public class Main extends GraphicalUserInterface {
     renderer = new Rendering();
     recorder = new Record();
     persistence = new Persistence();
-    currentState = State.INTIAL;
+    currentState = State.INITIAL;
   }
 
   @Override
   protected ArrayList<Item> getItems() {
-    if (currentState == State.INTIAL || maze == null) {
+    if (currentState == State.INITIAL || maze == null) {
       return null;
     }
     return maze.getPlayerInv();
@@ -65,7 +66,7 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void movePlayer(GraphicalUserInterface.Direction dir) {
-    if (currentState == State.INTIAL) {
+    if (currentState == State.INITIAL) {
       return;
     }
     maze.executeMove(dir);
@@ -77,7 +78,7 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected int getChipsRemaining() {
-    if (currentState == State.INTIAL) {
+    if (currentState == State.INITIAL) {
       return 0;
     }
     return maze.chipsRemaining();
@@ -93,7 +94,7 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void exitSaveGame() {
-    if (currentState == State.INTIAL) {
+    if (currentState == State.INITIAL) {
       return;
     }
     System.out.println("Save and exit");
@@ -144,7 +145,7 @@ public class Main extends GraphicalUserInterface {
     }
 
     maze = newMaze;
-    if (currentState == State.INTIAL) {
+    if (currentState == State.INITIAL) {
       startTimer(timeLeft);
     } else {
       timer.start();
@@ -154,7 +155,7 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void endRec() {
-    if (currentState == State.INTIAL) {
+    if (currentState == State.INITIAL) {
       return;
     }
     System.out.println("End Recording");
@@ -164,11 +165,16 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void startRec() {
-    if (currentState == State.INTIAL) {
+    if (currentState == State.INITIAL) {
       return;
     }
     System.out.println("Start Recording");
     //recorder.record(maze);
+  }
+
+  @Override
+  protected State getCurrentState() {
+    return currentState;
   }
 
   /**
@@ -198,10 +204,14 @@ public class Main extends GraphicalUserInterface {
         float timeRemaining = timePerLevel - timeElapsed;
         if (timeRemaining < 30) {
           timeLeft.setForeground(new Color(227, 115, 14));
-        } else if (timeRemaining < 15) {
+        }
+        if (timeRemaining < 15) {
           timeLeft.setForeground(Color.RED);
-        } else if (timeRemaining < 0) {
+        }
+        if (timeRemaining < 0) {
+          timeLeft.setText("0");
           timer.stop();
+          currentState = State.GAME_OVER;
         }
 
         if (renderer.updateFrame(String.format("%.1f", timeElapsed))) {

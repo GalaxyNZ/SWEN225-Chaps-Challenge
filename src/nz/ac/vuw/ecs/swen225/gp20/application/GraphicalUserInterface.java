@@ -35,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 
 public abstract class GraphicalUserInterface {
@@ -44,6 +45,7 @@ public abstract class GraphicalUserInterface {
   private static final int DEFAULT_DISPLAY_SIZE = 800;
   private static final int GAP_SIZE = 25;
   private static final int BORDER_SIZE = 25;
+  private JLabel timeLeft;
 
   public enum Direction {
     UP,
@@ -73,7 +75,7 @@ public abstract class GraphicalUserInterface {
     GridLayout gl = new GridLayout(2, 0, 0, 0);
 
     JLabel timeText = new JLabel("Time");
-    JLabel timeLeft = new JLabel("60.0");
+    timeLeft = new JLabel("60.0");
 
     JPanel time = new JPanel(gl);
     time.setBackground(Color.LIGHT_GRAY);
@@ -101,7 +103,6 @@ public abstract class GraphicalUserInterface {
     JPanel inventory = new JPanel(new GridLayout(1, 4, 5, 5));
     inventory.setBackground(Color.LIGHT_GRAY);
 
-
     JLabel itemOne = new JLabel();
     itemOne.setVisible(false);
     JLabel itemTwo = new JLabel();
@@ -123,7 +124,6 @@ public abstract class GraphicalUserInterface {
         updateInventory(inventory);
       }
     });
-
 
     JLabel lvlText = new JLabel("Level");
     JLabel lvlNumber = new JLabel("0");
@@ -311,6 +311,7 @@ public abstract class GraphicalUserInterface {
     newGameOne.setAccelerator(newGameKeyStroke);
     newGameOne.addActionListener(ev -> {
       newGame(timeLeft);
+      updateInventory(inventory);
       updateChips(chipsRemaining);
       redraw();
     });
@@ -320,6 +321,7 @@ public abstract class GraphicalUserInterface {
     restart.setAccelerator(res);
     restart.addActionListener(ev -> {
       restartRound();
+      updateInventory(inventory);
       updateChips(chipsRemaining);
       redraw();
     });
@@ -345,6 +347,7 @@ public abstract class GraphicalUserInterface {
     load.setAccelerator(lo);
     load.addActionListener(ev -> {
       loadGame(timeLeft);
+      updateInventory(inventory);
       updateChips(chipsRemaining);
       redraw();
     });
@@ -466,6 +469,7 @@ public abstract class GraphicalUserInterface {
       }
     });
 
+
     frame.setMinimumSize(new Dimension(DEFAULT_DISPLAY_SIZE, (int) (DEFAULT_DISPLAY_SIZE / 1.6)));
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setLayout(new BorderLayout());
@@ -475,6 +479,24 @@ public abstract class GraphicalUserInterface {
     frame.pack();
     frame.setVisible(true);
   }
+
+  private void checkGameState(JLabel timeLeft) {
+    if (getCurrentState() == Main.State.GAME_OVER) {
+      int result = JOptionPane.NO_OPTION;
+      while (result == JOptionPane.NO_OPTION) {
+        result = JOptionPane.showConfirmDialog(null,
+                "You Lost! Would you like to try again?", "Game Over",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        if (result == JOptionPane.NO_OPTION) {
+          System.exit(0); // cleanly end the program.
+        }
+        newGame(timeLeft);
+      }
+    }
+  }
+
+  protected abstract Main.State getCurrentState();
 
   protected abstract void iterateReplay();
 
@@ -512,6 +534,7 @@ public abstract class GraphicalUserInterface {
    * redraws the frame.
    */
   public void redraw() {
+    checkGameState(timeLeft);
     frame.repaint();
   }
 
