@@ -1,7 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
-
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;

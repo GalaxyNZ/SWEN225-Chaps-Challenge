@@ -1,11 +1,8 @@
 package test.nz.ac.vuw.ecs.swen225.gp20.monkey;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
+import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 public class MonkeyTest {
 
@@ -38,13 +35,13 @@ public class MonkeyTest {
 
             switch (rand) {
                 case 0:
-                    maze.executeMove(GUI.direction.DOWN);
+                    maze.executeMove(GraphicalUserInterface.Direction.DOWN);
                 case 1:
-                    maze.executeMove(GUI.direction.UP);
+                    maze.executeMove(GraphicalUserInterface.Direction.UP);
                 case 2:
-                    maze.executeMove(GUI.direction.LEFT);
+                    maze.executeMove(GraphicalUserInterface.Direction.LEFT);
                 case 3:
-                    maze.executeMove(GUI.direction.RIGHT);
+                    maze.executeMove(GraphicalUserInterface.Direction.RIGHT);
             }
 
         }
