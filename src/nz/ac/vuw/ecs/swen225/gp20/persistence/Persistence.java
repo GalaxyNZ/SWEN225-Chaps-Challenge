@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.Gson;
+import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.Record;
 import org.json.simple.JSONArray;
@@ -111,6 +112,7 @@ public class Persistence {
         file.put("SETRK", 2);
         file.put("numChips", maze.chipsRemaining());
         file.put("playerInv", playerInv);
+       //file.put("time", maze.timeElapsed);
         file.put("board", maze.toString());
 
 

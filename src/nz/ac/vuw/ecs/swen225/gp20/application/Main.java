@@ -25,6 +25,7 @@ public class Main extends GraphicalUserInterface {
   public Persistence persistence;
   private State currentState;
   public Maze maze;
+  public int count = 0;
 
   public enum State {
     INITIAL,
@@ -202,10 +203,14 @@ public class Main extends GraphicalUserInterface {
 
     // Creates timer that increments every 0.1 seconds
     timer = new Timer(100, e -> {
+
       if (!gamePaused) {
         timeLeft.setText(String.valueOf(String.format("%.1f", timePerLevel - timeElapsed)));
         timeElapsed += 0.1f;
-        if (timeElapsed - (int) timeElapsed == 0) {
+        count++;
+        if (count == 5) {
+          count = 0;
+          maze.moveBugs();
           // Move bugs
         }
 
