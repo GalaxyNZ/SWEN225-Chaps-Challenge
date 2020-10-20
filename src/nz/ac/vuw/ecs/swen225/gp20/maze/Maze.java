@@ -188,6 +188,6 @@ public class Maze {
 	public String toString() {
 		return board.toString();
 	}
-	
-	
+
+
 }
