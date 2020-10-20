@@ -3,6 +3,7 @@ package test.nz.ac.vuw.ecs.swen225.gp20.monkey;
 import static org.junit.jupiter.api.Assertions.*;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
+import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Board;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
@@ -392,9 +393,43 @@ public class FixedTests {
         assertEquals("[r, g, b, y, y, b, g, r]", maze.getPlayerInv().toString());
     }
 
+
+    @Test
+    public void t12_InfoItem() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|I|_|_|"
+                + "_|_|X|_|_|"
+                + "_|_|_|_|_|";
+
+        String[] moves = new String[]{ "w" };
+
+        String expected =
+                "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|X|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+
+
+        JSONObject test = toJSON(map);
+        Persistence p = new Persistence();
+        Maze maze = p.loadJSONString(test.toString());
+
+        gameplayLoop(maze, moves);
+
+        assertEquals(maze.getBoard().getInfo(), "SAMPLE TILE INFO");
+
+        assertEquals(expected, maze.toString());
+        assertEquals(0, maze.getPlayerChips());
+        assertEquals("[]", maze.getPlayerInv().toString());
+    }
+
     // Ending Game
     @Test
-    public void t12_SimpleGameEnd() {
+    public void t13_SimpleGameEnd() {
         String map =  "5|5|SAMPLE TILE INFO|0|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "_|_|%|_|_|"
@@ -406,8 +441,8 @@ public class FixedTests {
 
         String expected =
                 "|_|_|_|_|_|\n" +
+                        "|_|_|%|_|_|\n" +
                         "|_|_|X|_|_|\n" +
-                        "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
@@ -423,6 +458,86 @@ public class FixedTests {
         assertEquals(0, maze.getPlayerChips());
         assertEquals("[]", maze.getPlayerInv().toString());
         assertTrue(maze.levelWonChecker());
+    }
+
+    // Break it
+
+    @Test
+    public void t14_badBoardConstruction() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
+                + " |!|@|^|*|"
+                + "_|_|_|_|_|"
+                + "_|_|X|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_";
+
+        JSONObject test = toJSON(map);
+
+        String moves = "";
+
+        String expected =
+                "|#|_|_|_|#|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|X|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+        Persistence p = new Persistence();
+        try {
+            Maze maze = p.loadJSONString(test.toString());
+        }
+        catch (NullPointerException ignored) {}
+    }
+
+    @Test
+    public void t15_incorrectSize() {
+        String map =  "7|32|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|X|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_";
+
+        JSONObject test = toJSON(map);
+
+        String moves = "";
+
+        String expected =
+                "|#|_|_|_|#|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|X|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+        Persistence p = new Persistence();
+        Maze maze = p.loadJSONString(test.toString());
+    }
+
+    @Test
+    public void t15_noChap() {
+        String map =  "7|32|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_";
+
+        JSONObject test = toJSON(map);
+
+        String moves = "";
+
+        String expected =
+                "|#|_|_|_|#|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+        Persistence p = new Persistence();
+        try {
+            Maze maze = p.loadJSONString(test.toString());
+        }
+        catch (NullPointerException ignored) {}
     }
 
     public void gameplayLoop(Maze maze, String[] moves) {
@@ -462,6 +577,6 @@ public class FixedTests {
 
         test.put("board", scan.next().replace("|", ","));
 
-        return test;
+        return test; 
     }
 }

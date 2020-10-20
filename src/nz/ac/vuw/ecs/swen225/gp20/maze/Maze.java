@@ -168,13 +168,21 @@ public class Maze {
 	public Integer getPlayerChips(){
 		return player.getTreasure();
 	}
-	
+
 	/*
 	 * Returns total number of chips for GUI printing.
 	 */
-	
+
 	public int chipsTotal() {
 		return board.getTotalChips();
+	}
+
+	/*
+	 * Returns board
+	 */
+
+	public Board getBoard() {
+		return board;
 	}
 	
 	/*

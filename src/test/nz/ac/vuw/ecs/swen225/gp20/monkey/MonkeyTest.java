@@ -31,7 +31,6 @@ public class MonkeyTest {
             "_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|";
 
 
-    @Test
     public void MonkeyTesting() {
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
@@ -39,8 +38,6 @@ public class MonkeyTest {
 
         while (true) {
             int rand = (int) (Math.random() * 4);
-            System.out.println(rand);
-
             switch (rand) {
                 case 0:
                     maze.executeMove(GUI.direction.DOWN);
