@@ -34,7 +34,7 @@ public class Record {
     isRecording = true;
     //while (isRecording){
     while (!q.isEmpty()) {
-      moves.add(q.poll());
+      moves.add(q.poll().toString());
     }
     //}
 
