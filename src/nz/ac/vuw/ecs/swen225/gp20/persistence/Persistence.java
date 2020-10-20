@@ -92,7 +92,7 @@ public class Persistence {
 
     }
 
-    public void saveGame(Maze maze) {
+    public String saveGame(Maze maze) {
 
         JSONObject file = new JSONObject();
         JSONArray playerInv = new JSONArray();
@@ -114,7 +114,8 @@ public class Persistence {
         file.put("board", maze.toString());
 
 
-        try (FileWriter saveFile = new FileWriter(path + fileName() + ".json")) {
+        String fileName = fileName();
+        try (FileWriter saveFile = new FileWriter(path + fileName + ".json")) {
             String fileString = file.toJSONString();
             for (int i = 0; i < fileString.length(); i++) {
                 char next = fileString.charAt(i);
@@ -129,6 +130,7 @@ public class Persistence {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return fileName;
     }
 
     public static String fileName(){

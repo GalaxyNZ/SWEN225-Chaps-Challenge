@@ -51,7 +51,7 @@ public class Board {
         BKMax = (int) Double.parseDouble(map.get("SETBK").toString());
         YKMax = (int) Double.parseDouble(map.get("SETRK").toString());
         RKMax = (int) Double.parseDouble(map.get("SETYK").toString());
-        ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(map.get("board").toString().split("[,]")));
+        ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(map.get("board").toString().split("[|]")));
         makeTiles(delimitedInput, xSize, ySize);
 	}
 	
@@ -176,11 +176,11 @@ public class Board {
 	public String toString() {
 		String mapString= "";
 		for (int y = 0; y < ySize; y++) {
-			mapString += "|";
+		//	mapString += "|";
 			for (int x = 0; x < xSize; x++) {
 				mapString += boardMap[y][x].toString() + "|";
 			}
-			mapString += "\n";
+	//		mapString += "\n";
 		}
 		return mapString;
 	}
