@@ -218,10 +218,17 @@ public class Rendering {
                                 continue;
                             case "UL":
                                 new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.UL, draw);
-
-
+                                continue;
                         }
-
+                    case "g":
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.GK, draw);
+                        continue;
+                    case "b":
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.BK, draw);
+                        continue;
+                    case "r":
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.RK, draw);
+                        continue;
                 }
             }
         }

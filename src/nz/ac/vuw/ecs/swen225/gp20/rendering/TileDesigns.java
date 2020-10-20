@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.rendering;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class TileDesigns {
@@ -21,6 +22,19 @@ public class TileDesigns {
             case Treasure:
                 if(draw)return;
                 treasureTile(g,p,wh);
+                break;
+            case GK:
+                if(draw)return;
+                gk(g,p,wh);
+                break;
+            case BK:
+                if(draw)return;
+                bk(g,p,wh);
+                break;
+            case RK:
+                if(draw)return;
+                rk(g,p,wh);
+                break;
 
         }
     }
@@ -72,7 +86,8 @@ public class TileDesigns {
                     g.drawPolyline(new int[]{p.x,p.x,p.x+wh,p.x+wh},
                             new int[]{p.y+wh,p.y,p.y,p.y+wh},
                             4);
-
+                    g.drawLine(x2,y1,p.x+wh,p.y);
+                    g.drawLine(x1,y1,p.x,p.y);
                     break;
                 case DU:
                     g.setColor(Color.GRAY);
@@ -183,6 +198,21 @@ public class TileDesigns {
     }
     private void treasureTile(Graphics2D g, Point p, int wh){
         floorTile(g,p,wh);
+    }
+    private void gk(Graphics2D g, Point p, int wh){
+        floorTile(g,p,wh);
+        g.drawImage(new ImageIcon("res/GreenKey.png").getImage(), p.x+wh/2 -25,p.y+wh/2 -15, 50,30, null);
+
+    }
+    private void rk(Graphics2D g, Point p, int wh){
+        floorTile(g,p,wh);
+        g.drawImage(new ImageIcon("res/RedKey.png").getImage(), p.x+wh/2 -25,p.y+wh/2 -15, 50,30, null);
+
+    }
+    private void bk(Graphics2D g, Point p, int wh){
+        floorTile(g,p,wh);
+        g.drawImage(new ImageIcon("res/BlueKey.png").getImage(), p.x+wh/2 -25,p.y+wh/2 -15, 50,30, null);
+
     }
 
 
