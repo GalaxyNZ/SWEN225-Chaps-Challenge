@@ -11,6 +11,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.Record;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.Replay;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.Rendering;
 
 public class Main extends GraphicalUserInterface {
@@ -20,9 +21,10 @@ public class Main extends GraphicalUserInterface {
   private Timer timer;
   private Rendering renderer;
   private Record recorder;
-  private Persistence persistence;
+  private Replay replay;
+  public Persistence persistence;
   private State currentState;
-  Maze maze;
+  public Maze maze;
 
   public enum State {
     INITIAL,
@@ -110,12 +112,14 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void replayGame() {
-
+    replay = new Replay(this);
+    maze = replay.loadReplay();
   }
 
   @Override
   protected void iterateReplay() {
-
+    //replay.iterateStep();
+    replay.autoStep();
   }
 
   @Override
@@ -171,7 +175,9 @@ public class Main extends GraphicalUserInterface {
     }
     System.out.println("Start Recording");
     recorder = new Record();
+    recorder.startRec(maze);
     //recorder.record(maze);
+
   }
 
   @Override

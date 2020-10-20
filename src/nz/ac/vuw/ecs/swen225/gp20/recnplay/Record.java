@@ -20,6 +20,7 @@ public class Record {
   public Queue<GraphicalUserInterface.Direction> q = new ArrayDeque<>();
   private Boolean isRecording = false;
   private Object Persistence;
+  private String fileName;
 
 
   /**
@@ -39,8 +40,6 @@ public class Record {
     }
     //}
 
-    Persistence persistence = new Persistence();
-    String fileName = persistence.saveGame(maze);
 
     file.put("replayFile", fileName);
     file.put("moves", moves);
@@ -61,6 +60,11 @@ public class Record {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public void startRec(Maze maze){
+    Persistence persistence = new Persistence();
+    fileName = persistence.saveGame(maze);
   }
 
   /**
