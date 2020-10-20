@@ -29,8 +29,7 @@ public class Rendering {
 
         if(m != null){
             prev = position;
-            position = m.getPlayerLocation();
-            System.out.println(position);
+            position =  new Point(m.getPlayerLocation().x,m.getPlayerLocation().y);
             findChunk(g2);
         }
                 switch (actor) {
@@ -163,8 +162,7 @@ public class Rendering {
                 String tileChar = m.getBoardTile(new Point(x,y)).toString();
 
                 switch (tileChar) {
-                    case "X":
-                    case "_":
+                    default:
                         new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.Floor, draw);
                         break;
                     case "#":
@@ -207,44 +205,7 @@ public class Rendering {
                             case "DULR":
                                 new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.DULR, draw);
                         }
-                        continue;
-                    case "%":
-                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.Exit, draw);
-                        continue;
-                    case "E":
-                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.ELI, draw);
-                        continue;
-                    case "i":
-                        g.setColor(new Color(92, 12, 144));
-                        continue;
-                    case "T":
-                        g.setColor(Color.darkGray);
-                        continue;
-                    case "G":
-                        g.setColor(Color.GREEN);
-                        continue;
-                    case "g":
-                        g.setColor(new Color(13, 120, 6, 255));
-                        continue;
-                    case "R":
-                        g.setColor(Color.RED);
-                        continue;
-                    case "r":
-                        g.setColor(Color.pink);
-                        continue;
-                    case "Y":
-                        g.setColor(Color.ORANGE);
-                        continue;
-                    case "y":
-                        g.setColor(Color.YELLOW);
-                        continue;
-                    case "B":
-                        g.setColor(Color.BLUE);
-                        continue;
-                    case "b":
-                        g.setColor(Color.CYAN);
-                        continue;
-                    default:
+
                 }
             }
         }
