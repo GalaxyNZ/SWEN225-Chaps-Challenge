@@ -57,6 +57,9 @@ public class TileDesigns {
         if(!draw) {
             g.setColor(new Color(240,240,240));
             g.fillRect(p.x, p.y, wh, wh);
+            g.setColor(new Color(240,240,240, 200) );
+            g.drawImage(new ImageIcon("res/Wall.png").getImage(), p.x,p.y, wh,wh, null);
+            g.fillRect(p.x, p.y, wh, wh);
         }else{
             g.setRenderingHint(
                     RenderingHints.KEY_ANTIALIASING,
