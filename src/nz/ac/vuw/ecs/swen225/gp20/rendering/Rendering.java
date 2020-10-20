@@ -229,6 +229,12 @@ public class Rendering {
                     case "r":
                         new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.RK, draw);
                         continue;
+                    case "y":
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.YK, draw);
+                        continue;
+                    case "T":
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.Treasure, draw);
+
                 }
             }
         }

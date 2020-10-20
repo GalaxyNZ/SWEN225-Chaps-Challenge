@@ -35,6 +35,10 @@ public class TileDesigns {
                 if(draw)return;
                 rk(g,p,wh);
                 break;
+            case YK:
+                if(draw)return;
+                yk(g,p,wh);
+                break;
 
         }
     }
@@ -198,6 +202,8 @@ public class TileDesigns {
     }
     private void treasureTile(Graphics2D g, Point p, int wh){
         floorTile(g,p,wh);
+        g.drawImage(new ImageIcon("res/Treasure.png").getImage(), p.x,p.y, wh,wh, null);
+
     }
     private void gk(Graphics2D g, Point p, int wh){
         floorTile(g,p,wh);
@@ -214,6 +220,10 @@ public class TileDesigns {
         g.drawImage(new ImageIcon("res/BlueKey.png").getImage(), p.x+wh/2 -25,p.y+wh/2 -15, 50,30, null);
 
     }
+    private void yk(Graphics2D g, Point p, int wh){
+        floorTile(g,p,wh);
+        g.drawImage(new ImageIcon("res/YellowKey.png").getImage(), p.x+wh/2 -25,p.y+wh/2 -15, 50,30, null);
 
+    }
 
 }
