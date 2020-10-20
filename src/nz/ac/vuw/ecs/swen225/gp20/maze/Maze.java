@@ -146,7 +146,7 @@ public class Maze {
 	 */
 	
 	public Point getPlayerLocation() {
-		return board.findPlayer();
+		return player.getLocation();
 	}
 	
 	/*

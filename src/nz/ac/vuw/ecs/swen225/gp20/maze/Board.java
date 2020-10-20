@@ -176,11 +176,11 @@ public class Board {
 	public String toString() {
 		String mapString= "";
 		for (int y = 0; y < ySize; y++) {
-		//	mapString += "|";
+			mapString += "|";
 			for (int x = 0; x < xSize; x++) {
 				mapString += boardMap[y][x].toString() + "|";
 			}
-	//		mapString += "\n";
+			mapString += "\n";
 		}
 		return mapString;
 	}
