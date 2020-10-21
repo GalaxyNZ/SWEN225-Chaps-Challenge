@@ -221,6 +221,7 @@ public class Rendering {
                                 continue;
                         }
                     case "g":
+
                         new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.GK, draw);
                         continue;
                     case "b":
@@ -237,6 +238,44 @@ public class Rendering {
                         continue;
                     case "I":
                         new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.Info, draw);
+                        break;
+                    case "R":
+                        tile = "";
+                        if(checkTile(x,y+1)) tile += CL.D.toString();
+                        if(checkTile(x,y-1)) tile += CL.U.toString();
+                        if(checkTile(x-1,y)) tile += CL.L.toString();
+                        if(checkTile(x+1,y)) tile += CL.R.toString();
+
+                        new TileDesigns(g,defaultP,wh, chunkSize,  new Point(i,j), CL.RD,  tile.equals("DU"));
+                    break;
+                    case"G":
+                        tile = "";
+                        if(checkTile(x,y+1)) tile += CL.D.toString();
+                        if(checkTile(x,y-1)) tile += CL.U.toString();
+                        if(checkTile(x-1,y)) tile += CL.L.toString();
+                        if(checkTile(x+1,y)) tile += CL.R.toString();
+
+                        new TileDesigns(g,defaultP,wh, chunkSize,  new Point(i,j), CL.G,  tile.equals("DU") );
+                    break;
+                    case"B" :
+                        tile = "";
+                        if(checkTile(x,y+1)) tile += CL.D.toString();
+                        if(checkTile(x,y-1)) tile += CL.U.toString();
+                        if(checkTile(x-1,y)) tile += CL.L.toString();
+                        if(checkTile(x+1,y)) tile += CL.R.toString();
+
+                        new TileDesigns(g,defaultP,wh, chunkSize,  new Point(i,j), CL.B,  tile.equals("DU") );
+                    break;
+                    case"Y":
+                        tile = "";
+                        if(checkTile(x,y+1)) tile += CL.D.toString();
+                        if(checkTile(x,y-1)) tile += CL.U.toString();
+                        if(checkTile(x-1,y)) tile += CL.L.toString();
+                        if(checkTile(x+1,y)) tile += CL.R.toString();
+
+                        new TileDesigns(g,defaultP,wh,chunkSize,  new Point(i,j), CL.Y,  tile.equals("DU"));
+
+
                 }
             }
         }
@@ -245,7 +284,8 @@ public class Rendering {
         if(x < 0 || x >= m.getBoardSize().x || y < 0 || y >= m.getBoardSize().y) return false;
         Tile t = m.getBoardTile(new Point(x,y));
         if( t == null) return false;
-        return t.toString().equals("#");
+        return t.toString().equals("#")||t.toString().equals("G")||t.toString().equals("B")||
+                t.toString().equals("R")||t.toString().equals("Y")||t.toString().equals("E");
     }
     private boolean still(Graphics2D g, String str){
         try{
