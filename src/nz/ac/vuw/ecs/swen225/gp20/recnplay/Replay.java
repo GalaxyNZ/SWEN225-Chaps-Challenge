@@ -34,13 +34,13 @@ public class Replay {
     return selectFile();
   }
 
-  public void autoStep(){
+  public void autoStep(int delayTime){
     //while (!moves.isEmpty()){
     //  iterateStep();
 
    // }
 
-    Timer timer = new Timer(1000, e -> {
+    Timer timer = new Timer(delayTime, e -> {
       if (!moves.isEmpty()) {
         iterateStep();
       }
@@ -50,7 +50,7 @@ public class Replay {
 
   public void iterateStep(){
     if (!moves.isEmpty()){
-      main.maze.executeMove(moves.remove(0));
+      main.getMaze().executeMove(moves.remove(0));
     }
   }
   public Maze selectFile() {
@@ -84,7 +84,7 @@ public class Replay {
 
       }
       loadMoves(map.get("moves").toString());
-      maze = main.persistence.loadFile(path + map.get("replayFile").toString() + ".json");
+      maze = main.getPersistence().loadFile(path + map.get("replayFile").toString() + ".json");
       reader.close();
       //maze = new Maze(map);
 

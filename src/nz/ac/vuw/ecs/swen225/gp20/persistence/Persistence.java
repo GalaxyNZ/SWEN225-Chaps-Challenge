@@ -74,7 +74,6 @@ public class Persistence {
             for (Map.Entry<?, ?> entry : map.entrySet()) {
                 String varName = entry.getKey().toString();
                 System.out.println(entry.getKey() + " = " + entry.getValue());
-
             }
 
             reader.close();

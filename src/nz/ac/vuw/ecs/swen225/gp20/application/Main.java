@@ -140,7 +140,7 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void autoReplay() {
-    replay.autoStep();
+    replay.autoStep(1000);
   }
 
   @Override
