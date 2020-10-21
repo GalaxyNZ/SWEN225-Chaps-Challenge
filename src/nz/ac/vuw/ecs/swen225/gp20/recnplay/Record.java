@@ -43,6 +43,7 @@ public class Record {
 
     file.put("replayFile", fileName);
     file.put("moves", moves);
+    file.put("time", maze.getTimeElapsed());
 
 
     try (FileWriter recFile = new FileWriter(fileName(fileName) + ".json")) {
@@ -92,7 +93,6 @@ public class Record {
 
   public static void main(String[] args) {
     Record r = new Record();
-    // r.record();
   }
 
 }

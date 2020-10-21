@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.google.gson.internal.$Gson$Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 
 /*
@@ -16,20 +17,32 @@ public class Maze {
 	public String password;
 	private Player player;
 	private boolean endGameState = false;
+	private float timeElapsed = 0;
+	private int levelNumber = 0;
 	
 	/*
 	 * Constructor class for a maze (1 Level of the game).
-	 */
-	
-	public Maze(String mapString) {
-		board = new Board(mapString);
-		player = new Player(board.findPlayer(), board.getChips());
-	}
+	 * Has an input of a JSON map.
+	 * Creates player, board, sets level number and add saved items to players inv if the map provided is for a saved game.
+	 */	
 	
 	public Maze (Map<?,?> boardMap) {
 		board = new Board(boardMap);
 		player = new Player(board.findPlayer(), board.getChips());
+		levelNumber = (int) Double.parseDouble(boardMap.get("level").toString());
+		for(Item i : board.getLoadedInv()) { //Runs 0 times for a new game, will construct a players inventory from a loaded inventory.
+			player.addToInv(i);
+		}
 	}
+	
+	/*
+	 * Returns the number of this level.
+	 */
+	
+	public int getLevel() {
+		return levelNumber;
+	}
+	
 	
 	/*
 	 * Executes movements and checks validity based off of input. Designed to be called by both Main and Monkey Testing.
@@ -128,6 +141,10 @@ public class Maze {
 		}
 	}
 	
+	/*
+	 * Calls a Board method that moves all bugs and returns true if the bug killed the player.
+	 */
+	
 	public boolean moveBugs() {		
 		return board.moveBugs();
 	}
@@ -194,6 +211,22 @@ public class Maze {
 	
 	public String toString() {
 		return board.toString();
+	}
+	
+	/*
+	 * Sets the amount of time that has taken place.
+	 */
+	
+	public void setTimeElapsed(float time) {
+		timeElapsed = time;
+	}
+	
+	/*
+	 * Returns the amount of time elapsed in this level.
+	 */
+	
+	public float getTimeElapsed() {
+		return timeElapsed;
 	}
 
 

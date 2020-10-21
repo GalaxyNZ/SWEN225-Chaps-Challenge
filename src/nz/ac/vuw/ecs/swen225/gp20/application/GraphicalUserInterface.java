@@ -45,6 +45,8 @@ public abstract class GraphicalUserInterface {
   private static final int GAP_SIZE = 25;
   private static final int BORDER_SIZE = 25;
   private JLabel timeLeft;
+  private JPanel inventory;
+  private JLabel chipsRemaining;
 
   public enum Direction {
     UP,
@@ -89,7 +91,7 @@ public abstract class GraphicalUserInterface {
     chips.setBorder(border);
     chips.add(chipsText);
 
-    JLabel chipsRemaining = new JLabel("0");
+    chipsRemaining = new JLabel("0");
     chips.add(chipsRemaining, BorderLayout.CENTER);
 
     JLabel itemsText = new JLabel("Items");
@@ -99,7 +101,7 @@ public abstract class GraphicalUserInterface {
     items.setBorder(border);
     items.add(itemsText);
 
-    JPanel inventory = new JPanel(new GridLayout(1, 4, 5, 5));
+    inventory = new JPanel(new GridLayout(1, 4, 5, 5));
     inventory.setBackground(Color.LIGHT_GRAY);
 
     JLabel itemOne = new JLabel();
@@ -377,6 +379,11 @@ public abstract class GraphicalUserInterface {
       redraw();
     });
 
+    JMenu options = new JMenu("Options");
+    options.setPreferredSize(new Dimension(60, 15));
+    options.add(resume);
+    options.add(pause);
+
     JMenuItem recStart = new JMenuItem("Start Recording");
     recStart.addActionListener(ev -> {
       startRec();
@@ -393,7 +400,7 @@ public abstract class GraphicalUserInterface {
     //KeyStroke rep = KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_DOWN_MASK);
     //replay.setAccelerator(rep);
     replay.addActionListener(ev -> {
-      replayGame();
+      replayGame(timeLeft);
       redraw();
     });
 
@@ -403,15 +410,19 @@ public abstract class GraphicalUserInterface {
       redraw();
     });
 
+    JMenuItem autoRep = new JMenuItem("Auto Replay");
+    autoRep.addActionListener(ev -> {
+      autoReplay();
+      redraw();
+    });
 
-    JMenu options = new JMenu("Options");
-    options.setPreferredSize(new Dimension(60, 15));
-    options.add(resume);
-    options.add(pause);
-    options.add(recStart);
-    options.add(recEnd);
-    options.add(replay);
-    options.add(iterateRep);
+    JMenu replayMenu = new JMenu("Rec & Replay");
+    menu.setPreferredSize(new Dimension(45, 15));
+    replayMenu.add(recStart);
+    replayMenu.add(recEnd);
+    replayMenu.add(replay);
+    replayMenu.add(iterateRep);
+    replayMenu.add(autoRep);
 
     JMenuItem levelOne = new JMenuItem("Level One");
     levelOne.addActionListener(ev -> System.out.println("Play Level One"));
@@ -430,6 +441,7 @@ public abstract class GraphicalUserInterface {
     JMenuBar controls = new JMenuBar();
     controls.add(menu);
     controls.add(options);
+    controls.add(replayMenu);
     controls.add(level);
     controls.add(help);
     controls.setLayout(new BoxLayout(controls, BoxLayout.LINE_AXIS));
@@ -478,6 +490,8 @@ public abstract class GraphicalUserInterface {
     frame.pack();
     frame.setVisible(true);
   }
+
+  protected abstract void autoReplay();
 
   private void checkGameState(JLabel timeLeft) {
     if (getCurrentState() == Main.State.GAME_OVER) {
@@ -533,6 +547,8 @@ public abstract class GraphicalUserInterface {
    * redraws the frame.
    */
   public void redraw() {
+    updateChips(chipsRemaining);
+    updateInventory(inventory);
     checkGameState(timeLeft);
     frame.repaint();
   }
@@ -548,7 +564,7 @@ public abstract class GraphicalUserInterface {
   /**
    * Replays the game from a save.
    */
-  protected abstract void replayGame();
+  protected abstract void replayGame(JLabel timeLeft);
 
   /**
    * Gets the number of chips remaining for

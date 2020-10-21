@@ -7,18 +7,18 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.io.File;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Replay {
   Main main;
   ArrayList<GraphicalUserInterface.Direction> moves;
+  Timer timer;
+  float timeElapsed;
 
   String path = "src/replays/";
 
@@ -30,25 +30,32 @@ public class Replay {
   public Maze loadReplay(){
     //main.persistence.loadFile();
    // selectFile();
+    moves = new ArrayList<>();
     return selectFile();
   }
 
-  public void autoStep(){
-    while (!moves.isEmpty()){
+  public void autoStep(int delayTime){
+    //while (!moves.isEmpty()){
+    //  iterateStep();
+
+   // }
+    timer = new Timer(delayTime, e -> {
       iterateStep();
-      try {
-        Thread.sleep(1000, 0);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    }
+    });
+    timer.start();
   }
 
   public void iterateStep(){
-    if (!moves.isEmpty()){
-      main.maze.executeMove(moves.remove(0));
+    if (!moves.isEmpty() && main.currentState == Main.State.REPLAYING){
+      main.getMaze().executeMove(moves.remove(0));
+    }
+    else {
+      main.stopReplaying();
+      if (timer != null) timer.stop();
+      main.setTimeElapsed(timeElapsed);
     }
   }
+
   public Maze selectFile() {
 
     String selectedFile = "";
@@ -80,7 +87,8 @@ public class Replay {
 
       }
       loadMoves(map.get("moves").toString());
-      maze = main.persistence.loadFile(path + map.get("replayFile").toString() + ".json");
+      timeElapsed = Float.parseFloat(map.get("time").toString());
+      maze = main.getPersistence().loadFile(path + map.get("replayFile").toString() + ".json");
       reader.close();
       //maze = new Maze(map);
 

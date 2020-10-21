@@ -27,22 +27,15 @@ public class Board {
 	private int extraDataSize;
 	private Map<Integer, ArrayList<String>> bugMoves = new HashMap<Integer, ArrayList<String>>();
 	private ArrayList<Point> bugLocations = new ArrayList<Point>();
+	private ArrayList<Item> loadedPlayerInv = new ArrayList<Item>();
 	
 	/*
-	 * Constructor method. Runs mapString through a delimiter, creating an array. 
-	 * Removes and stores boardMaps size parameters, gets the total number of chips for the ExitLockItem and the Information stored in the InfoTile.
-	 */
-	
-	public Board(String input) {
-		ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(input.split("[|]")));
-		xSize = Integer.parseInt(delimitedInput.remove(0));
-		ySize = Integer.parseInt(delimitedInput.remove(0));
-		tileInformation = delimitedInput.remove(0);
-		numChips = Integer.parseInt(delimitedInput.remove(0));
-		boardMap = new Tile[ySize][xSize];
-		delimitedInput = getKeyInfo(delimitedInput);
-		makeTiles(delimitedInput, xSize, ySize);
-	}
+	 * Constructor method. Has an input of a Map with generic contents from Persistence. 
+	 * Stores boardMaps size parameters, gets the total number of chips for the ExitLockItem and the Information stored in the InfoTile.
+	 * Gets all key information from the map.
+	 * Gets and bug details from map.
+	 * Constructs a players inventory if this is loading a saved game.
+	 */	
 	
 	public Board(Map<?,?> map) {
 		xSize = (int) Double.parseDouble(map.get("xSize").toString());
@@ -54,10 +47,53 @@ public class Board {
         BKMax = (int) Double.parseDouble(map.get("SETBK").toString());
         YKMax = (int) Double.parseDouble(map.get("SETRK").toString());
         RKMax = (int) Double.parseDouble(map.get("SETYK").toString());
+        if(map.keySet().contains("inventory")) { //If this is a loaded game then build player inventory.
+        	loadedPlayerInv = makeLoadedInv(map.get("inventory").toString());
+        }
         setBugs(map);
         ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(map.get("board").toString().split("[|]")));
         makeTiles(delimitedInput, xSize, ySize);
 	}
+	
+	/*
+	 * Takes the input string of a loaded players inventory and creates an ArrayList that Maze can give to the player.
+	 */
+	
+	private ArrayList<Item> makeLoadedInv(String inventoryList) {
+		ArrayList<Item> toReturn = new ArrayList<Item>();
+		ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(inventoryList.split("[|]")));
+		for(String s: delimitedInput) {
+			int uses = 1;
+			switch(s) {
+			case "R":
+				uses = RKMax;
+				break;
+			case "B":
+				uses = BKMax;
+				break;
+			case "Y":
+				uses = YKMax;
+				break;
+			case "G":
+				uses = GKMax;
+				break;
+			}
+			toReturn.add(new KeyItem(s,uses));
+		}
+		return toReturn;
+	}
+
+	/*
+	 * Allows Maze to access a loaded inventory so it can be given to the player.
+	 */
+	
+	public ArrayList<Item> getLoadedInv(){
+		return loadedPlayerInv;
+	}
+
+	/*
+	 * Creates a map that contains all of the bugs by number and their movesets by analyzing the input map entries.
+	 */
 	
 	private void setBugs(Map<?,?> map) {
 		if(map.containsKey("numBugs")) {
@@ -65,50 +101,70 @@ public class Board {
 			for(int i = 0; i < max; i++) {
 				if(map.containsKey("enemy" + i)) {
 					String movesetArray = map.get("enemy" + i).toString();
-					bugMoves.put(i,new ArrayList<String>(Arrays.asList(movesetArray.split("[|]"))));
+					bugMoves.put(i,new ArrayList<String>(Arrays.asList(movesetArray.split("[|]"))));					
 				}
 			}
 		}
 		
 	}
-
-	
-	public boolean moveBugs() {
-		System.out.println("Hello there");
-		ArrayList<Point> newBugLocations = new ArrayList<>();
-		for(Point pt: bugLocations) {
-			if(boardMap[pt.y][pt.x].getItem() instanceof MonsterItem) {
-				String move = boardMap[pt.y][pt.x].getItem().getNextMove();
-				if(move != null) {
-					System.out.println("hi");
-					switch(move) {
-					case "UP":
-						 moveThisBug(pt, new Point(pt.x, pt.y-1));
-						 newBugLocations.add(new Point(pt.x, pt.y-1));
-					case "DOWN":
-						 moveThisBug(pt, new Point(pt.x, pt.y+1));
-						newBugLocations.add(new Point(pt.x, pt.y+1));
-					case "LEFT":
-						 moveThisBug(pt, new Point(pt.x-1, pt.y));
-						newBugLocations.add(new Point(pt.x-1, pt.y));
-					case "RIGHT":
-						 moveThisBug(pt, new Point(pt.x+1, pt.y));
-						newBugLocations.add(new Point(pt.x+1, pt.y));
-					//default:
-						//return false;
-					}
-				}
-			}
-		}
-		bugLocations = newBugLocations;
-		return true;
-	}
 	
 	/*
-	 * 
+	 * Gets every bug from the list of all bug locations and runs them through the bug mover, returns true if bug kills player.
+	 */
+	
+	 public boolean moveBugs() {
+	        ArrayList<Point> newBugLocations = new ArrayList<>();
+	        boolean playerKilled = false;
+	        for(Point pt: bugLocations) {
+	            if(boardMap[pt.y][pt.x].getItem() instanceof MonsterItem) {
+	                String move = boardMap[pt.y][pt.x].getItem().getNextMove();
+	                if(move != null) {
+	                    switch(move) {
+	                    case "UP":
+	                         playerKilled = moveThisBug(pt, new Point(pt.x, pt.y-1));
+	                         newBugLocations.add(new Point(pt.x, pt.y-1));
+	                         if(playerKilled) {
+	                        	 return playerKilled;
+	                         }
+	                         break;
+	                    case "DOWN":
+	                    	playerKilled = moveThisBug(pt, new Point(pt.x, pt.y+1));
+	                        newBugLocations.add(new Point(pt.x, pt.y+1));
+	                        if(playerKilled) {
+	                        	 return playerKilled;
+	                         }
+	                        break;
+	                    case "LEFT":
+	                    	playerKilled = moveThisBug(pt, new Point(pt.x-1, pt.y));
+	                        newBugLocations.add(new Point(pt.x-1, pt.y));
+	                        if(playerKilled) {
+	                        	 return playerKilled;
+	                         }
+	                        break;
+	                    case "RIGHT":
+	                    	playerKilled = moveThisBug(pt, new Point(pt.x+1, pt.y));
+	                        newBugLocations.add(new Point(pt.x+1, pt.y));
+	                        if(playerKilled) {
+	                        	 return playerKilled;
+	                         }
+	                        break;
+	                    }
+	                }
+	            }
+	        }
+	        if (newBugLocations.size() < bugLocations.size()) return true;
+	        bugLocations = newBugLocations;
+	        return false;
+	    }
+	
+	/*
+	 * Moves the bug at oldLocation to newLocation on the board, returns true of the bug killed the player.
 	 */
 	
 	private boolean moveThisBug(Point oldLocation, Point newLocation) {
+		if(boardMap[oldLocation.y][oldLocation.x].getItem() instanceof Chap) {
+			return true;
+		}
 		if(boardMap[newLocation.y][newLocation.x].getItem() instanceof Chap) {
 			boardMap[newLocation.y][newLocation.x].addItem(boardMap[oldLocation.y][oldLocation.x].addItem(null));
 			return true;
@@ -116,38 +172,20 @@ public class Board {
 		boardMap[newLocation.y][newLocation.x].addItem(boardMap[oldLocation.y][oldLocation.x].addItem(null));
 		return false;
 	}
-
+	
 	/*
-	 * After universal variables are taken from the ArrayList of delimited mapString all extra information is processed.
-	 * This method sets the amount of uses per different color of Key.
+	 * Returns an ArrayList<String> of the next move for all bugs.
 	 */
 	
-	private ArrayList<String> getKeyInfo(ArrayList<String> input) {
-		String token = "";
-		while(!token.equals("F")) { 
-			token = input.get(0);
-			switch(token) {
-			case "SETGK":
-				input.remove(0);
-				GKMax = Integer.parseInt(input.remove(0));
-				break;
-			case "SETBK":
-				input.remove(0);
-				BKMax = Integer.parseInt(input.remove(0));
-				break;
-			case "SETRK":
-				input.remove(0);
-				RKMax = Integer.parseInt(input.remove(0));
-				break;
-			case "SETYK":
-				input.remove(0);
-				YKMax = Integer.parseInt(input.remove(0));
-				break;
-			default:
-				break;
+	public ArrayList<String> getNextBugMoves(){
+		ArrayList<String> moves = new ArrayList<String>();
+		for(Point pt : bugLocations) {
+			if(boardMap[pt.y][pt.x].getItem() instanceof MonsterItem) {
+				MonsterItem thisMonster = (MonsterItem) boardMap[pt.y][pt.x].getItem();
+				moves.add(thisMonster.peekThisMove());
 			}
 		}
-		return input;
+		return moves;
 	}
 	
 	/*
@@ -243,34 +281,58 @@ public class Board {
 				return null;
 		}		
 	}
+	
+	/*
+	 * Writes the board and all of its elements into a string for printing purposes.
+	 */
 
 	public String toString() {
 		String mapString= "";
 		for (int y = 0; y < ySize; y++) {
-			mapString += ",";
+			//mapString += "|";
 			for (int x = 0; x < xSize; x++) {
-				mapString += boardMap[y][x].toString() + ",";
+				mapString += boardMap[y][x].toString() + "|";
 			}
-			mapString += "\n";
+			//mapString += "\n";
 		}
 		return mapString;
 	}
+	
+	/*
+	 * Returns the location of the player on the board.
+	 */
 
 	public void setPlayerLocation(Point point) {
 		this.playerLocation = point;
 	}
+	
+	/*
+	 * Sets the Tile at given location in the boardMap.
+	 */
 
 	public void setTileAt(int x, int y, Tile tile) {
 		boardMap[y][x] = tile;
 	}
+	
+	/*
+	 * Get the width of the Board.
+	 */
 
 	public int getWidth() {
 		return boardMap[0].length;
 	}
+	
+	/*
+	 * Get the height of the Board.
+	 */
 
 	public int getHeight() {
 		return boardMap.length;
 	}
+	
+	/*
+	 * Returns the total number of chips on this map.
+	 */
 	
 	public int getTotalChips() {
 		return numChips;

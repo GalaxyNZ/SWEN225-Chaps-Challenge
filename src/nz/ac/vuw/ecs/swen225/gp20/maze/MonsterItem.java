@@ -30,6 +30,10 @@ public class MonsterItem extends Item{
 		return returnValue;
 	}
 	
+	/*
+	 * Returns the String that represents this Monster.
+	 */
+	
 	public String getChar() {
 		return thisChar;
 	}
@@ -42,8 +46,20 @@ public class MonsterItem extends Item{
 		return "VOID COLOR";
 	}
 	
+	/*
+	 * Returns the String that represents this Monster.
+	 */
+	
 	public String toString() {
 		return thisChar;
+	}
+	
+	/*
+	 * Returns the next move the bug will do.
+	 */
+	
+	public String peekThisMove() {
+		return moveset.get(count);
 	}
 	
 }
