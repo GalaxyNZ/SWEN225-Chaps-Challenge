@@ -9,30 +9,11 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.InputMap;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
@@ -266,6 +247,11 @@ public abstract class GraphicalUserInterface {
       }
     });
 
+    // This stops space bar activating buttons
+    InputMap im = (InputMap) UIManager.get("Button.focusInputMap");
+    im.put(KeyStroke.getKeyStroke("pressed SPACE"), "none");
+    im.put(KeyStroke.getKeyStroke("released SPACE"), "none");
+
     InputMap inputMap = buttons.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), "right");
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, true), "left");
@@ -481,7 +467,6 @@ public abstract class GraphicalUserInterface {
         setLabel(lvlNumber, infoFontSize);
       }
     });
-
 
     frame.setMinimumSize(new Dimension(DEFAULT_DISPLAY_SIZE, (int) (DEFAULT_DISPLAY_SIZE / 1.6)));
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

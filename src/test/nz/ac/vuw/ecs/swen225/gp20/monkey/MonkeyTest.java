@@ -12,7 +12,7 @@ import static test.nz.ac.vuw.ecs.swen225.gp20.monkey.FixedTests.toJSON;
 
 public class MonkeyTest {
 
-    /*String map =  "17|16|SAMPLE TILE INFO|11|SETBK|1|SETYK|1|SETRK|1|SETGK|2|" +
+    String map =  "17|16|SAMPLE TILE INFO|11|SETBK|1|SETYK|1|SETRK|1|SETGK|2|" +
             "_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|" +
             "_|_|_|#|#|#|#|#|_|#|#|#|#|#|_|_|_|" +
             "_|_|_|#|_|_|_|#|#|#|_|_|_|#|_|_|_|" +
@@ -49,6 +49,6 @@ public class MonkeyTest {
                     maze.executeMove(GraphicalUserInterface.Direction.RIGHT);
             }
         }
-    }*/
+    }
 
 }
