@@ -46,6 +46,7 @@ public abstract class GraphicalUserInterface {
   private static final int BORDER_SIZE = 25;
   private JLabel timeLeft;
   private JPanel inventory;
+  private JLabel chipsRemaining;
 
   public enum Direction {
     UP,
@@ -90,7 +91,7 @@ public abstract class GraphicalUserInterface {
     chips.setBorder(border);
     chips.add(chipsText);
 
-    JLabel chipsRemaining = new JLabel("0");
+    chipsRemaining = new JLabel("0");
     chips.add(chipsRemaining, BorderLayout.CENTER);
 
     JLabel itemsText = new JLabel("Items");
@@ -546,6 +547,7 @@ public abstract class GraphicalUserInterface {
    * redraws the frame.
    */
   public void redraw() {
+    updateChips(chipsRemaining);
     updateInventory(inventory);
     checkGameState(timeLeft);
     frame.repaint();

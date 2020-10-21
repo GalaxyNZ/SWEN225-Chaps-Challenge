@@ -31,6 +31,7 @@ public class Main extends GraphicalUserInterface {
     INITIAL,
     RUNNING,
     GAME_OVER,
+    GAME_WON,
     REPLAYING
   }
 
@@ -80,7 +81,7 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void movePlayer(GraphicalUserInterface.Direction dir) {
-    if (currentState == State.INITIAL || gamePaused) {
+    if (currentState != State.RUNNING || gamePaused) {
       return;
     }
     maze.executeMove(dir);
@@ -94,7 +95,7 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected int getChipsRemaining() {
-    if (currentState == State.INITIAL) {
+    if (currentState == State.INITIAL || maze == null) {
       return 0;
     }
     return maze.chipsRemaining();
@@ -110,9 +111,10 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void exitSaveGame() {
-    if (currentState == State.INITIAL) {
+    if (currentState != State.RUNNING) {
       return;
     }
+    timer.stop();
     System.out.println("Save and exit");
     int result = JOptionPane.showConfirmDialog(null,
             "Are you sure you want to quit? Your game will be saved", "Save & Exit Game",
@@ -122,14 +124,23 @@ public class Main extends GraphicalUserInterface {
       persistence.saveGame(maze);
       System.exit(0); // cleanly end the program.
     }
+    timer.start();
   }
 
   @Override
   protected void replayGame(JLabel timeLeft) {
-    currentState = State.REPLAYING;
     replay = new Replay(this);
-    maze = replay.loadReplay();
-    startTimer(timeLeft);
+    if (timer != null) {
+      timer.stop();
+    }
+    Maze newMaze = replay.loadReplay();
+    if (newMaze != null) {
+      maze = newMaze;
+      currentState = State.REPLAYING;
+      startTimer(timeLeft);
+    } else {
+      timer.start();
+    }
   }
 
   public void stopReplaying(){
@@ -223,11 +234,13 @@ public class Main extends GraphicalUserInterface {
       timer.stop();
       timeElapsed = 0f;
     }
+    timeElapsed = maze.getTimeElapsed();
 
     // Creates timer that increments every 0.1 seconds
     timer = new Timer(100, e -> {
 
       if (!gamePaused && currentState != State.REPLAYING) {
+        maze.setTimeElapsed(timeElapsed);
         timeLeft.setText(String.valueOf(String.format("%.1f", timePerLevel - timeElapsed)));
         timeElapsed += 0.1f;
         count++;
@@ -254,6 +267,7 @@ public class Main extends GraphicalUserInterface {
           redraw();
         }
       } else if (currentState == State.REPLAYING) {
+        timeLeft.setText("REPLAYING");
         timeElapsed += 0.1f;
         if (renderer.updateFrame(String.format("%.1f", timeElapsed))) {
           redraw();
