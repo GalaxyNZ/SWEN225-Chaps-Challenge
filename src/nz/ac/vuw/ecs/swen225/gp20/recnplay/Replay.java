@@ -51,7 +51,7 @@ public class Replay {
     }
     else {
       main.stopReplaying();
-      timer.stop();
+      if (timer != null) timer.stop();
       main.setTimeElapsed(timeElapsed);
     }
   }
