@@ -46,7 +46,7 @@ public class Persistence {
         chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            selectedFile += chooser.getSelectedFile().toString();
+            selectedFile = chooser.getSelectedFile().toString();
             return loadFile(chooser.getSelectedFile().toString());
         } else return null;
     }
