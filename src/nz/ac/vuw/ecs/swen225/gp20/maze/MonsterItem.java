@@ -17,18 +17,18 @@ public class MonsterItem extends Item{
 	}
 	
 	/*
-	 * Returns the next direction that a monster should move in as determined
-	 * by its moveset. Returns to top of the list once a whole loop completed.
+	 * Returns a version of moveset that moves the starting point to where the bug currently is for saved games.
 	 */
 	
-	public String getNextMove(){
-		String returnValue = moveset.get(count);
-		count++;
-		if(count >= moveset.size()) {
-			count = 0;
-		}
-		return returnValue;
-	}
+	public ArrayList<String> getMoveset() {
+        ArrayList<String> newMoveSet = new ArrayList<>();
+        int count = this.count;
+        for (int i = 0; i < moveset.size(); i++) {
+            if ((count + i) >= moveset.size()) count = -i;
+            newMoveSet.add(moveset.get(count + i));
+        }
+        return newMoveSet;
+    }
 	
 	/*
 	 * Returns the String that represents this Monster.

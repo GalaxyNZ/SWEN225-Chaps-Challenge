@@ -150,12 +150,20 @@ public class Maze {
 	}
 	
 	/*
-	 * Calls a Board method that returns the next move for every bug on the board.
+	 * Returns a map of all the different bugs movesets.
 	 */
 	
-	public ArrayList<String> getNextBugMoves(){
-		return board.getNextBugMoves();
-	}
+	public ArrayList<HashMap<Integer, ArrayList<String>>> getBugMoves() {
+        return board.getBugMoves();
+    }
+	
+	/*
+	 * Calls a method in board that returns the total number of monsters.
+	 */
+
+    public int getNumMonsters() {
+        return board.getNumMonsters();
+    }
 	
 	/*
 	 * Returns true if the level has been completed, else returns false.
