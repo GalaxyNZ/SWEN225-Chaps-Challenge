@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.internal.$Gson$Preconditions;
@@ -188,6 +189,18 @@ public class Maze {
 	public Point getPlayerLocation() {
 		return player.getLocation();
 	}
+
+	/*
+	 * return the boards
+	 */
+
+	public Board getBoard() {return board;}
+
+	/*
+	 * Returns the chips the player has
+	 */
+
+	public int getPlayerChips() { return player.getTreasure(); }
 	
 	/*
 	 * Returns ArrayList of all items in the players inventory for GUI printing.

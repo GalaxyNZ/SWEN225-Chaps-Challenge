@@ -569,7 +569,7 @@ public class FixedTests {
         scan.skip("\\|");
         scan.useDelimiter("\n");
 
-        test.put("board", scan.next().replace("|", ","));
+        test.put("board", scan.next());
 
         return test; 
     }
