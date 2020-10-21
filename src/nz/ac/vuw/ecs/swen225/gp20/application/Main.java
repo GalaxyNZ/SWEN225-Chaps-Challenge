@@ -291,7 +291,7 @@ public class Main extends GraphicalUserInterface {
     timer.start();
   }
 
-  private void moveEnemies() {
+  public void moveEnemies() {
     if (maze.moveBugs()) {
       currentState = State.GAME_OVER;
     }
