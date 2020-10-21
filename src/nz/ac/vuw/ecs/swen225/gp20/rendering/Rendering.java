@@ -236,6 +236,18 @@ public class Rendering {
                     case "T":
                         new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.Treasure, draw);
                         continue;
+                    case "0":
+                        g.setColor(Color.RED);
+                        g.fillRect(defaultP.x, defaultP.y, 70, 70);
+                        continue;
+                    case "1":
+                        g.setColor(Color.MAGENTA);
+                        g.fillRect(defaultP.x, defaultP.y, 70, 70);
+                        continue;
+                    case "2":
+                        g.setColor(Color.ORANGE);
+                        g.fillRect(defaultP.x, defaultP.y, 70, 70);
+                        continue;
                     case "I":
                         new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.Info, draw);
                         break;

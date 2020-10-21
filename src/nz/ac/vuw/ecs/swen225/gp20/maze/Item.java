@@ -21,4 +21,13 @@ public class Item {
 	public String getColor() {
 		return "VOID COLOR";
 	}
+	
+	/*
+	 * MonsterItem only call.
+	 */
+
+	public String getNextMove() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -1,15 +1,14 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
+import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
 import java.util.Date;
 import java.util.Queue;
@@ -18,9 +17,10 @@ import java.util.Queue;
  *This class represents the recording aspect of the game.
  */
 public class Record {
-  //private ArrayList<String> moves = new ArrayList<>();
-  public Queue<GUI.direction> q = new ArrayDeque<>();
+  public Queue<GraphicalUserInterface.Direction> q = new ArrayDeque<>();
   private Boolean isRecording = false;
+  private Object Persistence;
+  private String fileName;
 
 
   /**
@@ -36,23 +36,25 @@ public class Record {
     isRecording = true;
     //while (isRecording){
     while (!q.isEmpty()) {
-      moves.add(q.poll());
+      moves.add(q.poll().toString());
     }
     //}
 
-    file.put("xSize", maze.getBoardSize().getX());
-    file.put("ySize", maze.getBoardSize().getY());
-    file.put("tileInfo", "something");
-    file.put("SETGK", 3);
-    file.put("SETBK", 2);
-    file.put("SETYK", 1);
-    file.put("SETRK", 2);
-    file.put("board", maze.toString());
+
+    file.put("replayFile", fileName);
     file.put("moves", moves);
 
-    try (FileWriter recFile = new FileWriter(fileName() + ".json")) {
 
-      recFile.write(file.toJSONString());
+    try (FileWriter recFile = new FileWriter(fileName(fileName) + ".json")) {
+
+      String fileString = file.toJSONString();
+      for (int i = 0; i < fileString.length(); i++) {
+        char next = fileString.charAt(i);
+        if (next == ',' || next == '{') recFile.write(next + "\n\t");
+        else if (next == '}') recFile.write("\n" + next);
+        else recFile.write(next);
+
+      }
       recFile.flush();
 
     } catch (IOException e) {
@@ -60,11 +62,16 @@ public class Record {
     }
   }
 
+  public void startRec(Maze maze){
+    Persistence persistence = new Persistence();
+    fileName = persistence.saveGame(maze);
+  }
+
   /**
    * Adds moves to the queue for recording.
    * @param direction
    */
-  public void addMove(GUI.direction direction){
+  public void addMove(GraphicalUserInterface.Direction direction){
     q.add(direction);
   }
 
@@ -79,15 +86,12 @@ public class Record {
    * Sets the recording name to "yyyy/MM/dd-HH:mm:ss" so that most file names are unique.
    * @return
    */
-  public String fileName(){
-    Date date = new Date();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
-    return dateFormat.format(date);
+  public String fileName(String fileName){
+    return "src/replays/" + fileName + "_moves";
   }
 
   public static void main(String[] args) {
     Record r = new Record();
-    // r.record();
   }
 
 }
