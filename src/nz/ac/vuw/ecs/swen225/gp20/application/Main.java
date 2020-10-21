@@ -69,7 +69,7 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void movePlayer(GraphicalUserInterface.Direction dir) {
-    if (currentState == State.INITIAL) {
+    if (currentState == State.INITIAL || gamePaused) {
       return;
     }
     maze.executeMove(dir);
@@ -91,7 +91,7 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void newGame(JLabel timeLeft) {
-    System.out.println("Starts new game at level 1");
+    gamePaused = false;
     maze = persistence.newGame();
     currentState = State.RUNNING;
     startTimer(timeLeft);
@@ -123,7 +123,11 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void iterateReplay() {
-    //replay.iterateStep();
+    replay.iterateStep();
+  }
+
+  @Override
+  protected void autoReplay() {
     replay.autoStep();
   }
 
@@ -147,6 +151,7 @@ public class Main extends GraphicalUserInterface {
     Maze newMaze = persistence.selectFile();
 
     if (newMaze == null) {
+      gamePaused = false;
       if (timer != null) {
         timer.start();
       }
@@ -160,7 +165,7 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void endRec() {
-    if (currentState == State.INITIAL) {
+    if (currentState == State.INITIAL || recorder == null) {
       return;
     }
     recorder.record(maze);
@@ -169,10 +174,9 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void startRec() {
-    if (currentState == State.INITIAL) {
+    if (currentState == State.INITIAL || recorder != null) {
       return;
     }
-    System.out.println("Start Recording");
     recorder = new Record();
     recorder.startRec(maze);
 
@@ -207,8 +211,9 @@ public class Main extends GraphicalUserInterface {
         count++;
         if (count == 5) {
           count = 0;
-          maze.moveBugs();
-          // Move bugs
+          if (maze.moveBugs()) {
+            currentState = State.GAME_OVER;
+          }
         }
 
         float timeRemaining = timePerLevel - timeElapsed;
@@ -220,10 +225,14 @@ public class Main extends GraphicalUserInterface {
         }
         if (timeRemaining < 0) {
           timeLeft.setText("0");
-          timer.stop();
           currentState = State.GAME_OVER;
         }
 
+        if (renderer.updateFrame(String.format("%.1f", timeElapsed))) {
+          redraw();
+        }
+      } else if (currentState == State.REPLAYING) {
+        timeElapsed += 0.1f;
         if (renderer.updateFrame(String.format("%.1f", timeElapsed))) {
           redraw();
         }
