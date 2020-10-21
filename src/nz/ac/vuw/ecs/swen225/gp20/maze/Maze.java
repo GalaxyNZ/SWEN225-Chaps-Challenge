@@ -1,14 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.awt.Point;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Scanner;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
+import com.google.gson.internal.$Gson$Preconditions;
+import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 
 /*
  * The main class behind the gameplay, this constructs a board and is responsible for validating and executing a Players inputs from the GUI or keyboard.
@@ -40,7 +37,7 @@ public class Maze {
 	 * Returns true if movement is valid or false if movement is invalid.
 	 */
 	
-	public boolean executeMove(GUI.direction movement) {
+	public boolean executeMove(GraphicalUserInterface.Direction movement) {
 		switch(movement) {
 		case UP:
 			if(validMove(player.getLocation(), new Point(player.getLocation().x, player.getLocation().y-1))) { //Attempts move up 1 Tile.
@@ -83,6 +80,9 @@ public class Maze {
 	private boolean validMove(Point oldLocation, Point newLocation) {
 		int newX = newLocation.x;
 		int newY = newLocation.y;
+		if(newLocation.x < 0 || newLocation.x >= board.xSize || newLocation.y < 0 || newLocation.y >= board.ySize) { //Out of bounds check.
+			return false;
+		}
 		if(board.boardMap[newY][newX] instanceof WallTile) { //Walls are always an obstacle.
 			return false;
 		}
@@ -127,6 +127,10 @@ public class Maze {
 		else { //Should not be reachable, as the player should be contained within map by obstacle tiles and therefore cannot reach null location of the board.
 			return false;
 		}
+	}
+	
+	public boolean moveBugs() {		
+		return board.moveBugs();
 	}
 	
 	/*
