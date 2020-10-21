@@ -174,19 +174,29 @@ public class Board {
 	}
 	
 	/*
-	 * Returns an ArrayList<String> of the next move for all bugs.
+	 * Returns a map of every monster by ID and moveset for save games.
 	 */
 	
-	public ArrayList<String> getNextBugMoves(){
-		ArrayList<String> moves = new ArrayList<String>();
-		for(Point pt : bugLocations) {
-			if(boardMap[pt.y][pt.x].getItem() instanceof MonsterItem) {
-				MonsterItem thisMonster = (MonsterItem) boardMap[pt.y][pt.x].getItem();
-				moves.add(thisMonster.peekThisMove());
-			}
-		}
-		return moves;
-	}
+	public ArrayList<HashMap<Integer, ArrayList<String>>> getBugMoves() {
+        ArrayList<HashMap<Integer, ArrayList<String>>> monster = new ArrayList<>();
+        for(Point pt : bugLocations) {
+            HashMap<Integer, ArrayList<String>> moves = new HashMap<>();
+            if(boardMap[pt.y][pt.x].getItem() instanceof MonsterItem) {
+                MonsterItem thisMonster = (MonsterItem) boardMap[pt.y][pt.x].getItem();
+                moves.put(Integer.parseInt(thisMonster.getChar()), thisMonster.getMoveset());
+            }
+            monster.add(moves);
+        }
+        return monster;
+    }
+	
+	/*
+	 * Returns the total number of monsters on the board.
+	 */
+	
+	public int getNumMonsters() {
+        return this.bugLocations.size();
+    }
 	
 	/*
 	 * Takes the delimited mapString and populates the board with Tiles based off of feedback from textAssignmentTable.
