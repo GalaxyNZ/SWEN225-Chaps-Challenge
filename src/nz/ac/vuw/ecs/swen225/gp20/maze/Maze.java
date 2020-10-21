@@ -17,15 +17,12 @@ public class Maze {
 	public String password;
 	private Player player;
 	private boolean endGameState = false;
+	private float timeElapsed = 0;
 	
 	/*
 	 * Constructor class for a maze (1 Level of the game).
-	 */
-	
-	public Maze(String mapString) {
-		board = new Board(mapString);
-		player = new Player(board.findPlayer(), board.getChips());
-	}
+	 * Has an input of a JSON map.
+	 */	
 	
 	public Maze (Map<?,?> boardMap) {
 		board = new Board(boardMap);
@@ -129,6 +126,10 @@ public class Maze {
 		}
 	}
 	
+	/*
+	 * Calls a Board method that moves all bugs and returns true if the bug killed the player.
+	 */
+	
 	public boolean moveBugs() {		
 		return board.moveBugs();
 	}
@@ -195,6 +196,22 @@ public class Maze {
 	
 	public String toString() {
 		return board.toString();
+	}
+	
+	/*
+	 * Sets the amount of time that has taken place.
+	 */
+	
+	public void setTimeElapsed(float time) {
+		timeElapsed = time;
+	}
+	
+	/*
+	 * Returns the amount of time elapsed in this level.
+	 */
+	
+	public float getTimeElapsed() {
+		return timeElapsed;
 	}
 
 
