@@ -47,7 +47,7 @@ public class Persistence {
     }
 
     public String getMoves(){
-        if( map != null && map.containsKey("moves")){
+        if(map != null && map.containsKey("moves")){
             return map.get("moves").toString();
         }
         return null;
@@ -90,6 +90,7 @@ public class Persistence {
             //readBoard(board);
             //maze = new Maze(board, player);
             maze = new Maze(map);
+            maze.setTimeElapsed(Float.parseFloat(map.get("time").toString()));
 
 
         } catch (Exception ex) {
@@ -105,21 +106,32 @@ public class Persistence {
         JSONArray playerInv = new JSONArray();
 
 
-        for(Item i: maze.getPlayerInv()){
-         playerInv.add(i.toString());
-        }
+       // for(Item i: maze.getPlayerInv()){
+        // playerInv.add(i.toString());
+        //}
 
         file.put("xSize", maze.getBoardSize().getX());
         file.put("ySize", maze.getBoardSize().getY());
         file.put("tileInfo", "something");
-        file.put("SETGK", 3);
-        file.put("SETBK", 2);
+        file.put("SETGK", 2);
+        file.put("SETBK", 1);
         file.put("SETYK", 1);
-        file.put("SETRK", 2);
+        file.put("SETRK", 1);
         file.put("numChips", maze.chipsRemaining());
-        file.put("playerInv", playerInv);
-       //file.put("time", maze.timeElapsed);
+        //file.put("playerInv", playerInv);
+        file.put("time", maze.getTimeElapsed());
+        file.put("level", maze.getLevel());
         file.put("board", maze.toString());
+        ArrayList<Item> inv = maze.getPlayerInv();
+        if (!inv.isEmpty()) {
+            StringBuilder inventory = new StringBuilder();
+            for (Item i : inv) {
+                if (i instanceof KeyItem) {
+                    inventory.append(i.getColor()).append("|");
+                }
+            }
+            file.put("inventory", inventory.toString());
+        }
 
 
         String fileName = fileName();
