@@ -18,6 +18,7 @@ public class Replay {
   Main main;
   ArrayList<GraphicalUserInterface.Direction> moves;
   Timer timer;
+  float timeElapsed;
 
   String path = "src/replays/";
 
@@ -51,6 +52,7 @@ public class Replay {
     else {
       main.stopReplaying();
       timer.stop();
+      main.setTimeElapsed(timeElapsed);
     }
   }
 
@@ -85,6 +87,7 @@ public class Replay {
 
       }
       loadMoves(map.get("moves").toString());
+      timeElapsed = Float.parseFloat(map.get("time").toString());
       maze = main.getPersistence().loadFile(path + map.get("replayFile").toString() + ".json");
       reader.close();
       //maze = new Maze(map);
