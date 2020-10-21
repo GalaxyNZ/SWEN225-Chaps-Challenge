@@ -265,7 +265,7 @@ public class Rendering {
                         if(checkTile(x+1,y)) tile += CL.R.toString();
 
                         new TileDesigns(g,defaultP,wh, chunkSize,  new Point(i,j), CL.B,  tile.equals("DU") );
-                    break;
+                        break;
                     case"Y":
                         tile = "";
                         if(checkTile(x,y+1)) tile += CL.D.toString();
@@ -274,8 +274,19 @@ public class Rendering {
                         if(checkTile(x+1,y)) tile += CL.R.toString();
 
                         new TileDesigns(g,defaultP,wh,chunkSize,  new Point(i,j), CL.Y,  tile.equals("DU"));
-
-
+                        break;
+                    case "0":
+                        g.setColor(Color.RED);
+                        g.fillRect(defaultP.x, defaultP.y, wh, wh);
+                        break;
+                    case "1":
+                        g.setColor(Color.BLUE);
+                        g.fillRect(defaultP.x, defaultP.y, wh, wh);
+                        break;
+                    case "2":
+                        g.setColor(Color.GREEN);
+                        g.fillRect(defaultP.x, defaultP.y, wh, wh);
+                        break;
                 }
             }
         }
