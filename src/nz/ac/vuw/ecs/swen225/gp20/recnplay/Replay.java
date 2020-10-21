@@ -17,6 +17,7 @@ import java.util.Map;
 public class Replay {
   Main main;
   ArrayList<GraphicalUserInterface.Direction> moves;
+  Timer timer;
 
   String path = "src/replays/";
 
@@ -28,6 +29,7 @@ public class Replay {
   public Maze loadReplay(){
     //main.persistence.loadFile();
    // selectFile();
+    moves = new ArrayList<>();
     return selectFile();
   }
 
@@ -36,7 +38,6 @@ public class Replay {
     //  iterateStep();
 
    // }
-    Timer timer;
     timer = new Timer(delayTime, e -> {
       iterateStep();
     });
@@ -47,7 +48,10 @@ public class Replay {
     if (!moves.isEmpty() && main.currentState == Main.State.REPLAYING){
       main.getMaze().executeMove(moves.remove(0));
     }
-    else main.stopReplaying();
+    else {
+      main.stopReplaying();
+      timer.stop();
+    }
   }
 
   public Maze selectFile() {
