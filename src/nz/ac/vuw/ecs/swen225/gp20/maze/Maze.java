@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.internal.$Gson$Preconditions;

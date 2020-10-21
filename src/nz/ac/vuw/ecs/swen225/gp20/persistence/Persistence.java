@@ -14,10 +14,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Persistence {
@@ -126,6 +123,7 @@ public class Persistence {
         // playerInv.add(i.toString());
         //}
 
+
         file.put("xSize", maze.getBoardSize().getX());
         file.put("ySize", maze.getBoardSize().getY());
         file.put("tileInfo", "something");
@@ -147,6 +145,19 @@ public class Persistence {
                 }
             }
             file.put("inventory", inventory.toString());
+        }
+        if (maze.getNumMonsters() > 0) {
+            file.put("numBugs", maze.getNumMonsters());
+        }
+        for (HashMap<Integer, ArrayList<String>> map : maze.getBugMoves()) {
+            for (Map.Entry<Integer, ArrayList<String>> monster : map.entrySet()) {
+                StringBuilder moves = new StringBuilder();
+                for (String move : monster.getValue()) {
+                    moves.append(move);
+                    moves.append("|");
+                }
+                file.put("enemy" + monster.getKey(), moves.toString());
+            }
         }
 
 

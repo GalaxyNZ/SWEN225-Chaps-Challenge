@@ -29,6 +29,15 @@ public class MonsterItem extends Item{
         }
         return newMoveSet;
     }
+
+	public String getNextMove(){
+		String returnValue = moveset.get(count);
+		count++;
+		if(count >= moveset.size()) {
+			count = 0;
+		}
+		return returnValue;
+	}
 	
 	/*
 	 * Returns the String that represents this Monster.
