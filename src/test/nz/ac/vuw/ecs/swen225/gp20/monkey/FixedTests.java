@@ -57,7 +57,7 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         assertEquals(expected, maze.toString());
         assertEquals(0, maze.getPlayerChips());
@@ -105,7 +105,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         assertEquals(expected, maze.toString());
         assertEquals(0, maze.getPlayerChips());
@@ -132,7 +132,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -163,7 +163,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -194,7 +194,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -225,7 +225,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -256,7 +256,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -286,7 +286,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -320,7 +320,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -351,7 +351,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -382,7 +382,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -414,7 +414,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -448,7 +448,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -482,7 +482,7 @@ public class FixedTests {
 
         Persistence p = new Persistence();
         try {
-            Maze maze = p.loadJSONString(test.toString());
+            Maze maze = p.loadJsonString(test.toString());
         }
         catch (NullPointerException ignored) {}
     }
@@ -508,7 +508,7 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
     }
 
     @Test
@@ -533,7 +533,7 @@ public class FixedTests {
 
         Persistence p = new Persistence();
         try {
-            Maze maze = p.loadJSONString(test.toString());
+            Maze maze = p.loadJsonString(test.toString());
         }
         catch (NullPointerException ignored) {}
     }
