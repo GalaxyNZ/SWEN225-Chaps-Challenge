@@ -1,14 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.awt.Point;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Scanner;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
+import com.google.gson.internal.$Gson$Preconditions;
+import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 
 /*
  * The main class behind the gameplay, this constructs a board and is responsible for validating and executing a Players inputs from the GUI or keyboard.
@@ -20,27 +17,39 @@ public class Maze {
 	public String password;
 	private Player player;
 	private boolean endGameState = false;
+	private float timeElapsed = 0;
+	private int levelNumber = 0;
 	
 	/*
 	 * Constructor class for a maze (1 Level of the game).
-	 */
-	
-	public Maze(String mapString) {
-		board = new Board(mapString);
-		player = new Player(board.findPlayer(), board.getChips());
-	}
+	 * Has an input of a JSON map.
+	 * Creates player, board, sets level number and add saved items to players inv if the map provided is for a saved game.
+	 */	
 	
 	public Maze (Map<?,?> boardMap) {
 		board = new Board(boardMap);
 		player = new Player(board.findPlayer(), board.getChips());
+		levelNumber = Integer.parseInt(boardMap.get("level").toString());
+		for(Item i : board.getLoadedInv()) { //Runs 0 times for a new game, will construct a players inventory from a loaded inventory.
+			player.addToInv(i);
+		}
 	}
+	
+	/*
+	 * Returns the number of this level.
+	 */
+	
+	public int getLevel() {
+		return levelNumber;
+	}
+	
 	
 	/*
 	 * Executes movements and checks validity based off of input. Designed to be called by both Main and Monkey Testing.
 	 * Returns true if movement is valid or false if movement is invalid.
 	 */
 	
-	public boolean executeMove(GUI.direction movement) {
+	public boolean executeMove(GraphicalUserInterface.Direction movement) {
 		switch(movement) {
 		case UP:
 			if(validMove(player.getLocation(), new Point(player.getLocation().x, player.getLocation().y-1))) { //Attempts move up 1 Tile.
@@ -83,6 +92,9 @@ public class Maze {
 	private boolean validMove(Point oldLocation, Point newLocation) {
 		int newX = newLocation.x;
 		int newY = newLocation.y;
+		if(newLocation.x < 0 || newLocation.x >= board.xSize || newLocation.y < 0 || newLocation.y >= board.ySize) { //Out of bounds check.
+			return false;
+		}
 		if(board.boardMap[newY][newX] instanceof WallTile) { //Walls are always an obstacle.
 			return false;
 		}
@@ -130,6 +142,30 @@ public class Maze {
 	}
 	
 	/*
+	 * Calls a Board method that moves all bugs and returns true if the bug killed the player.
+	 */
+	
+	public boolean moveBugs() {		
+		return board.moveBugs();
+	}
+	
+	/*
+	 * Returns a map of all the different bugs movesets.
+	 */
+	
+	public ArrayList<HashMap<Integer, ArrayList<String>>> getBugMoves() {
+        return board.getBugMoves();
+    }
+	
+	/*
+	 * Calls a method in board that returns the total number of monsters.
+	 */
+
+    public int getNumMonsters() {
+        return board.getNumMonsters();
+    }
+	
+	/*
 	 * Returns true if the level has been completed, else returns false.
 	 */
 	
@@ -150,39 +186,23 @@ public class Maze {
 	 */
 	
 	public Point getPlayerLocation() {
-		return board.findPlayer();
+		return player.getLocation();
 	}
-
+	
 	/*
 	 * Returns ArrayList of all items in the players inventory for GUI printing.
 	 */
-
+	
 	public ArrayList<Item> getPlayerInv(){
 		return player.getInventory();
 	}
-
-	/*
-	 * Returns number of chips that chap has picked up
-	 */
-
-	public Integer getPlayerChips(){
-		return player.getTreasure();
-	}
-
+	
 	/*
 	 * Returns total number of chips for GUI printing.
 	 */
-
+	
 	public int chipsTotal() {
 		return board.getTotalChips();
-	}
-
-	/*
-	 * Returns board
-	 */
-
-	public Board getBoard() {
-		return board;
 	}
 	
 	/*
@@ -209,5 +229,21 @@ public class Maze {
 		return board.toString();
 	}
 	
+	/*
+	 * Sets the amount of time that has taken place.
+	 */
 	
+	public void setTimeElapsed(float time) {
+		timeElapsed = time;
+	}
+	
+	/*
+	 * Returns the amount of time elapsed in this level.
+	 */
+	
+	public float getTimeElapsed() {
+		return timeElapsed;
+	}
+
+
 }

@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.Gson;
+import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.Record;
 import org.json.simple.JSONArray;
@@ -26,6 +27,7 @@ public class Persistence {
     Player player;
     String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/levels/";
     String selectedFile = "";
+    int fileCount = 0;
 
     public Maze selectFile() {
 
@@ -45,11 +47,17 @@ public class Persistence {
     }
 
     public Maze newGame(){
-        return loadFile(path +"level1");
+        return loadFile(path +"level1.json");
     }
+
+    public int getLevelAmount(){ return fileCount; }
 
     public Maze loadFile(String file) { //read
         Maze maze = null;
+
+        File directory = new File(path);
+        fileCount = directory.list().length;
+        System.out.println("File Count:"+fileCount);
 
         try {
             // create Gson instance
@@ -118,10 +126,15 @@ public class Persistence {
             return maze;
     }
 
-
-    public void saveGame(Maze maze) {
+    public String saveGame(Maze maze) {
 
         JSONObject file = new JSONObject();
+        JSONArray playerInv = new JSONArray();
+
+
+        for(Item i: maze.getPlayerInv()){
+         playerInv.add(i.toString());
+        }
 
         file.put("xSize", maze.getBoardSize().getX());
         file.put("ySize", maze.getBoardSize().getY());
@@ -130,17 +143,29 @@ public class Persistence {
         file.put("SETBK", 2);
         file.put("SETYK", 1);
         file.put("SETRK", 2);
+        file.put("numChips", maze.chipsRemaining());
+        file.put("playerInv", playerInv);
+       //file.put("time", maze.timeElapsed);
         file.put("board", maze.toString());
 
 
-        try (FileWriter saveFile = new FileWriter(path + fileName() + ".json")) {
+        String fileName = fileName();
+        try (FileWriter saveFile = new FileWriter(path + fileName + ".json")) {
+            String fileString = file.toJSONString();
+            for (int i = 0; i < fileString.length(); i++) {
+                char next = fileString.charAt(i);
+                if (next == ',' || next == '{') saveFile.write(next + "\n\t");
+                else if (next == '}') saveFile.write("\n" + next);
+                else saveFile.write(next);
+            }
 
-            saveFile.write(file.toJSONString());
+            //saveFile.write(file.toJSONString());
             saveFile.flush();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return fileName;
     }
 
     public static String fileName(){

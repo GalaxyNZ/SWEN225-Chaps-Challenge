@@ -1,6 +1,6 @@
 package test.nz.ac.vuw.ecs.swen225.gp20.monkey;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
+import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import org.json.simple.JSONObject;
@@ -40,13 +40,13 @@ public class MonkeyTest {
             int rand = (int) (Math.random() * 4);
             switch (rand) {
                 case 0:
-                    maze.executeMove(GUI.direction.DOWN);
+                    maze.executeMove(GraphicalUserInterface.Direction.DOWN);
                 case 1:
-                    maze.executeMove(GUI.direction.UP);
+                    maze.executeMove(GraphicalUserInterface.Direction.UP);
                 case 2:
-                    maze.executeMove(GUI.direction.LEFT);
+                    maze.executeMove(GraphicalUserInterface.Direction.LEFT);
                 case 3:
-                    maze.executeMove(GUI.direction.RIGHT);
+                    maze.executeMove(GraphicalUserInterface.Direction.RIGHT);
             }
         }
     }
