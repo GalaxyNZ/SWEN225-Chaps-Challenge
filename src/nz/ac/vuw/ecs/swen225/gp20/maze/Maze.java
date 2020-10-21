@@ -18,16 +18,31 @@ public class Maze {
 	private Player player;
 	private boolean endGameState = false;
 	private float timeElapsed = 0;
+	private int levelNumber = 0;
 	
 	/*
 	 * Constructor class for a maze (1 Level of the game).
 	 * Has an input of a JSON map.
+	 * Creates player, board, sets level number and add saved items to players inv if the map provided is for a saved game.
 	 */	
 	
 	public Maze (Map<?,?> boardMap) {
 		board = new Board(boardMap);
 		player = new Player(board.findPlayer(), board.getChips());
+		levelNumber = Integer.parseInt(boardMap.get("level").toString());
+		for(Item i : board.getLoadedInv()) { //Runs 0 times for a new game, will construct a players inventory from a loaded inventory.
+			player.addToInv(i);
+		}
 	}
+	
+	/*
+	 * Returns the number of this level.
+	 */
+	
+	public int getLevel() {
+		return levelNumber;
+	}
+	
 	
 	/*
 	 * Executes movements and checks validity based off of input. Designed to be called by both Main and Monkey Testing.

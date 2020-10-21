@@ -27,12 +27,14 @@ public class Board {
 	private int extraDataSize;
 	private Map<Integer, ArrayList<String>> bugMoves = new HashMap<Integer, ArrayList<String>>();
 	private ArrayList<Point> bugLocations = new ArrayList<Point>();
+	private ArrayList<Item> loadedPlayerInv = new ArrayList<Item>();
 	
 	/*
 	 * Constructor method. Has an input of a Map with generic contents from Persistence. 
 	 * Stores boardMaps size parameters, gets the total number of chips for the ExitLockItem and the Information stored in the InfoTile.
 	 * Gets all key information from the map.
 	 * Gets and bug details from map.
+	 * Constructs a players inventory if this is loading a saved game.
 	 */	
 	
 	public Board(Map<?,?> map) {
@@ -45,11 +47,50 @@ public class Board {
         BKMax = (int) Double.parseDouble(map.get("SETBK").toString());
         YKMax = (int) Double.parseDouble(map.get("SETRK").toString());
         RKMax = (int) Double.parseDouble(map.get("SETYK").toString());
+        if(map.keySet().contains("inventory")) { //If this is a loaded game then build player inventory.
+        	loadedPlayerInv = makeLoadedInv(map.get("inventory").toString());
+        }
         setBugs(map);
         ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(map.get("board").toString().split("[,]")));
         makeTiles(delimitedInput, xSize, ySize);
 	}
 	
+	/*
+	 * Takes the input string of a loaded players inventory and creates an ArrayList that Maze can give to the player.
+	 */
+	
+	private ArrayList<Item> makeLoadedInv(String inventoryList) {
+		ArrayList<Item> toReturn = new ArrayList<Item>();
+		ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(inventoryList.split("[|]")));
+		for(String s: delimitedInput) {
+			int uses = 1;
+			switch(s) {
+			case "R":
+				uses = RKMax;
+				break;
+			case "B":
+				uses = BKMax;
+				break;
+			case "Y":
+				uses = YKMax;
+				break;
+			case "G":
+				uses = GKMax;
+				break;
+			}
+			toReturn.add(new KeyItem(s,uses));
+		}
+		return toReturn;
+	}
+
+	/*
+	 * Allows Maze to access a loaded inventory so it can be given to the player.
+	 */
+	
+	public ArrayList<Item> getLoadedInv(){
+		return loadedPlayerInv;
+	}
+
 	/*
 	 * Creates a map that contains all of the bugs by number and their movesets by analyzing the input map entries.
 	 */
