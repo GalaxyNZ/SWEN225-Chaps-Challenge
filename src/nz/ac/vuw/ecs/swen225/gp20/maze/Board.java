@@ -315,7 +315,7 @@ public class Board {
 			for (int x = 0; x < xSize; x++) {
 				mapString += boardMap[y][x].toString() + "|";
 			}
-			//mapString += "\n";
+			mapString += "\n";
 		}
 		return mapString;
 	}
