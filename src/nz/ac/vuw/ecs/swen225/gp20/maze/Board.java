@@ -93,6 +93,7 @@ public class Board {
 
 	/*
 	 * Creates a map that contains all of the bugs by number and their movesets by analyzing the input map entries.
+	 * Creates no bugs if there is no numBugs in the map.
 	 */
 	
 	private void setBugs(Map<?,?> map) {
@@ -203,6 +204,7 @@ public class Board {
 	 */
 
 	private void makeTiles(ArrayList<String> input, int xSize, int ySize) {
+		assert input.contains("X"); //Board string must contain a player.
 		int i;
 		int j;
 		int count = 0;
