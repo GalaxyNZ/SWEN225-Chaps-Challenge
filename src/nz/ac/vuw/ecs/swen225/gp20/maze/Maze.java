@@ -150,6 +150,14 @@ public class Maze {
 	}
 	
 	/*
+	 * Calls a Board method that returns the next move for every bug on the board.
+	 */
+	
+	public ArrayList<String> getNextBugMoves(){
+		return board.getNextBugMoves();
+	}
+	
+	/*
 	 * Returns true if the level has been completed, else returns false.
 	 */
 	
