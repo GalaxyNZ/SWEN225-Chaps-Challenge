@@ -62,6 +62,10 @@ public class Main extends GraphicalUserInterface {
     this.timeElapsed = timeElapsed;
   }
 
+  public void gameWon() {
+    currentState = State.GAME_WON;
+  }
+
   @Override
   protected ArrayList<Item> getItems() {
     if (currentState == State.INITIAL || maze == null) {
@@ -252,6 +256,7 @@ public class Main extends GraphicalUserInterface {
         }
 
         float timeRemaining = timePerLevel - timeElapsed;
+        timeLeft.setForeground(Color.BLACK);
         if (timeRemaining < 30) {
           timeLeft.setForeground(new Color(227, 115, 14));
         }
