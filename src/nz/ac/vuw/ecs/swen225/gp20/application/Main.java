@@ -23,10 +23,10 @@ public class Main extends GraphicalUserInterface {
   private Rendering renderer;
   private Record recorder;
   private Replay replay;
-  public Persistence persistence;
+  private Persistence persistence;
   private State currentState;
-  public Maze maze;
-  public int count = 0;
+  private Maze maze;
+  private int count = 0;
 
   public enum State {
     INITIAL,
@@ -48,6 +48,18 @@ public class Main extends GraphicalUserInterface {
     renderer = new Rendering();
     persistence = new Persistence();
     currentState = State.INITIAL;
+  }
+
+  public Maze getMaze() {
+    return this.maze;
+  }
+
+  public Persistence getPersistence() {
+    return this.persistence;
+  }
+
+  public void setTimeElapsed(float timeElapsed) {
+    this.timeElapsed = timeElapsed;
   }
 
   @Override
