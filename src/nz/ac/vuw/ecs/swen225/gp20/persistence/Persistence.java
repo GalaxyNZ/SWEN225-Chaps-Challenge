@@ -168,7 +168,7 @@ public class Persistence {
         //file.put("playerInv", playerInv);
         file.put("time", maze.getTimeElapsed());
         file.put("level", maze.getLevel());
-        file.put("board", maze.toString());
+        file.put("board", maze.toStringPer());
         ArrayList<Item> inv = maze.getPlayerInv();
         if (!inv.isEmpty()) {
             StringBuilder inventory = new StringBuilder();

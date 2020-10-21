@@ -307,6 +307,18 @@ public class Board {
 		}
 		return mapString;
 	}
+
+	public String toStringTest() {
+		String mapString= "";
+		for (int y = 0; y < ySize; y++) {
+			mapString += "|";
+			for (int x = 0; x < xSize; x++) {
+				mapString += boardMap[y][x].toString() + "|";
+			}
+			//mapString += "\n";
+		}
+		return mapString;
+	}
 	
 	/*
 	 * Returns the location of the player on the board.
