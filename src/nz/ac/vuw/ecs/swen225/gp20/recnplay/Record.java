@@ -17,7 +17,7 @@ import java.util.Queue;
  *This class represents the recording aspect of the game.
  */
 public class Record {
-  public Queue<GraphicalUserInterface.Direction> q = new ArrayDeque<>();
+  public Queue<String> q = new ArrayDeque<>();
   private Boolean isRecording = false;
   private Object Persistence;
   private String fileName;
@@ -73,8 +73,10 @@ public class Record {
    * @param direction
    */
   public void addMove(GraphicalUserInterface.Direction direction){
-    q.add(direction);
+    q.add(direction.name());
   }
+
+  public void addBugMove(){ q.add("ENEMIES");}
 
   /**
    * Stops recording the movement so we can save to Json file.

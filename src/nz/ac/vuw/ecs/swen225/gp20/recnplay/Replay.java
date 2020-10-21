@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class Replay {
   Main main;
-  ArrayList<GraphicalUserInterface.Direction> moves;
+  ArrayList<String> moves;
   Timer timer;
   float timeElapsed;
 
@@ -47,7 +47,9 @@ public class Replay {
 
   public void iterateStep(){
     if (!moves.isEmpty() && main.currentState == Main.State.REPLAYING){
-      main.getMaze().executeMove(moves.remove(0));
+      String nextMoves = moves.remove(0);
+      if (nextMoves.equals("ENEMIES")) main.moveEnemies();
+      else main.getMaze().executeMove(GraphicalUserInterface.Direction.valueOf(nextMoves));
     }
     else {
       main.stopReplaying();
@@ -110,7 +112,7 @@ public class Replay {
     }
     ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(moves.split("[,]")));
     for (String s : delimitedInput){
-      this.moves.add(GraphicalUserInterface.Direction.valueOf(s));
+      this.moves.add(s);
     }
   }
 
