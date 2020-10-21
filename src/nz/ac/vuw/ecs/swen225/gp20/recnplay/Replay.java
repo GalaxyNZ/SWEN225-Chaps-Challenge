@@ -7,15 +7,12 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.*;
-import java.io.File;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Replay {
   Main main;
@@ -39,20 +36,20 @@ public class Replay {
     //  iterateStep();
 
    // }
-
-    Timer timer = new Timer(delayTime, e -> {
-      if (!moves.isEmpty()) {
-        iterateStep();
-      }
+    Timer timer;
+    timer = new Timer(delayTime, e -> {
+      iterateStep();
     });
     timer.start();
   }
 
   public void iterateStep(){
-    if (!moves.isEmpty()){
+    if (!moves.isEmpty() && main.currentState == Main.State.REPLAYING){
       main.getMaze().executeMove(moves.remove(0));
     }
+    else main.stopReplaying();
   }
+
   public Maze selectFile() {
 
     String selectedFile = "";

@@ -24,10 +24,9 @@ public class Main extends GraphicalUserInterface {
   private Record recorder;
   private Replay replay;
   private Persistence persistence;
-  private State currentState;
   private Maze maze;
   private int count = 0;
-
+  public State currentState;
   public enum State {
     INITIAL,
     RUNNING,
@@ -133,13 +132,24 @@ public class Main extends GraphicalUserInterface {
     startTimer(timeLeft);
   }
 
+  public void stopReplaying(){
+    currentState = State.RUNNING;
+    replay = null;
+  }
+
   @Override
   protected void iterateReplay() {
+    if (replay == null) {
+      return;
+    }
     replay.iterateStep();
   }
 
   @Override
   protected void autoReplay() {
+    if (replay == null) {
+      return;
+    }
     replay.autoStep(1000);
   }
 
