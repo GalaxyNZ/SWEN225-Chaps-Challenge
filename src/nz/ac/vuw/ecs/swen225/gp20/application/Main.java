@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
@@ -30,7 +31,8 @@ public class Main extends GraphicalUserInterface {
   public enum State {
     INITIAL,
     RUNNING,
-    GAME_OVER
+    GAME_OVER,
+    REPLAYING
   }
 
 
@@ -112,9 +114,11 @@ public class Main extends GraphicalUserInterface {
   }
 
   @Override
-  protected void replayGame() {
+  protected void replayGame(JLabel timeLeft) {
+    currentState = State.REPLAYING;
     replay = new Replay(this);
     maze = replay.loadReplay();
+    startTimer(timeLeft);
   }
 
   @Override
@@ -150,11 +154,7 @@ public class Main extends GraphicalUserInterface {
     }
 
     maze = newMaze;
-    if (currentState == State.INITIAL) {
-      startTimer(timeLeft);
-    } else {
-      timer.start();
-    }
+    startTimer(timeLeft);
     currentState = State.RUNNING;
   }
 
@@ -163,8 +163,6 @@ public class Main extends GraphicalUserInterface {
     if (currentState == State.INITIAL) {
       return;
     }
-    System.out.println("End Recording");
-    //recorder.stopRecording();
     recorder.record(maze);
     recorder = null;
   }
@@ -177,7 +175,6 @@ public class Main extends GraphicalUserInterface {
     System.out.println("Start Recording");
     recorder = new Record();
     recorder.startRec(maze);
-    //recorder.record(maze);
 
   }
 
@@ -204,7 +201,7 @@ public class Main extends GraphicalUserInterface {
     // Creates timer that increments every 0.1 seconds
     timer = new Timer(100, e -> {
 
-      if (!gamePaused) {
+      if (!gamePaused && currentState != State.REPLAYING) {
         timeLeft.setText(String.valueOf(String.format("%.1f", timePerLevel - timeElapsed)));
         timeElapsed += 0.1f;
         count++;

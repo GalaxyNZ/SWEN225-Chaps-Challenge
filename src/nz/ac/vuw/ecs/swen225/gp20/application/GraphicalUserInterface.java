@@ -393,7 +393,7 @@ public abstract class GraphicalUserInterface {
     //KeyStroke rep = KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_DOWN_MASK);
     //replay.setAccelerator(rep);
     replay.addActionListener(ev -> {
-      replayGame();
+      replayGame(timeLeft);
       redraw();
     });
 
@@ -548,7 +548,7 @@ public abstract class GraphicalUserInterface {
   /**
    * Replays the game from a save.
    */
-  protected abstract void replayGame();
+  protected abstract void replayGame(JLabel timeLeft);
 
   /**
    * Gets the number of chips remaining for
