@@ -246,8 +246,9 @@ public class Rendering {
                     case "2":
                         g.setColor(Color.ORANGE);
                         g.fillRect(defaultP.x, defaultP.y, 70, 70);
-
-
+                        continue;
+                    case "I":
+                        new TileDesigns(g,defaultP,wh, chunkSize, new Point(i,j), CL.Info, draw);
                 }
             }
         }
