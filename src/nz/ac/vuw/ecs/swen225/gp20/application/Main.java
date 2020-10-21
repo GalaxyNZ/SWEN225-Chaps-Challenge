@@ -135,11 +135,17 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void iterateReplay() {
+    if (replay == null) {
+      return;
+    }
     replay.iterateStep();
   }
 
   @Override
   protected void autoReplay() {
+    if (replay == null) {
+      return;
+    }
     replay.autoStep();
   }
 
