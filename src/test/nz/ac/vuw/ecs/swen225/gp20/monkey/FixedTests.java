@@ -5,7 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
+
+import javax.json.Json;
+import java.util.Scanner;
 
 public class FixedTests {
 
@@ -27,20 +31,21 @@ public class FixedTests {
         * r = red key
         * Y = Yellow locked door
         * y = yellow key
-        *
      */
 
 
     // BASIC TESTS
 
     @Test
-    public void SimpleBoardGeneration() {
+    public void t01_SimpleBoardGeneration() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
                 + "#|_|_|_|#|"
                 + "_|_|_|_|_|"
                 + "_|_|X|_|_|"
                 + "_|_|_|_|_|"
-                + "_|_|_|_|_|";
+                + "_|_|_|_|_";
+
+        JSONObject test = toJSON(map);
 
         String moves = "";
 
@@ -52,15 +57,15 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
         Persistence p = new Persistence();
-        Maze maze = p.loadFile(map);
+        Maze maze = p.loadJSONString(test.toString());
 
         assertEquals(expected, maze.toString());
-        assertEquals(0, maze.chipsRemaining());
+        assertEquals(0, maze.getPlayerChips());
         assertEquals("[]", maze.getPlayerInv().toString());
     }
 
     @Test
-    public void ComplexBoardGeneration() {
+    public void t02_ComplexBoardGeneration() {
         String map =  "17|16|SAMPLE TILE INFO|11|SETBK|1|SETYK|1|SETRK|1|SETGK|2|" +
                 "_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|" +
                 "_|_|_|#|#|#|#|#|_|#|#|#|#|#|_|_|_|" +
@@ -77,7 +82,7 @@ public class FixedTests {
                 "_|_|_|_|_|#|_|T|#|T|_|#|_|_|_|_|_|" +
                 "_|_|_|_|_|#|_|_|#|g|_|#|_|_|_|_|_|" +
                 "_|_|_|_|_|#|#|#|#|#|#|#|_|_|_|_|_|" +
-                "_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|";
+                "_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_";
 
         String expected =
                 "|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|\n" +
@@ -97,16 +102,18 @@ public class FixedTests {
                         "|_|_|_|_|_|#|#|#|#|#|#|#|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|\n";
 
+
+        JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadFile(map);
+        Maze maze = p.loadJSONString(test.toString());
 
         assertEquals(expected, maze.toString());
-        assertEquals(0, maze.chipsRemaining());
+        assertEquals(0, maze.getPlayerChips());
         assertEquals("[]", maze.getPlayerInv().toString());
     }
 
     @Test
-    public void SimpleMovement() {
+    public void t03_SimpleMovement() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_|"
@@ -123,20 +130,21 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
+        JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadFile(map);
+        Maze maze = p.loadJSONString(test.toString());
 
         gameplayLoop(maze, moves);
 
         assertEquals(expected, maze.toString());
-        assertEquals(0, maze.chipsRemaining());
+        assertEquals(0, maze.getPlayerChips());
         assertEquals("[]", maze.getPlayerInv().toString());
     }
 
     // Restricted movement
 
     @Test
-    public void Walls() {
+    public void t04_Walls() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "_|#|#|#|_|"
@@ -153,19 +161,20 @@ public class FixedTests {
                         "|_|#|#|#|_|\n" +
                         "|_|_|_|_|_|\n";
 
+        JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadFile(map);
+        Maze maze = p.loadJSONString(test.toString());
 
         gameplayLoop(maze, moves);
 
         assertEquals(expected, maze.toString());
-        assertEquals(0, maze.chipsRemaining());
+        assertEquals(0, maze.getPlayerChips());
         assertEquals("[]", maze.getPlayerInv().toString());
     }
 
 
     @Test
-    public void MovementOffMap() {
+    public void t05_MovementOffMap() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_|"
@@ -182,19 +191,21 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
+
+        JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadFile(map);
+        Maze maze = p.loadJSONString(test.toString());
 
         gameplayLoop(maze, moves);
 
         assertEquals(expected, maze.toString());
-        assertEquals(0, maze.chipsRemaining());
+        assertEquals(0, maze.getPlayerChips());
         assertEquals("[]", maze.getPlayerInv().toString());
     }
 
     // DOORS and KEYS
     @Test
-    public void LockedDoors() {
+    public void t06_LockedDoors() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "#|#|B|#|#|"
@@ -211,20 +222,21 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
+
+        JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadFile(map);
+        Maze maze = p.loadJSONString(test.toString());
 
         gameplayLoop(maze, moves);
 
         assertEquals(expected, maze.toString());
-        assertEquals(0, maze.chipsRemaining());
-        assertEquals("[b]", maze.getPlayerInv().toString());
+        assertEquals(0, maze.getPlayerChips());
+        assertEquals("[]", maze.getPlayerInv().toString());
     }
 
 
-
     @Test
-    public void NoKeyUnlockingDoor() {
+    public void t07_NoKeyUnlockingDoor() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "#|#|G|#|#|"
@@ -241,18 +253,20 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
+
+        JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadFile(map);
+        Maze maze = p.loadJSONString(test.toString());
 
         gameplayLoop(maze, moves);
 
         assertEquals(expected, maze.toString());
-        assertEquals(0, maze.chipsRemaining());
+        assertEquals(0, maze.getPlayerChips());
         assertEquals("[b]", maze.getPlayerInv().toString());
     }
 
     @Test
-    public void IncorrectKeyUnlockingDoor() {
+    public void t08_IncorrectKeyUnlockingDoor() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "#|#|G|#|#|"
@@ -269,13 +283,15 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
+
+        JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadFile(map);
+        Maze maze = p.loadJSONString(test.toString());
 
         gameplayLoop(maze, moves);
 
         assertEquals(expected, maze.toString());
-        assertEquals(0, maze.chipsRemaining());
+        assertEquals(0, maze.getPlayerChips());
         assertEquals("[]", maze.getPlayerInv().toString());
     }
 
@@ -283,7 +299,7 @@ public class FixedTests {
     // ITEM TESTS
 
     @Test
-    public void PickUpTreasure() {
+    public void t09_PickUpTreasure() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "_|T|T|_|_|"
@@ -301,18 +317,20 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
 
+
+        JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadFile(map);
+        Maze maze = p.loadJSONString(test.toString());
 
         gameplayLoop(maze, moves);
 
         assertEquals(expected, maze.toString());
-        assertEquals(5, maze.chipsRemaining());
+        assertEquals(5, maze.getPlayerChips());
         assertEquals("[]", maze.getPlayerInv().toString());
     }
 
     @Test
-    public void PickUpKeys() {
+    public void t10_PickUpKeys() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "_|b|g|_|_|"
@@ -330,18 +348,20 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
 
+
+        JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadFile(map);
+        Maze maze = p.loadJSONString(test.toString());
 
         gameplayLoop(maze, moves);
 
         assertEquals(expected, maze.toString());
-        assertEquals(0, maze.chipsRemaining());
+        assertEquals(0, maze.getPlayerChips());
         assertEquals("[r, g, b, y]", maze.getPlayerInv().toString());
     }
 
     @Test
-    public void PickUpMultipleKeys() {
+    public void t11_PickUpMultipleKeys() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "_|b|g|_|_|"
@@ -359,20 +379,56 @@ public class FixedTests {
                         "|_|_|_|X|_|\n";
 
 
+
+        JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadFile(map);
+        Maze maze = p.loadJSONString(test.toString());
 
         gameplayLoop(maze, moves);
 
         assertEquals(expected, maze.toString());
-        assertEquals(0, maze.chipsRemaining());
+        assertEquals(0, maze.getPlayerChips());
         assertEquals("[r, g, b, y, y, b, g, r]", maze.getPlayerInv().toString());
+    }
+
+
+    @Test
+    public void t12_InfoItem() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|I|_|_|"
+                + "_|_|X|_|_|"
+                + "_|_|_|_|_|";
+
+        String[] moves = new String[]{ "w" };
+
+        String expected =
+                "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|X|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+
+
+        JSONObject test = toJSON(map);
+        Persistence p = new Persistence();
+        Maze maze = p.loadJSONString(test.toString());
+
+        gameplayLoop(maze, moves);
+
+        assertEquals(maze.getBoard().getInfo(), "SAMPLE TILE INFO");
+
+        assertEquals(expected, maze.toString());
+        assertEquals(0, maze.getPlayerChips());
+        assertEquals("[]", maze.getPlayerInv().toString());
     }
 
     // Ending Game
     @Test
-    public void SimpleGameEnd() {
-        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
+    public void t13_SimpleGameEnd() {
+        String map =  "5|5|SAMPLE TILE INFO|0|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "_|_|%|_|_|"
                 + "_|_|E|_|_|"
@@ -383,23 +439,106 @@ public class FixedTests {
 
         String expected =
                 "|_|_|_|_|_|\n" +
+                        "|_|_|%|_|_|\n" +
                         "|_|_|X|_|_|\n" +
-                        "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
 
+
+        JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadFile(map);
+        Maze maze = p.loadJSONString(test.toString());
 
         gameplayLoop(maze, moves);
 
         assertEquals(expected, maze.toString());
-        assertEquals(0, maze.chipsRemaining());
-        assertEquals("[E]", maze.getPlayerInv().toString());
+        assertEquals(0, maze.getPlayerChips());
+        assertEquals("[]", maze.getPlayerInv().toString());
+        assertTrue(maze.levelWonChecker());
     }
 
-    private void gameplayLoop(Maze maze, String[] moves) {
+    // Break it
+
+    @Test
+    public void t14_badBoardConstruction() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
+                + " |!|@|^|*|"
+                + "_|_|_|_|_|"
+                + "_|_|X|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_";
+
+        JSONObject test = toJSON(map);
+
+        String moves = "";
+
+        String expected =
+                "|#|_|_|_|#|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|X|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+        Persistence p = new Persistence();
+        try {
+            Maze maze = p.loadJSONString(test.toString());
+        }
+        catch (NullPointerException ignored) {}
+    }
+
+    @Test
+    public void t15_incorrectSize() {
+        String map =  "7|32|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|X|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_";
+
+        JSONObject test = toJSON(map);
+
+        String moves = "";
+
+        String expected =
+                "|#|_|_|_|#|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|X|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+        Persistence p = new Persistence();
+        Maze maze = p.loadJSONString(test.toString());
+    }
+
+    @Test
+    public void t15_noChap() {
+        String map =  "7|32|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_|"
+                + "_|_|_|_|_";
+
+        JSONObject test = toJSON(map);
+
+        String moves = "";
+
+        String expected =
+                "|#|_|_|_|#|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+        Persistence p = new Persistence();
+        try {
+            Maze maze = p.loadJSONString(test.toString());
+        }
+        catch (NullPointerException ignored) {}
+    }
+
+    public void gameplayLoop(Maze maze, String[] moves) {
         for (String s : moves) {
             switch (s) {
                 case "s":
@@ -412,5 +551,26 @@ public class FixedTests {
                     maze.executeMove(GraphicalUserInterface.Direction.RIGHT);
             }
         }
+    }
+
+    public static JSONObject toJSON(String map) {
+        Scanner scan = new Scanner(map);
+        scan.useDelimiter("\\|");
+
+        JSONObject test = new JSONObject();
+        test.put("xSize", scan.next());
+        test.put("ySize", scan.next());
+        test.put("tileInfo", scan.next());
+        test.put("numChips", scan.next());        scan.next();
+        test.put("SETBK", scan.next());           scan.next();
+        test.put("SETYK", scan.next());           scan.next();
+        test.put("SETRK", scan.next());           scan.next();
+        test.put("SETGK", scan.next());
+        scan.skip("\\|");
+        scan.useDelimiter("\n");
+
+        test.put("board", scan.next().replace("|", ","));
+
+        return test; 
     }
 }
