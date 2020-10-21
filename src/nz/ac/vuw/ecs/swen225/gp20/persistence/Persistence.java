@@ -58,7 +58,7 @@ public class Persistence {
     public Maze nextLevel(Main main){
         int level = main.getMaze().getLevel();
         if(level < fileCount) {
-            selectedFile = path + "level" + level + ".json";
+            selectedFile = path + "level" + (level + 1) + ".json";
             return loadFile(selectedFile);
         }
         main.gameWon();
