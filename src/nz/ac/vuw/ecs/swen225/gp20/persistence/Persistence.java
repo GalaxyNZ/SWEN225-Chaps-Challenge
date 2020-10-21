@@ -46,6 +46,13 @@ public class Persistence {
         return loadFile(selectedFile);
     }
 
+    public String getMoves(){
+        if( map != null && map.containsKey("moves")){
+            return map.get("moves").toString();
+        }
+        return null;
+    }
+
     public Maze newGame(){
         return loadFile(path +"level1.json");
     }
