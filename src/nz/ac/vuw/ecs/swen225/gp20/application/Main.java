@@ -292,6 +292,9 @@ public class Main extends GraphicalUserInterface {
   }
 
   public void moveEnemies() {
+    if (recorder != null) {
+      recorder.addBugMove();
+    }
     if (maze.moveBugs()) {
       currentState = State.GAME_OVER;
     }
