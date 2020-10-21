@@ -132,6 +132,21 @@ public class Board {
 	}
 	
 	/*
+	 * Returns an ArrayList<String> of the next move for all bugs.
+	 */
+	
+	public ArrayList<String> getNextBugMoves(){
+		ArrayList<String> moves = new ArrayList<String>();
+		for(Point pt : bugLocations) {
+			if(boardMap[pt.y][pt.x].getItem() instanceof MonsterItem) {
+				MonsterItem thisMonster = (MonsterItem) boardMap[pt.y][pt.x].getItem();
+				moves.add(thisMonster.peekThisMove());
+			}
+		}
+		return moves;
+	}
+	
+	/*
 	 * Takes the delimited mapString and populates the board with Tiles based off of feedback from textAssignmentTable.
 	 * Input ArrayList should no longer contain anything but raw Tile data.
 	 */
