@@ -36,6 +36,7 @@ import javax.swing.KeyStroke;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 
 public abstract class GraphicalUserInterface {
 
@@ -321,7 +322,7 @@ public abstract class GraphicalUserInterface {
     KeyStroke res = KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK);
     restart.setAccelerator(res);
     restart.addActionListener(ev -> {
-      restartRound();
+      restartRound(timeLeft);
       updateInventory(inventory);
       updateChips(chipsRemaining);
       redraw();
@@ -491,20 +492,33 @@ public abstract class GraphicalUserInterface {
     frame.setVisible(true);
   }
 
+  protected abstract void restartRound(JLabel timeLeft);
+
   protected abstract void autoReplay();
 
   private void checkGameState(JLabel timeLeft) {
-    if (getCurrentState() == Main.State.GAME_OVER) {
+    if (getCurrentState() == Main.State.GAME_OVER || getCurrentState() == Main.State.GAME_WON) {
       int result = JOptionPane.NO_OPTION;
       while (result == JOptionPane.NO_OPTION) {
-        result = JOptionPane.showConfirmDialog(null,
-                "You Lost! Would you like to try again?", "Game Over",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
+        if (getCurrentState() == Main.State.GAME_OVER) {
+          result = JOptionPane.showConfirmDialog(null,
+                  "You Lost! Would you like to try again?", "Game Over",
+                  JOptionPane.YES_NO_OPTION,
+                  JOptionPane.QUESTION_MESSAGE);
+        } else {
+          result = JOptionPane.showConfirmDialog(null,
+                  "You Won! Would you like to play again?", "Game Won",
+                  JOptionPane.YES_NO_OPTION,
+                  JOptionPane.QUESTION_MESSAGE);
+        }
         if (result == JOptionPane.NO_OPTION) {
           System.exit(0); // cleanly end the program.
         }
-        newGame(timeLeft);
+        if (getCurrentState() == Main.State.GAME_OVER) {
+          restartRound(timeLeft);
+        } else {
+          newGame(timeLeft);
+        }
       }
     }
   }
@@ -649,13 +663,6 @@ public abstract class GraphicalUserInterface {
   private void setLabel(JLabel label, int size) {
     label.setHorizontalAlignment(JLabel.CENTER);
     label.setFont(new Font(label.getName(), Font.BOLD, size));
-  }
-
-  /**
-   * Restarts the current level that the player is on.
-   */
-  private void restartRound() {
-    System.out.println("Restarts current level");
   }
 
   /**

@@ -27,6 +27,7 @@ public class Main extends GraphicalUserInterface {
   private Maze maze;
   private int count = 0;
   public State currentState;
+  private JLabel timeLeft;
   public enum State {
     INITIAL,
     RUNNING,
@@ -90,7 +91,10 @@ public class Main extends GraphicalUserInterface {
     }
     maze.executeMove(dir);
     if (maze.levelWonChecker()) {
-      // Player has won
+      maze = persistence.nextLevel(this);
+      if (maze != null) {
+        startTimer(this.timeLeft);
+      }
     }
     if (recorder != null) {
       recorder.addMove(dir);
@@ -110,6 +114,7 @@ public class Main extends GraphicalUserInterface {
     gamePaused = false;
     maze = persistence.newGame();
     currentState = State.RUNNING;
+    this.timeLeft = timeLeft;
     startTimer(timeLeft);
   }
 
@@ -129,6 +134,13 @@ public class Main extends GraphicalUserInterface {
       System.exit(0); // cleanly end the program.
     }
     timer.start();
+  }
+
+  @Override
+  protected void restartRound(JLabel timeLeft) {
+    currentState = State.RUNNING;
+    maze = persistence.restart();
+    startTimer(timeLeft);
   }
 
   @Override
@@ -243,7 +255,7 @@ public class Main extends GraphicalUserInterface {
     // Creates timer that increments every 0.1 seconds
     timer = new Timer(100, e -> {
 
-      if (!gamePaused && currentState != State.REPLAYING) {
+      if (!gamePaused && currentState != State.REPLAYING && currentState != State.GAME_WON) {
         maze.setTimeElapsed(timeElapsed);
         timeLeft.setText(String.valueOf(String.format("%.1f", timePerLevel - timeElapsed)));
         timeElapsed += 0.1f;
