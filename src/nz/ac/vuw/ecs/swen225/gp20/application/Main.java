@@ -173,11 +173,10 @@ public class Main extends GraphicalUserInterface {
   }
 
   @Override
-  protected void autoReplay() {
-    if (replay == null) {
-      return;
+  protected void autoReplay(int delay) {
+    if (replay != null) {
+      replay.autoStep(delay);
     }
-    replay.autoStep(1000);
   }
 
   @Override
