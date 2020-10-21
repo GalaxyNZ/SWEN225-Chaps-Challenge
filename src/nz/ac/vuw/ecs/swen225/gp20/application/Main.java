@@ -261,9 +261,7 @@ public class Main extends GraphicalUserInterface {
         count++;
         if (count == 5) {
           count = 0;
-          if (maze.moveBugs()) {
-            currentState = State.GAME_OVER;
-          }
+          moveEnemies();
         }
 
         float timeRemaining = timePerLevel - timeElapsed;
@@ -291,6 +289,12 @@ public class Main extends GraphicalUserInterface {
       }
     });
     timer.start();
+  }
+
+  private void moveEnemies() {
+    if (maze.moveBugs()) {
+      currentState = State.GAME_OVER;
+    }
   }
 
 }
