@@ -40,7 +40,16 @@ public class Main extends GraphicalUserInterface {
 
 
   public static void main(String... args) {
-    new Main();
+    Main game = new Main();
+    game.getLastLevel();
+  }
+
+  private void getLastLevel() {
+    maze = persistence.getLastLevel();
+    if (maze != null) {
+      startTimer(timeLeft);
+      currentState = State.RUNNING;
+    }
   }
 
   /**
