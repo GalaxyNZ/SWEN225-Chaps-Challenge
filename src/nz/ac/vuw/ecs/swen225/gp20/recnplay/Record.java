@@ -1,23 +1,26 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
-
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Queue;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonBuilderFactory;
 import javax.json.JsonObjectBuilder;
-import java.io.*;
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Queue;
+import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 
 /**
  *This class represents the recording aspect of the game.
  */
 public class Record {
-  public Queue<String> q = new ArrayDeque<>();
+  public Queue<String> movements = new ArrayDeque<>();
   private String fileName;
 
 
@@ -30,8 +33,8 @@ public class Record {
     JsonBuilderFactory factory = Json.createBuilderFactory(config);
 
     JsonArrayBuilder array = factory.createArrayBuilder();
-    while (!q.isEmpty()) {
-      array.add(q.poll().toString());
+    while (!movements.isEmpty()) {
+      array.add(movements.poll().toString());
     }
 
     JsonObjectBuilder object = factory.createObjectBuilder();
@@ -50,9 +53,13 @@ public class Record {
 
       for (int i = 0; i < saveLength; i++) {
         char next = savedGame.charAt(i);
-        if (next == ',' || next == '{') writer.write(next + "\n\t");
-        else if (next == '}') writer.write("\n" + next);
-        else writer.write(next);
+        if (next == ',' || next == '{') {
+          writer.write(next + "\n\t");
+        } else if (next == '}') {
+          writer.write("\n" + next);
+        } else {
+          writer.write(next);
+        }
       }
 
       writer.close();
@@ -70,14 +77,14 @@ public class Record {
   /**
    * Adds moves to the queue for recording.
    *
-   * @param direction
+   * @param direction from Main
    */
   public void addMove(GraphicalUserInterface.Direction direction) {
-    q.add(direction.name());
+    movements.add(direction.name());
   }
 
   public void addBugMove() {
-    q.add("ENEMIES");
+    movements.add("ENEMIES");
   }
 
   /**
