@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -57,7 +58,9 @@ public class Persistence {
     String[] list = directory.list();
     if (list != null) {
       saveCount = list.length;
-      return loadFile(savePath + list[saveCount-1]);
+      if (saveCount > 0) {
+        return loadFile(savePath + list[saveCount - 1]);
+      }
     }
     return null;
   }
@@ -257,7 +260,7 @@ public class Persistence {
       int saveLength = savedGame.length();
       stringWriter.close();
 
-      Writer writer = new BufferedWriter(new FileWriter(savePath + fileName + ".json"));
+      Writer writer = new BufferedWriter(new FileWriter(savePath + fileName + ".json", StandardCharsets.UTF_8));
 
       for (int i = 0; i < saveLength; i++) {
         char next = savedGame.charAt(i);

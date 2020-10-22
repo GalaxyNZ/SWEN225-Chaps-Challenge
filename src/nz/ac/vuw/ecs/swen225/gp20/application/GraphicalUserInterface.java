@@ -47,6 +47,7 @@ public abstract class GraphicalUserInterface {
   private static final int DEFAULT_DISPLAY_SIZE = 800;
   private static final int GAP_SIZE = 25;
   private static final int BORDER_SIZE = 25;
+  private boolean asking = false;
   JPanel helpBox;
   private JLabel timeLeft;
   private JPanel inventory;
@@ -606,9 +607,10 @@ public abstract class GraphicalUserInterface {
    *                 time left.
    */
   private void checkGameState(JLabel timeLeft) {
-    if (getCurrentState() == Main.State.GAME_OVER || getCurrentState() == Main.State.GAME_WON) {
+    if (!asking && (getCurrentState() == Main.State.GAME_OVER || getCurrentState() == Main.State.GAME_WON)) {
       int result = JOptionPane.NO_OPTION;
       while (result == JOptionPane.NO_OPTION) {
+        asking = true;
         if (getCurrentState() == Main.State.GAME_OVER) {
           result = JOptionPane.showConfirmDialog(null,
                   "You Lost! Would you like to try again?", "Game Over",
@@ -628,6 +630,7 @@ public abstract class GraphicalUserInterface {
         } else {
           newGame(timeLeft);
         }
+        asking = false;
       }
     }
   }
