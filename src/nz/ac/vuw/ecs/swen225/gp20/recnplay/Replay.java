@@ -14,6 +14,12 @@ import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
+/**
+ * Replay class.
+ * Responsible for moving things according to recorded movements.
+ *
+ * @author Philip
+ */
 public class Replay {
   Main main;
   ArrayList<String> moves;
@@ -136,17 +142,15 @@ public class Replay {
     this.moves = new ArrayList<>();
     StringBuilder stringBuilder = new StringBuilder(moves);
     for (int i = 0; i < moves.length(); i++) {
-      if (moves.charAt(i) == '[' || moves.charAt(i) == ']') {
-        if (moves.charAt(i) == '\n' || moves.charAt(i) == ' ') {
-          stringBuilder.deleteCharAt(i);
-        }
+      if (moves.charAt(i) == '[' || moves.charAt(i) == ']'
+              || moves.charAt(i) == '\n' || moves.charAt(i) == ' ') {
+        stringBuilder.deleteCharAt(i);
       }
       moves = stringBuilder.toString();
     }
     ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(moves.split("[,]")));
-    for (String s : delimitedInput) {
-      this.moves.add(s);
-    }
+    this.moves.addAll(delimitedInput);
   }
+
 
 }

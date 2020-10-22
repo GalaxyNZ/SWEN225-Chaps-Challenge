@@ -1,6 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Queue;
@@ -14,18 +19,20 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 
 /**
  *This class represents the recording aspect of the game.
+ *
+ * @author Philip
  */
 public class Record {
-  public Queue<String> movements = new ArrayDeque<>();
+  private final Queue<String> movements = new ArrayDeque<>();
   private String fileName;
 
 
   /**
-   * Begins recording of gameplay by saving current state
+   * recording of gameplay by saving current state
    * of board and recording movements, then saving to Json file.
    */
   public void record(Maze maze) {
-    HashMap<String, Integer> config = new HashMap();
+    HashMap<String, Integer> config = new HashMap<>();
     JsonBuilderFactory factory = Json.createBuilderFactory(config);
 
     JsonArrayBuilder array = factory.createArrayBuilder();
@@ -46,7 +53,7 @@ public class Record {
       stringWriter.close();
 
       FileOutputStream fileStream = new FileOutputStream(fileName(fileName));
-      Writer writer = new OutputStreamWriter(fileStream, "UTF-8");
+      Writer writer = new OutputStreamWriter(fileStream, StandardCharsets.UTF_8);
 
       for (int i = 0; i < saveLength; i++) {
         char next = savedGame.charAt(i);
@@ -62,10 +69,15 @@ public class Record {
       writer.close();
 
     } catch (IOException e) {
-      System.out.printf("Error saving game: " + e);
+      System.out.print("Error saving game: " + e);
     }
   }
 
+  /**
+   * Start the recording.
+   *
+   * @param maze from persistance to get maze
+   */
   public void startRec(Maze maze) {
     Persistence persistence = new Persistence();
     fileName = persistence.saveGame(maze);
@@ -80,6 +92,9 @@ public class Record {
     movements.add(direction.name());
   }
 
+  /**
+   * Add bug movements to Json.
+   */
   public void addBugMove() {
     movements.add("ENEMIES");
   }
