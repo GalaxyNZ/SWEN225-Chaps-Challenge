@@ -233,13 +233,21 @@ public class Maze {
 	public Point getBoardSize() {
 		return new Point(board.getWidth(), board.getHeight());
 	}
-	
+
+	/*
+	 * Returns a string representative of the board for persistence calls.
+	 */
+
+	public String toStringPer() {
+		return board.toString();
+	}
+
 	/*
 	 * Returns a string representative of the board for Monkey Test calls.
 	 */
-	
+
 	public String toString() {
-		return board.toString();
+		return board.toStringTest();
 	}
 	
 	/*
