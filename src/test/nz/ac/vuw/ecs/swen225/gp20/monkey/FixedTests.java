@@ -517,7 +517,7 @@ public class FixedTests {
 
     @Test
     public void t16_noChap() {
-        String map =  "7|32|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_|"
