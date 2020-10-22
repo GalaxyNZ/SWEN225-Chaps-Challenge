@@ -1,8 +1,13 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.Gson;
-
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -19,8 +24,6 @@ import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.KeyItem;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import org.json.simple.JSONObject;
-
 
 
 public class Persistence {
@@ -52,12 +55,12 @@ public class Persistence {
 
     JFileChooser chooser = new JFileChooser(loadPath);
     FileNameExtensionFilter filter = new FileNameExtensionFilter(
-            "JSON files", "json");
+            "JSON files", "json");          // only accepts json files.
     chooser.setFileFilter(filter);
     int returnVal = chooser.showOpenDialog(null);
     if (returnVal == JFileChooser.APPROVE_OPTION) {
-      selectedFile = chooser.getSelectedFile().toString();
-      return loadFile(chooser.getSelectedFile().toString());
+      selectedFile = chooser.getSelectedFile().toString();    // set selected file to exactly that.
+      return loadFile(chooser.getSelectedFile().toString());  //
     } else {
       return null;
     }
@@ -81,9 +84,9 @@ public class Persistence {
    * @return next level.
    */
   public Maze nextLevel(Main main) {
-    int level = main.getMaze().getLevel();
-    if (level < fileCount) {
-      selectedFile = levelPath + "level" + (level + 1) + ".json";
+    int level = main.getMaze().getLevel(); //gets current level.
+    if (level < fileCount) { //checks if there can be a next level comparing to total levels.
+      selectedFile = levelPath + "level" + (level + 1) + ".json"; //gets next level number.
       return loadFile(selectedFile);
     }
     main.gameWon();
@@ -135,11 +138,10 @@ public class Persistence {
       // convert JSON file to map
       map = gson.fromJson(reader, Map.class);
 
-      // print map entries
-
       reader.close();
       maze = new Maze(map);
       maze.setTimeElapsed(Float.parseFloat(map.get("time").toString()));
+      //gets the time elapsed and sets the current time.
 
 
     } catch (Exception ex) {
@@ -191,7 +193,7 @@ public class Persistence {
 
     JsonObjectBuilder object = factory.createObjectBuilder();
 
-    object.add("xSize", maze.getBoardSize().getX());
+    object.add("xSize", maze.getBoardSize().getX()); //add all of the variables the the json object.
     object.add("ySize", maze.getBoardSize().getY());
     object.add("tileInfo", "something");
     object.add("SETGK", 2);
@@ -203,10 +205,10 @@ public class Persistence {
     object.add("level", maze.getLevel());
     object.add("board", maze.toStringPer());
 
-    if (maze.getNumMonsters() > 0) {
+    if (maze.getNumMonsters() > 0) {      //adds number of monsters if there is supposed to be some.
       object.add("numBugs", maze.getNumMonsters());
     }
-
+    //gets the current moves that a bug needs to do in its loop and saves the file.
     for (HashMap<Integer, ArrayList<String>> map : maze.getBugMoves()) {
       for (Map.Entry<Integer, ArrayList<String>> monster : map.entrySet()) {
         StringBuilder moves = new StringBuilder();
@@ -217,7 +219,7 @@ public class Persistence {
         object.add("enemy" + monster.getKey(), moves.toString());
       }
     }
-    ArrayList<Item> inv = maze.getPlayerInv();
+    ArrayList<Item> inv = maze.getPlayerInv(); //adds the players inventory to the object.
     if (!inv.isEmpty()) {
       StringBuilder inventory = new StringBuilder();
       for (Item i : inv) {
@@ -229,7 +231,7 @@ public class Persistence {
     }
 
     String fileName = fileName();
-    try {
+    try { //writes the json object to the file.
       Writer stringWriter = new StringWriter();
       Json.createWriter(stringWriter).write(object.build());
       String savedGame = stringWriter.toString();
@@ -240,9 +242,13 @@ public class Persistence {
 
       for (int i = 0; i < saveLength; i++) {
         char next = savedGame.charAt(i);
-        if (next == ',' || next == '{') writer.write(next + "\n\t");
-        else if (next == '}') writer.write("\n" + next);
-        else writer.write(next);
+        if (next == ',' || next == '{') {
+          writer.write(next + "\n\t");
+        } else if (next == '}') {
+          writer.write("\n" + next);
+        } else {
+          writer.write(next);
+        }
       }
 
       writer.close();
@@ -258,10 +264,14 @@ public class Persistence {
    *
    * @return date
    */
-  public static String fileName() {
+  public static String fileName() { // creates file name from the current date.
     Date date = new Date();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
     return dateFormat.format(date);
+  }
+
+  public Maze loadLevelTwo() {
+    return loadFile(levelPath + "level2.json");
   }
 
 }
