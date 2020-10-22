@@ -201,7 +201,7 @@ public class Persistence {
     object.add("numChips", maze.chipsRemaining());
     object.add("time", maze.getTimeElapsed());
     object.add("level", maze.getLevel());
-    object.add("board", maze.toString());
+    object.add("board", maze.toStringPer());
 
     if (maze.getNumMonsters() > 0) {
       object.add("numBugs", maze.getNumMonsters());
