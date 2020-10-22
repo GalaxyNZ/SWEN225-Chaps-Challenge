@@ -37,7 +37,7 @@ public class Record {
 
     JsonArrayBuilder array = factory.createArrayBuilder();
     while (!movements.isEmpty()) {
-      array.add(movements.poll().toString());
+      array.add(movements.poll());
     }
 
     JsonObjectBuilder object = factory.createObjectBuilder();
@@ -102,7 +102,7 @@ public class Record {
   /**
    * Sets the recording name to "yyyy/MM/dd-HH:mm:ss" so that most file names are unique.
    *
-   * @return
+   * @return filename as a string
    */
   public String fileName(String fileName) {
     return "src/nz/ac/vuw/ecs/swen225/gp20/recnplay/replays/" + fileName + "_moves.json";
