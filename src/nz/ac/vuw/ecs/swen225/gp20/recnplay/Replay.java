@@ -152,5 +152,4 @@ public class Replay {
     this.moves.addAll(delimitedInput);
   }
 
-
 }
