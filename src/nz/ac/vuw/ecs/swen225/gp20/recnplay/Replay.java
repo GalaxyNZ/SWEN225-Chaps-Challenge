@@ -121,8 +121,6 @@ public class Replay {
       timeElapsed = Float.parseFloat(map.get("time").toString());
       maze = main.getPersistence().loadFile(path + map.get("replayFile").toString() + ".json");
       reader.close();
-      //maze = new Maze(map);
-
     } catch (Exception ex) {
       ex.printStackTrace();
     }
