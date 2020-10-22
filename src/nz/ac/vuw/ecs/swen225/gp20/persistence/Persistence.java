@@ -188,6 +188,9 @@ public class Persistence {
    * @return file name.
    */
   public String saveGame(Maze maze) {
+    if (maze == null) {
+      return "";
+    }
     HashMap<String, Integer> config = new HashMap();
     JsonBuilderFactory factory = Json.createBuilderFactory(config);
 
