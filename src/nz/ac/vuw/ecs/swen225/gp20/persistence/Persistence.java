@@ -33,6 +33,7 @@ public class Persistence {
   String savePath = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/files/saves/";
   String selectedFile = "";
   int fileCount = 0;
+  int saveCount = 0;
 
   /**
    * Creates the Persistence.
@@ -44,6 +45,16 @@ public class Persistence {
     if (list != null) {
       fileCount = list.length;
     }
+  }
+
+  public Maze getLastLevel(){
+    File directory = new File(savePath);
+    String[] list = directory.list();
+    if (list != null) {
+      saveCount = list.length;
+      return loadFile(savePath + list[saveCount-1]);
+    }
+    return null;
   }
 
   /**
