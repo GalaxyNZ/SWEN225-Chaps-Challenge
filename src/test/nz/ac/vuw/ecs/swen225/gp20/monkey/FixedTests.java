@@ -57,7 +57,7 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         assertEquals(expected, maze.toString());
         assertEquals(0, maze.getPlayerChips());
@@ -105,7 +105,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         assertEquals(expected, maze.toString());
         assertEquals(0, maze.getPlayerChips());
@@ -132,7 +132,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -163,7 +163,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -194,7 +194,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -225,7 +225,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -256,7 +256,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -286,7 +286,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -320,7 +320,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -351,7 +351,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -382,7 +382,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -414,7 +414,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -448,7 +448,7 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         gameplayLoop(maze, moves);
 
@@ -471,15 +471,22 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
 
+        String moves = "";
+
+        String expected =
+                "|#|_|_|_|#|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|X|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
         Persistence p = new Persistence();
         try {
-            Maze maze = p.loadJSONString(test.toString());
+            Maze maze = p.loadJsonString(test.toString());
         }
-        catch (NullPointerException ignored) {
-            System.out.println("Null pointer thrown and caught.");
-        }
+        catch (NullPointerException ignored) {}
     }
-/*
+
     @Test
     public void t15_incorrectSize() {
         String map =  "7|32|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
@@ -494,29 +501,18 @@ public class FixedTests {
         String moves = "";
 
         String expected =
-                "|_|_|_|_|_|\n" +
+                "|#|_|_|_|#|\n" +
                         "|_|_|_|_|_|\n" +
                         "|_|_|X|_|_|\n" +
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        try {
-            Persistence p = new Persistence();
-            Maze maze = p.loadJSONString(test.toString());
-
-
-            assertEquals(expected, maze.toString());
-        } catch (IndexOutOfBoundsException e){
-            assert true;
-        }
-
-        fail();
+        Persistence p = new Persistence();
+        Maze maze = p.loadJsonString(test.toString());
     }
 
- */
-
     @Test
-    public void t16_noChap() {
+    public void t15_noChap() {
         String map =  "7|32|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_|"
@@ -526,9 +522,20 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
 
-        Persistence p = new Persistence();
+        String moves = "";
 
-        Maze maze = p.loadJSONString(test.toString());
+        String expected =
+                "|#|_|_|_|#|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
+        Persistence p = new Persistence();
+        try {
+            Maze maze = p.loadJsonString(test.toString());
+        }
+        catch (NullPointerException ignored) {}
     }
 
     public void gameplayLoop(Maze maze, String[] moves) {
@@ -536,16 +543,12 @@ public class FixedTests {
             switch (s) {
                 case "s":
                     maze.executeMove(GraphicalUserInterface.Direction.DOWN);
-                    break;
                 case "w":
                     maze.executeMove(GraphicalUserInterface.Direction.UP);
-                    break;
                 case "a":
                     maze.executeMove(GraphicalUserInterface.Direction.LEFT);
-                    break;
                 case "d":
                     maze.executeMove(GraphicalUserInterface.Direction.RIGHT);
-                    break;
             }
         }
     }
@@ -555,7 +558,6 @@ public class FixedTests {
         scan.useDelimiter("\\|");
 
         JSONObject test = new JSONObject();
-        test.put("level", 1);
         test.put("xSize", scan.next());
         test.put("ySize", scan.next());
         test.put("tileInfo", scan.next());

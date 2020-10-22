@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
@@ -17,17 +16,19 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.Rendering;
 
 public class Main extends GraphicalUserInterface {
   private static final float timePerLevel = 60f;
-  public float timeElapsed = 0f; // Current time elapsed since start
+  private final Persistence persistence;
+  private final Rendering renderer;
   public boolean gamePaused = false;
+  public float timeElapsed = 0f;
+  public State currentState;
   private Timer timer;
-  private Rendering renderer;
   private Record recorder;
   private Replay replay;
-  private Persistence persistence;
   private Maze maze;
   private int count = 0;
-  public State currentState;
   private JLabel timeLeft;
+  private JLabel lvlNumber;
+
   public enum State {
     INITIAL,
     RUNNING,
@@ -38,7 +39,7 @@ public class Main extends GraphicalUserInterface {
 
 
   public static void main(String... args) {
-    Main game = new Main();
+    new Main();
   }
 
   /**
@@ -51,29 +52,69 @@ public class Main extends GraphicalUserInterface {
     currentState = State.INITIAL;
   }
 
+  /**
+   * Gets the current maze object in the game.
+   *
+   * @return current current maze object
+   */
   public Maze getMaze() {
     return this.maze;
   }
 
+  /**
+   * Get method to return persistence so recnplay
+   * can utilize its methods.
+   *
+   * @return the persistence object
+   */
   public Persistence getPersistence() {
     return this.persistence;
   }
 
+  /**
+   * Sets the JLabel so it can be used to update time
+   * display throughout the game.
+   *
+   * @param timeElapsed is the JLable displaying time
+   */
   public void setTimeElapsed(float timeElapsed) {
     this.timeElapsed = timeElapsed;
   }
 
+  /**
+   * Player has won the game so change the game
+   * state to GAME_WON.
+   */
   public void gameWon() {
-    System.out.println("won");
     currentState = State.GAME_WON;
   }
 
-  @Override
-  protected ArrayList<Item> getItems() {
-    if (currentState == State.INITIAL || maze == null) {
-      return null;
+  /**
+   * Moves all the enemies on the board when called.
+   * All enemies are moved based on the timer, which
+   * updates every 0.1 seconds.
+   */
+  public void moveEnemies() {
+    // Only records bug move if there are bugs
+    if (recorder != null && maze.getNumMonsters() > 0) {
+      recorder.addBugMove();
     }
-    return maze.getPlayerInv();
+    // Moves enemies and ends game if enemies killed player
+    if (maze.moveBugs()) {
+      endRec();
+      currentState = State.GAME_OVER;
+    }
+  }
+
+  /**
+   * Sets the current state to running and sets replay
+   * to null so the game can continue right after a
+   * recording has finished replaying.
+   */
+  public void stopReplaying() {
+    // Stops recording and changes game state
+    currentState = State.RUNNING;
+    replay = null;
   }
 
   @Override
@@ -86,21 +127,21 @@ public class Main extends GraphicalUserInterface {
   }
 
   @Override
-  protected void movePlayer(GraphicalUserInterface.Direction dir) {
-    if (currentState != State.RUNNING || gamePaused) {
-      return;
+  protected void setTimeLeft(JLabel timeLeft) {
+    this.timeLeft = timeLeft;
+  }
+
+  @Override
+  protected void setLvlLabel(JLabel lvlNumber) {
+    this.lvlNumber = lvlNumber;
+  }
+
+  @Override
+  protected ArrayList<Item> getItems() {
+    if (currentState == State.INITIAL || maze == null) {
+      return null;
     }
-    maze.executeMove(dir);
-    if (maze.levelWonChecker()) {
-      Maze newMaze = persistence.nextLevel(this);
-      if (newMaze != null) {
-        maze = newMaze;
-        startTimer(this.timeLeft);
-      }
-    }
-    if (recorder != null) {
-      recorder.addMove(dir);
-    }
+    return maze.getPlayerInv();
   }
 
   @Override
@@ -112,7 +153,36 @@ public class Main extends GraphicalUserInterface {
   }
 
   @Override
+  protected State getCurrentState() {
+    return currentState;
+  }
+
+  @Override
+  protected void movePlayer(GraphicalUserInterface.Direction dir) {
+    if (currentState != State.RUNNING || gamePaused) {
+      return;
+    }
+    maze.executeMove(dir);
+    // If player has won level proceed to the next level
+    // or end game
+    if (maze.levelWonChecker()) {
+      endRec();
+      Maze newMaze = persistence.nextLevel(this);
+      if (newMaze != null) {
+        maze = newMaze;
+        startTimer(this.timeLeft);
+      }
+    }
+    // If recording add player move to recording
+    if (recorder != null) {
+      recorder.addMove(dir);
+    }
+  }
+
+  @Override
   protected void newGame(JLabel timeLeft) {
+    // Creates new game and initialised info
+    lvlNumber.setText("1");
     gamePaused = false;
     maze = persistence.newGame();
     currentState = State.RUNNING;
@@ -121,12 +191,35 @@ public class Main extends GraphicalUserInterface {
   }
 
   @Override
+  protected void loadGame(JLabel timeLeft) {
+    if (timer != null) {
+      timer.stop();
+    }
+    Maze newMaze = persistence.selectFile();
+
+    // If player canceled load game, continue game
+    if (newMaze == null) {
+      gamePaused = false;
+      if (timer != null) {
+        timer.start();
+      }
+      return;
+    }
+
+    // Loads game selected
+    maze = newMaze;
+    lvlNumber.setText("" + maze.getLevel());
+    startTimer(timeLeft);
+    currentState = State.RUNNING;
+  }
+
+  @Override
   protected void exitSaveGame() {
     if (currentState != State.RUNNING) {
       return;
     }
     timer.stop();
-    System.out.println("Save and exit");
+    // Asks if user wants to exit game or not
     int result = JOptionPane.showConfirmDialog(null,
             "Are you sure you want to quit? Your game will be saved", "Save & Exit Game",
             JOptionPane.YES_NO_OPTION,
@@ -140,9 +233,11 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void restartRound(JLabel timeLeft) {
-    currentState = State.RUNNING;
-    maze = persistence.restart();
-    startTimer(timeLeft);
+    // Only restarts if a game is already loaded
+    if (currentState == State.RUNNING) {
+      maze = persistence.restart();
+      startTimer(timeLeft);
+    }
   }
 
   @Override
@@ -152,18 +247,15 @@ public class Main extends GraphicalUserInterface {
       timer.stop();
     }
     Maze newMaze = replay.loadReplay();
+    // If user does not cancel replay load it
     if (newMaze != null) {
       maze = newMaze;
       currentState = State.REPLAYING;
       startTimer(timeLeft);
-    } else {
+    // Continue game is player does cancel
+    } else if (timer != null) {
       timer.start();
     }
-  }
-
-  public void stopReplaying(){
-    currentState = State.RUNNING;
-    replay = null;
   }
 
   @Override
@@ -183,48 +275,17 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void resumeGame() {
-    System.out.println("Resume the game");
     gamePaused = false;
   }
 
   @Override
   protected void pauseGame() {
-    System.out.println("Pauses the game");
     gamePaused = true;
   }
 
   @Override
-  protected void loadGame(JLabel timeLeft) {
-    if (timer != null) {
-      timer.stop();
-    }
-    Maze newMaze = persistence.selectFile();
-
-    if (newMaze == null) {
-      gamePaused = false;
-      if (timer != null) {
-        timer.start();
-      }
-      return;
-    }
-
-    maze = newMaze;
-    startTimer(timeLeft);
-    currentState = State.RUNNING;
-  }
-
-  @Override
-  protected void endRec() {
-    if (currentState == State.INITIAL || recorder == null) {
-      return;
-    }
-    recorder.record(maze);
-    recorder = null;
-  }
-
-  @Override
   protected void startRec() {
-    if (currentState == State.INITIAL || recorder != null) {
+    if (currentState == State.INITIAL || currentState == State.REPLAYING || recorder != null) {
       return;
     }
     recorder = new Record();
@@ -233,8 +294,12 @@ public class Main extends GraphicalUserInterface {
   }
 
   @Override
-  protected State getCurrentState() {
-    return currentState;
+  protected void endRec() {
+    if (currentState == State.INITIAL || currentState == State.REPLAYING || recorder == null) {
+      return;
+    }
+    recorder.record(maze);
+    recorder = null;
   }
 
   /**
@@ -257,9 +322,12 @@ public class Main extends GraphicalUserInterface {
     timer = new Timer(100, e -> {
 
       if (!gamePaused && currentState != State.REPLAYING) {
+        // Update JLabel to display correct time.
         maze.setTimeElapsed(timeElapsed);
         timeLeft.setText(String.valueOf(String.format("%.1f", timePerLevel - timeElapsed)));
         timeElapsed += 0.1f;
+
+        // Count increase every 0.1 seconds and enemies move every 0.5 seconds
         count++;
         if (count == 5) {
           count = 0;
@@ -267,6 +335,8 @@ public class Main extends GraphicalUserInterface {
         }
 
         float timeRemaining = timePerLevel - timeElapsed;
+        // Changes colour depending on how much time remains to give
+        // user a extra warning
         timeLeft.setForeground(Color.BLACK);
         if (timeRemaining < 30) {
           timeLeft.setForeground(new Color(227, 115, 14));
@@ -279,9 +349,11 @@ public class Main extends GraphicalUserInterface {
           currentState = State.GAME_OVER;
         }
 
+        // Updates renderer to animate character
         if (renderer.updateFrame(String.format("%.1f", timeElapsed))) {
           redraw();
         }
+      // Keeps timer going if replaying to have renderer working properly
       } else if (currentState == State.REPLAYING) {
         timeLeft.setText("REPLAYING");
         timeElapsed += 0.1f;
@@ -291,15 +363,6 @@ public class Main extends GraphicalUserInterface {
       }
     });
     timer.start();
-  }
-
-  public void moveEnemies() {
-    if (recorder != null) {
-      recorder.addBugMove();
-    }
-    if (maze.moveBugs()) {
-      currentState = State.GAME_OVER;
-    }
   }
 
 }
