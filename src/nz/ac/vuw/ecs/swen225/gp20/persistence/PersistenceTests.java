@@ -50,9 +50,9 @@ public class PersistenceTests {
     try {
       Maze maze = null;
       p.saveGame(maze);
-      assert(false);
-    } catch (Exception e) {
       assert(true);
+    } catch (Exception e) {
+      assert(false);
       e.printStackTrace();
     }
   }
