@@ -3,10 +3,9 @@ package test.nz.ac.vuw.ecs.swen225.gp20.monkey;
 import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
-import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import javax.json.JsonObject;
 
 import static test.nz.ac.vuw.ecs.swen225.gp20.monkey.FixedTests.toJSON;
 
@@ -32,21 +31,26 @@ public class MonkeyTest {
 
     @Test
     public void MonkeyTesting() {
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
+        int count = 0;
         while (true) {
             int rand = (int) (Math.random() * 4);
             switch (rand) {
                 case 0:
                     maze.executeMove(GraphicalUserInterface.Direction.DOWN);
+                    break;
                 case 1:
                     maze.executeMove(GraphicalUserInterface.Direction.UP);
+                    break;
                 case 2:
                     maze.executeMove(GraphicalUserInterface.Direction.LEFT);
+                    break;
                 case 3:
                     maze.executeMove(GraphicalUserInterface.Direction.RIGHT);
+                    break;
             }
         }
     }

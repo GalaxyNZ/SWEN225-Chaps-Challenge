@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
-import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 
-import javax.json.Json;
+import javax.json.*;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class FixedTests {
@@ -45,7 +45,7 @@ public class FixedTests {
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_";
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
 
         String moves = "";
 
@@ -103,7 +103,7 @@ public class FixedTests {
                         "|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|\n";
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -130,7 +130,7 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -161,7 +161,7 @@ public class FixedTests {
                         "|_|#|#|#|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -192,7 +192,7 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -223,7 +223,7 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -254,7 +254,7 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -284,7 +284,7 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -318,7 +318,7 @@ public class FixedTests {
 
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -349,7 +349,7 @@ public class FixedTests {
 
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -380,7 +380,7 @@ public class FixedTests {
 
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -412,7 +412,7 @@ public class FixedTests {
 
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -446,7 +446,7 @@ public class FixedTests {
 
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -469,12 +469,12 @@ public class FixedTests {
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_";
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
 
         String moves = "";
 
         String expected =
-                "|#|_|_|_|#|\n" +
+                "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n" +
                         "|_|_|X|_|_|\n" +
                         "|_|_|_|_|_|\n" +
@@ -501,7 +501,7 @@ public class FixedTests {
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_";
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
 
         String moves = "";
 
@@ -535,7 +535,7 @@ public class FixedTests {
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_";
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
 
 
        boolean catchError = false;
@@ -570,25 +570,28 @@ public class FixedTests {
         }
     }
 
-    public static JSONObject toJSON(String map) {
+    public static JsonObject toJSON(String map) {
         Scanner scan = new Scanner(map);
         scan.useDelimiter("\\|");
 
-        JSONObject test = new JSONObject();
-        test.put("level", 1);
-        test.put("xSize", scan.next());
-        test.put("ySize", scan.next());
-        test.put("tileInfo", scan.next());
-        test.put("numChips", scan.next());        scan.next();
-        test.put("SETBK", scan.next());           scan.next();
-        test.put("SETYK", scan.next());           scan.next();
-        test.put("SETRK", scan.next());           scan.next();
-        test.put("SETGK", scan.next());
+        HashMap<String, Integer> config = new HashMap();
+        JsonBuilderFactory factory = Json.createBuilderFactory(config);
+
+        JsonObjectBuilder test = factory.createObjectBuilder();
+        test.add("level", 1);
+        test.add("xSize", scan.next());
+        test.add("ySize", scan.next());
+        test.add("tileInfo", scan.next());
+        test.add("numChips", scan.next());        scan.next();
+        test.add("SETBK", scan.next());           scan.next();
+        test.add("SETYK", scan.next());           scan.next();
+        test.add("SETRK", scan.next());           scan.next();
+        test.add("SETGK", scan.next());
         scan.skip("\\|");
         scan.useDelimiter("\n");
 
-        test.put("board", scan.next());
+        test.add("board", scan.next());
 
-        return test; 
+        return test.build();
     }
 }
