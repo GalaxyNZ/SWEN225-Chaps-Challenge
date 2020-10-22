@@ -25,9 +25,9 @@ import org.json.simple.JSONObject;
 
 public class Persistence {
   Map<?, ?> map;
-  String levelPath = "src/nz/ac/vuw/ecs/swen225/gp20/files/levels/";
-  String loadPath = "src/nz/ac/vuw/ecs/swen225/gp20/files/";
-  String savePath = "src/nz/ac/vuw/ecs/swen225/gp20/files/saves/";
+  String levelPath = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/files/levels/";
+  String loadPath = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/files/";
+  String savePath = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/files/saves/";
   String selectedFile = "";
   int fileCount = 0;
 
