@@ -185,6 +185,7 @@ public class Main extends GraphicalUserInterface {
       Maze newMaze = persistence.nextLevel(this);
       if (newMaze != null) {
         maze = newMaze;
+        lvlNumber.setText("" + maze.getLevel());
         startTimer(this.timeLeft);
       }
     }
