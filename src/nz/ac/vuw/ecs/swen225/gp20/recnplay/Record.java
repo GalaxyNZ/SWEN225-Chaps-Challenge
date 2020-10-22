@@ -18,8 +18,6 @@ import java.util.Queue;
  */
 public class Record {
   public Queue<String> q = new ArrayDeque<>();
-  private Boolean isRecording = false;
-  private Object Persistence;
   private String fileName;
 
 
@@ -80,13 +78,6 @@ public class Record {
 
   public void addBugMove() {
     q.add("ENEMIES");
-  }
-
-  /**
-   * Stops recording the movement so we can save to Json file.
-   */
-  public void stopRecording() {
-    isRecording = false;
   }
 
   /**

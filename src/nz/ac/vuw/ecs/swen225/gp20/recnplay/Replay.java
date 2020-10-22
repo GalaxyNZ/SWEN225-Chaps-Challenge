@@ -20,7 +20,7 @@ public class Replay {
   Timer timer;
   float timeElapsed;
 
-  String path = "src/replays/";
+  String path = "src/nz/ac/vuw/ecs/swen225/gp20/recnplay/replays/";
 
   public Replay(Main main){
     this.main = main;
@@ -76,7 +76,7 @@ public class Replay {
   public Maze loadFile(String file) { //read
     Maze maze = null;
     Map<?, ?> map;
-    String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/levels/";
+    String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/files/saves/";
 
     try {
       // create Gson instance
