@@ -53,9 +53,7 @@ public class Replay {
    * @param delayTime to move in time
    */
   public void autoStep(int delayTime) {
-    timer = new Timer(delayTime, e -> {
-      iterateStep();
-    });
+    timer = new Timer(delayTime, e -> iterateStep());
     timer.start();
   }
 
@@ -116,7 +114,6 @@ public class Replay {
       Reader reader = Files.newBufferedReader(Paths.get(file));
       map = gson.fromJson(reader, Map.class);
       for (Map.Entry<?, ?> entry : map.entrySet()) {
-        String varName = entry.getKey().toString();
         System.out.println(entry.getKey() + " = " + entry.getValue());
 
       }
@@ -148,7 +145,7 @@ public class Replay {
       }
       moves = stringBuilder.toString();
     }
-    ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(moves.split("[,]")));
+    ArrayList<String> delimitedInput = new ArrayList<>(Arrays.asList(moves.split("[,]")));
     this.moves.addAll(delimitedInput);
   }
 
