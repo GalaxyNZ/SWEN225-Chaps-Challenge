@@ -607,7 +607,8 @@ public abstract class GraphicalUserInterface {
    *                 time left.
    */
   private void checkGameState(JLabel timeLeft) {
-    if (!asking && (getCurrentState() == Main.State.GAME_OVER || getCurrentState() == Main.State.GAME_WON)) {
+    if (!asking && (getCurrentState() == Main.State.GAME_OVER
+            || getCurrentState() == Main.State.GAME_WON)) {
       int result = JOptionPane.NO_OPTION;
       while (result == JOptionPane.NO_OPTION) {
         asking = true;
