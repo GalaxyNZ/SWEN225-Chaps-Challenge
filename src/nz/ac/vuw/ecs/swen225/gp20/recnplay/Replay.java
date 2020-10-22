@@ -1,67 +1,91 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
 import com.google.gson.Gson;
-import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
-import nz.ac.vuw.ecs.swen225.gp20.application.Main;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
+import javax.swing.JFileChooser;
+import javax.swing.Timer;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
+import nz.ac.vuw.ecs.swen225.gp20.application.Main;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
+/**
+ * Replay class.
+ * Responsible for moving things according to recorded movements.
+ *
+ * @author Philip
+ */
 public class Replay {
   Main main;
   ArrayList<String> moves;
   Timer timer;
   float timeElapsed;
 
-  String path = "src/replays/";
+  String path = "src/nz/ac/vuw/ecs/swen225/gp20/recnplay/replays/";
 
-  public Replay(Main main){
+  /**
+   * Constructor to move things in main.
+   *
+   * @param main from application to move entities
+   */
+  public Replay(Main main) {
     this.main = main;
-
   }
 
-  public Maze loadReplay(){
-    //main.persistence.loadFile();
-   // selectFile();
+  /**
+   * Clear movements for current recording and call selectFile.
+   *
+   * @return selected file
+   */
+  public Maze loadReplay() {
     moves = new ArrayList<>();
     return selectFile();
   }
 
-  public void autoStep(int delayTime){
-    //while (!moves.isEmpty()){
-    //  iterateStep();
-
-   // }
+  /**
+   * Automate movements in replay.
+   *
+   * @param delayTime to move in time
+   */
+  public void autoStep(int delayTime) {
     timer = new Timer(delayTime, e -> {
       iterateStep();
     });
     timer.start();
   }
 
-  public void iterateStep(){
-    if (!moves.isEmpty() && main.currentState == Main.State.REPLAYING){
+  /**
+   * Do one step at every call.
+   */
+  public void iterateStep() {
+    if (!moves.isEmpty() && main.currentState == Main.State.REPLAYING) {
       String nextMoves = moves.remove(0);
-      if (nextMoves.equals("ENEMIES")) main.moveEnemies();
-      else main.getMaze().executeMove(GraphicalUserInterface.Direction.valueOf(nextMoves));
-    }
-    else {
+      if (nextMoves.equals("ENEMIES")) {
+        main.moveEnemies();
+      } else {
+        main.getMaze().executeMove(GraphicalUserInterface.Direction.valueOf(nextMoves));
+      }
+    } else {
       main.stopReplaying();
-      if (timer != null) timer.stop();
+      if (timer != null) {
+        timer.stop();
+      }
       main.setTimeElapsed(timeElapsed);
     }
   }
 
+  /**
+   * Allow a file to be selected as long as it is a Json file.
+   *
+   * @return file
+   */
   public Maze selectFile() {
-
     String selectedFile = "";
-
     JFileChooser chooser = new JFileChooser(path);
     FileNameExtensionFilter filter = new FileNameExtensionFilter(
             "JSON files", "json");
@@ -70,13 +94,21 @@ public class Replay {
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       selectedFile += chooser.getSelectedFile().toString();
       return loadFile(selectedFile);
-    } else return null;
+    } else {
+      return null;
+    }
   }
 
+  /**
+   * Load selected file and read the Json.
+   *
+   * @param file as string from selected
+   * @return maze to be shown
+   */
   public Maze loadFile(String file) { //read
     Maze maze = null;
     Map<?, ?> map;
-    String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/nz.ac.vuw.ecs.swen225.gp20.persistence.levels/";
+    String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/files/saves/";
 
     try {
       // create Gson instance
@@ -101,19 +133,23 @@ public class Replay {
 
   }
 
-  public void loadMoves(String moves){
+  /**
+   * Load moves into ArrayList.
+   *
+   * @param moves from Json
+   */
+  public void loadMoves(String moves) {
     this.moves = new ArrayList<>();
     StringBuilder stringBuilder = new StringBuilder(moves);
-    for (int i = 0; i < moves.length(); i++){
-      if (moves.charAt(i) == '[' || moves.charAt(i) == ']' || moves.charAt(i) == '\n' || moves.charAt(i) == ' '){
+    for (int i = 0; i < moves.length(); i++) {
+      if (moves.charAt(i) == '[' || moves.charAt(i) == ']'
+              || moves.charAt(i) == '\n' || moves.charAt(i) == ' ') {
         stringBuilder.deleteCharAt(i);
       }
       moves = stringBuilder.toString();
     }
     ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(moves.split("[,]")));
-    for (String s : delimitedInput){
-      this.moves.add(s);
-    }
+    this.moves.addAll(delimitedInput);
   }
 
 }

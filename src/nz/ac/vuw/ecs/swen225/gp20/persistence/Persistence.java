@@ -28,9 +28,9 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 public class Persistence {
   Map<?, ?> map;
-  String levelPath = "src/nz/ac/vuw/ecs/swen225/gp20/files/levels/";
-  String loadPath = "src/nz/ac/vuw/ecs/swen225/gp20/files/";
-  String savePath = "src/nz/ac/vuw/ecs/swen225/gp20/files/saves/";
+  String levelPath = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/files/levels/";
+  String loadPath = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/files/";
+  String savePath = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/files/saves/";
   String selectedFile = "";
   int fileCount = 0;
 
@@ -203,7 +203,7 @@ public class Persistence {
     object.add("numChips", maze.chipsRemaining());
     object.add("time", maze.getTimeElapsed());
     object.add("level", maze.getLevel());
-    object.add("board", maze.toString());
+    object.add("board", maze.toStringPer());
 
     if (maze.getNumMonsters() > 0) {      //adds number of monsters if there is supposed to be some.
       object.add("numBugs", maze.getNumMonsters());

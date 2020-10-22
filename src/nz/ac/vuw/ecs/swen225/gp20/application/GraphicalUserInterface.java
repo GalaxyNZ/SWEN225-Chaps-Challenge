@@ -36,7 +36,9 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import nz.ac.vuw.ecs.swen225.gp20.maze.InfoTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
 
 public abstract class GraphicalUserInterface {
 
@@ -45,6 +47,7 @@ public abstract class GraphicalUserInterface {
   private static final int DEFAULT_DISPLAY_SIZE = 800;
   private static final int GAP_SIZE = 25;
   private static final int BORDER_SIZE = 25;
+  JPanel helpBox;
   private JLabel timeLeft;
   private JPanel inventory;
   private JLabel chipsRemaining;
@@ -64,8 +67,10 @@ public abstract class GraphicalUserInterface {
    */
   public void initialise() {
 
+    // Border for all the JPanels
     Border border = BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.GRAY);
 
+    // Drawing component to display board
     drawing = new JComponent() {
       protected void paintComponent(Graphics g) {
         redraw(g, getDrawingAreaDimension());
@@ -78,6 +83,8 @@ public abstract class GraphicalUserInterface {
 
     final JLabel timeText = new JLabel("Time");
     timeLeft = new JLabel("60.0");
+
+    setTimeLeft(timeLeft);
 
     JPanel time = new JPanel(gl);
     time.setBackground(Color.LIGHT_GRAY);
@@ -127,8 +134,10 @@ public abstract class GraphicalUserInterface {
       }
     });
 
-    JLabel lvlText = new JLabel("Level");
+    final JLabel lvlText = new JLabel("Level");
     JLabel lvlNumber = new JLabel("0");
+    
+    setLvlLabel(lvlNumber);
 
     JPanel lvl = new JPanel(gl);
     lvl.setBackground(Color.LIGHT_GRAY);
@@ -136,12 +145,12 @@ public abstract class GraphicalUserInterface {
     lvl.add(lvlText);
     lvl.add(lvlNumber);
 
+    // Creates Actions so the JButtons can use shortcut keys
     final Action moveUp = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
         movePlayer(Direction.UP);
-        updateInventory(inventory);
-        updateChips(chipsRemaining);
+        updateInfo();
       }
     };
 
@@ -149,8 +158,7 @@ public abstract class GraphicalUserInterface {
       @Override
       public void actionPerformed(ActionEvent e) {
         movePlayer(Direction.DOWN);
-        updateInventory(inventory);
-        updateChips(chipsRemaining);
+        updateInfo();
       }
     };
 
@@ -158,8 +166,7 @@ public abstract class GraphicalUserInterface {
       @Override
       public void actionPerformed(ActionEvent e) {
         movePlayer(Direction.RIGHT);
-        updateInventory(inventory);
-        updateChips(chipsRemaining);
+        updateInfo();
       }
     };
 
@@ -167,10 +174,10 @@ public abstract class GraphicalUserInterface {
       @Override
       public void actionPerformed(ActionEvent e) {
         movePlayer(Direction.LEFT);
-        updateInventory(inventory);
-        updateChips(chipsRemaining);
+        updateInfo();
       }
     };
+
 
     final Action startRecord = new AbstractAction() {
       @Override
@@ -230,6 +237,7 @@ public abstract class GraphicalUserInterface {
     stopRec.setFocusPainted(false);
     stopRec.addActionListener(stopRecord);
 
+    // Creates a JPanel for all the buttons
     JPanel buttons = new JPanel(new GridLayout(2, 3, 5, 5));
     buttons.setBackground(Color.LIGHT_GRAY);
     buttons.setBorder(border);
@@ -240,6 +248,7 @@ public abstract class GraphicalUserInterface {
     buttons.add(down);
     buttons.add(right);
 
+    // Resizes the buttons based on the frame size
     buttons.addComponentListener(new ComponentAdapter() {
       @Override
       public void componentResized(ComponentEvent e) {
@@ -271,6 +280,7 @@ public abstract class GraphicalUserInterface {
     im.put(KeyStroke.getKeyStroke("pressed SPACE"), "none");
     im.put(KeyStroke.getKeyStroke("released SPACE"), "none");
 
+    // Adds quick keys for the JButtons
     InputMap inputMap = buttons.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), "right");
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, true), "left");
@@ -286,7 +296,7 @@ public abstract class GraphicalUserInterface {
     buttons.getActionMap().put("stop", stopRecord);
     buttons.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
 
-
+    // Creates the Info JPanel to display the levels info on the right
     JPanel info = new JPanel(new GridLayout(5, 0, 0, 0));
     info.setBackground(Color.LIGHT_GRAY);
     info.setBorder(border);
@@ -296,8 +306,9 @@ public abstract class GraphicalUserInterface {
     info.add(items);
     info.add(buttons);
 
+    // Creates the main display for the frame
     JPanel display = new JPanel();
-    display.setBackground(new Color(0, 204, 0));
+    display.setBackground(new Color(31, 4, 56, 235));
     display.setPreferredSize(new Dimension(DEFAULT_DISPLAY_SIZE,
             (int) (DEFAULT_DISPLAY_SIZE / 1.6)));
     display.setLayout(null);
@@ -360,6 +371,7 @@ public abstract class GraphicalUserInterface {
     });
 
 
+    // Creates the Menu menu
     JMenu menu = new JMenu("Menu");
     menu.setPreferredSize(new Dimension(45, 15));
     menu.add(newGameOne);
@@ -385,6 +397,7 @@ public abstract class GraphicalUserInterface {
       redraw();
     });
 
+    // Creates the Options Menu
     JMenu options = new JMenu("Options");
     options.setPreferredSize(new Dimension(60, 15));
     options.add(resume);
@@ -403,14 +416,14 @@ public abstract class GraphicalUserInterface {
     });
 
     JMenuItem replay = new JMenuItem("Replay");
-    //KeyStroke rep = KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_DOWN_MASK);
-    //replay.setAccelerator(rep);
     replay.addActionListener(ev -> {
       replayGame(timeLeft);
       redraw();
     });
 
     JMenuItem iterateRep = new JMenuItem("Iterate Replay");
+    KeyStroke iterate = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, true);
+    iterateRep.setAccelerator(iterate);
     iterateRep.addActionListener(ev -> {
       iterateReplay();
       redraw();
@@ -420,13 +433,14 @@ public abstract class GraphicalUserInterface {
     autoRep.addActionListener(ev -> {
       boolean validInput = false;
       while (!validInput) {
-        String delayString = JOptionPane.showInputDialog(frame, "How quick do you want the replay speed to be? (100-1000 milliseconds)", null);
+        String delayString = JOptionPane.showInputDialog(frame,
+                "How quick do you want the replay speed to be? (100-1000 milliseconds)", null);
         if (delayString == null) {
           break;
         }
         if (isNumeric(delayString)) {
           int delay = Integer.parseInt(delayString);
-          if (delay > 100 && delay < 1000) {
+          if (delay >= 100 && delay <= 1000) {
             validInput = true;
             autoReplay(delay);
             redraw();
@@ -435,17 +449,79 @@ public abstract class GraphicalUserInterface {
       }
     });
 
+    // Creates the Record and Replay Menu
     JMenu replayMenu = new JMenu("Rec & Replay");
     menu.setPreferredSize(new Dimension(45, 15));
+    replayMenu.add(replay);
     replayMenu.add(recStart);
     replayMenu.add(recEnd);
-    replayMenu.add(replay);
-    replayMenu.add(iterateRep);
     replayMenu.add(autoRep);
+    replayMenu.add(iterateRep);
+
+    JPanel helpControls = new JPanel(new GridLayout(5, 1, 5, 5));
+    helpControls.add(new JLabel("   CONTROLS"));
+    JLabel arrow = new JLabel("     - Use the arrow keys or the buttons move");
+    JLabel rec = new JLabel("     - Click the right button (next to the UP arrow) "
+            + "to start recording");
+    JLabel stop = new JLabel("     - Click the left button (next to the UP arrow) "
+            + "to stop recording");
+    try {
+      final Class<?> thisClass = getClass();
+      Image img = ImageIO.read(thisClass.getResource("/assets/up.png"));
+      Image scaled = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+      arrow.setIcon(new ImageIcon(scaled));
+      img = ImageIO.read(thisClass.getResource("/assets/record.png"));
+      scaled = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+      rec.setIcon(new ImageIcon(scaled));
+      img = ImageIO.read(thisClass.getResource("/assets/stop_record.png"));
+      scaled = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+      stop.setIcon(new ImageIcon(scaled));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    helpControls.add(arrow);
+    helpControls.add(rec);
+    helpControls.add(stop);
+
+    JPanel helpInstructions = new JPanel(new GridLayout(5, 1, 5, 5));
+    helpInstructions.add(new JLabel("HOW TO PLAY"));
+    JLabel key = new JLabel("  - Doors can only be opened with the key corresponding to "
+            + "its colour");
+    JLabel token = new JLabel("  - Collect all the tokens to open up the exit and then leave");
+    try {
+      final Class<?> thisClass = getClass();
+      Image img = ImageIO.read(thisClass.getResource("/assets/RKey.png"));
+      Image scaled = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+      key.setIcon(new ImageIcon(scaled));
+      img = ImageIO.read(thisClass.getResource("/assets/Treasure.png"));
+      scaled = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+      token.setIcon(new ImageIcon(scaled));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    helpInstructions.add(token);
+    helpInstructions.add(key);
+    helpInstructions.add(new JLabel("  - Watch out for the enemies, they can kill you"));
+
+    helpBox = new JPanel(new GridLayout(1, 2, 5, 5));
+    helpBox.setPreferredSize(new Dimension(1000, 200));
+    helpBox.add(helpControls);
+    helpBox.add(helpInstructions);
+
+    JMenuItem showHelp = new JMenuItem("Show Help");
+    showHelp.addActionListener(new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(frame, helpBox, "Help", JOptionPane.PLAIN_MESSAGE);
+      }
+    });
 
     JMenu help = new JMenu("Help");
     help.setPreferredSize(new Dimension(45, 15));
+    help.add(showHelp);
 
+    // creates the Menu at the top and adds all menu items
     JMenuBar controls = new JMenuBar();
     controls.add(menu);
     controls.add(options);
@@ -487,6 +563,7 @@ public abstract class GraphicalUserInterface {
       }
     });
 
+    // Sets the initial frame and adds all components
     frame.setMinimumSize(new Dimension(DEFAULT_DISPLAY_SIZE, (int) (DEFAULT_DISPLAY_SIZE / 1.6)));
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setLayout(new BorderLayout());
@@ -497,10 +574,37 @@ public abstract class GraphicalUserInterface {
     frame.setVisible(true);
   }
 
-  protected abstract void restartRound(JLabel timeLeft);
+  /**
+   * Updates the current info and checks if
+   * info should be displayed.
+   */
+  private void updateInfo() {
+    updateInventory(inventory);
+    updateChips(chipsRemaining);
+    redraw();
+    if (getCurrentTile() instanceof InfoTile) {
+      JOptionPane.showMessageDialog(frame, helpBox, "Help", JOptionPane.PLAIN_MESSAGE);
+    }
+  }
 
-  protected abstract void autoReplay(int delay);
+  /**
+   * Sets the JLabel to display level number.
+   *
+   * @param lvlNumber is JLabel that will be the
+   *                  result of the step.
+   */
+  protected abstract void setLvlLabel(JLabel lvlNumber);
 
+  /**
+   * Checks the current game state to determine
+   * if the game is over and whether they have
+   * won. If game is over it ask if they want
+   * to play again and either restarts the
+   * level/game or closes the game.
+   *
+   * @param timeLeft is the JLabel to display
+   *                 time left.
+   */
   private void checkGameState(JLabel timeLeft) {
     if (getCurrentState() == Main.State.GAME_OVER || getCurrentState() == Main.State.GAME_WON) {
       int result = JOptionPane.NO_OPTION;
@@ -528,14 +632,24 @@ public abstract class GraphicalUserInterface {
     }
   }
 
-  protected abstract Main.State getCurrentState();
-
-  protected abstract void iterateReplay();
-
+  /**
+   * Updates the JLabel to display the current number
+   * of chips left to collect on the GUI.
+   *
+   * @param chipsRemaining is a JLabel that displays the
+   *                       number of chips remaining.
+   */
   private void updateChips(JLabel chipsRemaining) {
     chipsRemaining.setText(Integer.toString(getChipsRemaining()));
   }
 
+  /**
+   * Updates the inventory in the GUI by drawing
+   * the items on the JPanel, scaling applies.
+   *
+   * @param inventory is a JPanel that displays
+   *                  the players inventory.
+   */
   private void updateInventory(JPanel inventory) {
     ArrayList<Item> items = getItems();
     if (items == null) {
@@ -546,7 +660,8 @@ public abstract class GraphicalUserInterface {
       if (i < items.size()) {
         String itemColour = getItems().get(i).getColor();
         try {
-          Image img = ImageIO.read(getClass().getResource("/assets/" + itemColour + ".png"));
+          final Class<?> thisClass = getClass();
+          Image img = ImageIO.read(thisClass.getResource("/assets/" + itemColour + "Key.png"));
           Image scaled = img.getScaledInstance(components[i].getWidth(),
                   components[i].getHeight(), java.awt.Image.SCALE_SMOOTH);
           if (components[i] instanceof JLabel) {
@@ -579,6 +694,53 @@ public abstract class GraphicalUserInterface {
    * @param d dimension of the drawing area.
    */
   protected abstract void redraw(Graphics g, Dimension d);
+
+  /**
+   * Sets the JLabel in main to the JLabel in
+   * the GUI so it can be update frequently.
+   *
+   * @param timeLeft is the JLabel to display
+   *                 time left.
+   */
+  protected abstract void setTimeLeft(JLabel timeLeft);
+
+  /**
+   * Gets the current tile that the player is standing
+   * on at the time of being called.
+   *
+   * @return the current tile that the player is on
+   */
+  protected abstract Tile getCurrentTile();
+
+  /**
+   * Restarts the game at the current level.
+   *
+   * @param timeLeft is the JLabel to display
+   *                 time left.
+   */
+  protected abstract void restartRound(JLabel timeLeft);
+
+  /**
+   * Replays the recording automatically so user
+   * doesn't have to iterate through each step.
+   *
+   * @param delay is the time in milliseconds
+   *              that it will replay each step.
+   */
+  protected abstract void autoReplay(int delay);
+
+  /**
+   * Gets the current state of the game from main.
+   *
+   * @return the current state.
+   */
+  protected abstract Main.State getCurrentState();
+
+  /**
+   * Iterates through one movement in when
+   * replaying.
+   */
+  protected abstract void iterateReplay();
 
   /**
    * Replays the game from a save.
@@ -702,8 +864,18 @@ public abstract class GraphicalUserInterface {
     return drawing.getSize();
   }
 
+  /**
+   * Checks if the current string is a number.
+   * Used when checking user input.
+   *
+   * @param str is a String that is being checked
+   *            if it is a number.
+   * @return true if str is a number.
+   */
   public static boolean isNumeric(String str) {
-    if (str == null || str.isEmpty()) return false;
+    if (str == null || str.isEmpty()) {
+      return false;
+    }
     try {
       Integer.parseInt(str);
       return true;
