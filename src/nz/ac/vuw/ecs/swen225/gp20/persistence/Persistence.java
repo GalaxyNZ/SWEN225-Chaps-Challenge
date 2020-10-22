@@ -47,6 +47,11 @@ public class Persistence {
     }
   }
 
+  /**
+   * gets last saved game to load.
+   *
+   * @return last played save.
+   */
   public Maze getLastLevel(){
     File directory = new File(savePath);
     String[] list = directory.list();
