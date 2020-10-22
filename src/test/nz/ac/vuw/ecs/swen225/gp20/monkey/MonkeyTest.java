@@ -33,10 +33,11 @@ public class MonkeyTest {
     public void MonkeyTesting() {
         JsonObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJsonString(test.toString());
+        //Maze maze = p.loadJsonString(test.toString());
+        Maze maze = p.newGame();
 
         int count = 0;
-        while (true) {
+        while (!maze.levelWonChecker()) {
             int rand = (int) (Math.random() * 4);
             switch (rand) {
                 case 0:
@@ -52,7 +53,9 @@ public class MonkeyTest {
                     maze.executeMove(GraphicalUserInterface.Direction.RIGHT);
                     break;
             }
+        count++;
         }
+        System.out.println(count);
     }
 
 }
