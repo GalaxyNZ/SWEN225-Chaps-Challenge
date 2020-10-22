@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.Record;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.Replay;
@@ -158,6 +159,11 @@ public class Main extends GraphicalUserInterface {
   }
 
   @Override
+  protected Tile getCurrentTile() {
+    return maze.getBoardTile(maze.getPlayerLocation());
+  }
+
+  @Override
   protected void movePlayer(GraphicalUserInterface.Direction dir) {
     if (currentState != State.RUNNING || gamePaused) {
       return;
@@ -234,7 +240,9 @@ public class Main extends GraphicalUserInterface {
   @Override
   protected void restartRound(JLabel timeLeft) {
     // Only restarts if a game is already loaded
-    if (currentState == State.RUNNING) {
+    if (currentState == State.RUNNING || currentState == State.GAME_OVER
+            || currentState == State.GAME_WON) {
+      currentState = State.RUNNING;
       maze = persistence.restart();
       startTimer(timeLeft);
     }
@@ -312,7 +320,7 @@ public class Main extends GraphicalUserInterface {
    */
   public void startTimer(JLabel timeLeft) {
     // Resets timer if method is called again
-    if (timeElapsed > 0f) {
+    if (timeElapsed > 0f || timer != null) {
       timer.stop();
       timeElapsed = 0f;
     }
