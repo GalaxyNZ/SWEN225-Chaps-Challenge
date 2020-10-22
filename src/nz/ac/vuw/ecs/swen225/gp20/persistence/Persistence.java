@@ -25,7 +25,9 @@ import org.json.simple.JSONObject;
 
 public class Persistence {
   Map<?, ?> map;
-  String path = "src/files.levels/";
+  String levelPath = "src/nz/ac/vuw/ecs/swen225/gp20/files/levels/";
+  String loadPath = "src/nz/ac/vuw/ecs/swen225/gp20/files/";
+  String savePath = "src/nz/ac/vuw/ecs/swen225/gp20/files/saves/";
   String selectedFile = "";
   int fileCount = 0;
 
@@ -34,7 +36,7 @@ public class Persistence {
    * initializes fileCount to end game.
    */
   public Persistence() {
-    File directory = new File(path);
+    File directory = new File(loadPath);
     String[] list = directory.list();
     if (list != null) {
       fileCount = list.length;
@@ -48,7 +50,7 @@ public class Persistence {
    */
   public Maze selectFile() {
 
-    JFileChooser chooser = new JFileChooser(path);
+    JFileChooser chooser = new JFileChooser(loadPath);
     FileNameExtensionFilter filter = new FileNameExtensionFilter(
             "JSON files", "json");
     chooser.setFileFilter(filter);
@@ -81,7 +83,7 @@ public class Persistence {
   public Maze nextLevel(Main main) {
     int level = main.getMaze().getLevel();
     if (level < fileCount) {
-      selectedFile = path + "level" + (level + 1) + ".json";
+      selectedFile = levelPath + "level" + (level + 1) + ".json";
       return loadFile(selectedFile);
     }
     main.gameWon();
@@ -106,7 +108,7 @@ public class Persistence {
    * @return selected file.
    */
   public Maze newGame() {
-    selectedFile = path + "level1.json";
+    selectedFile = levelPath + "level1.json";
     return loadFile(selectedFile);
   }
 
@@ -234,7 +236,7 @@ public class Persistence {
       int saveLength = savedGame.length();
       stringWriter.close();
 
-      Writer writer = new BufferedWriter(new FileWriter(path + fileName + ".json"));
+      Writer writer = new BufferedWriter(new FileWriter(savePath + fileName + ".json"));
 
       for (int i = 0; i < saveLength; i++) {
         char next = savedGame.charAt(i);

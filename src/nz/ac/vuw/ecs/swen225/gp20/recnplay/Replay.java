@@ -76,7 +76,7 @@ public class Replay {
   public Maze loadFile(String file) { //read
     Maze maze = null;
     Map<?, ?> map;
-    String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/files.levels/";
+    String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/nz.ac.vuw.ecs.swen225.gp20.persistence.levels/";
 
     try {
       // create Gson instance
