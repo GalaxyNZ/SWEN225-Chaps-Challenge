@@ -460,7 +460,7 @@ public abstract class GraphicalUserInterface {
 
     JPanel helpControls = new JPanel(new GridLayout(5, 1, 5, 5));
     helpControls.add(new JLabel("   CONTROLS"));
-    JLabel arrow = new JLabel("     - User the arrow keys or the buttons move");
+    JLabel arrow = new JLabel("     - Use the arrow keys or the buttons move");
     JLabel rec = new JLabel("     - Click the right button (next to the UP arrow) "
             + "to start recording");
     JLabel stop = new JLabel("     - Click the left button (next to the UP arrow) "
