@@ -481,14 +481,18 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
         Persistence p = new Persistence();
+
+        boolean catchError = false;
         try {
             Maze maze = p.loadJsonString(test.toString());
         }
-        catch (NullPointerException ignored) {
+        catch (NullPointerException e) {
             System.out.println("Null pointer thrown and caught.");
+            catchError = true;
         }
+        assertTrue(catchError);
     }
-/*
+
     @Test
     public void t15_incorrectSize() {
         String map =  "7|32|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
@@ -509,20 +513,19 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
+        boolean catchError = false;
         try {
             Persistence p = new Persistence();
             Maze maze = p.loadJsonString(test.toString());
 
-
             assertEquals(expected, maze.toString());
         } catch (IndexOutOfBoundsException e){
-            assert true;
+            catchError = true;
         }
 
-        fail();
+        assertTrue(catchError);
     }
 
- */
 
     @Test
     public void t16_noChap() {
@@ -535,18 +538,17 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
 
-        String moves = "";
 
-        String expected =
-                "|#|_|_|_|#|\n" +
-                        "|_|_|_|_|_|\n" +
-                        "|_|_|_|_|_|\n" +
-                        "|_|_|_|_|_|\n" +
-                        "|_|_|_|_|_|\n";
+       boolean catchError = false;
+        try {
+            Persistence p = new Persistence();
+            Maze maze = p.loadJsonString(test.toString());
+        }
+        catch (AssertionError e) {
+            catchError = true;
+        }
 
-        Persistence p = new Persistence();
-        Maze maze = p.loadJsonString(test.toString());
-
+        assertTrue(catchError);
 
     }
 
