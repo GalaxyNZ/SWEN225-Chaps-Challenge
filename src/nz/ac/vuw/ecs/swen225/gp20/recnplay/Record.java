@@ -1,10 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Queue;
@@ -49,7 +45,8 @@ public class Record {
       int saveLength = savedGame.length();
       stringWriter.close();
 
-      Writer writer = new BufferedWriter(new FileWriter(fileName(fileName) + ".json"));
+      FileOutputStream fileStream = new FileOutputStream(fileName(fileName));
+      Writer writer = new OutputStreamWriter(fileStream, "UTF-8");
 
       for (int i = 0; i < saveLength; i++) {
         char next = savedGame.charAt(i);
@@ -93,6 +90,6 @@ public class Record {
    * @return
    */
   public String fileName(String fileName) {
-    return "src/nz/ac/vuw/ecs/swen225/gp20/recnplay/replays/" + fileName + "_moves";
+    return "src/nz/ac/vuw/ecs/swen225/gp20/recnplay/replays/" + fileName + "_moves.json";
   }
 }
