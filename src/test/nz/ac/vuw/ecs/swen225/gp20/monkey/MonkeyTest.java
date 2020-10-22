@@ -34,8 +34,18 @@ public class MonkeyTest {
         JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         //Maze maze = p.loadJsonString(test.toString());
-        Maze maze = p.newGame();
 
+        //TODO: make multiple boards and test them all.
+
+        Maze maze = p.newGame();
+        MonkeyTestingLoop(maze);
+
+        maze = p.loadLevelTwo();
+        MonkeyTestingLoop(maze);
+
+    }
+
+    private void MonkeyTestingLoop(Maze maze) {
         int count = 0;
         while (!maze.levelWonChecker()) {
             int rand = (int) (Math.random() * 4);
@@ -53,7 +63,7 @@ public class MonkeyTest {
                     maze.executeMove(GraphicalUserInterface.Direction.RIGHT);
                     break;
             }
-        count++;
+            count++;
         }
         System.out.println(count);
     }
