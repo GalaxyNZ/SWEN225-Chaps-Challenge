@@ -270,4 +270,8 @@ public class Persistence {
     return dateFormat.format(date);
   }
 
+  public Maze loadLevelTwo() {
+    return loadFile(levelPath + "level2.json");
+  }
+
 }
