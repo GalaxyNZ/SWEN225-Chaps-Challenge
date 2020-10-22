@@ -39,7 +39,7 @@ public class Persistence {
    * initializes fileCount to end game.
    */
   public Persistence() {
-    File directory = new File(loadPath);
+    File directory = new File(levelPath);
     String[] list = directory.list();
     if (list != null) {
       fileCount = list.length;
