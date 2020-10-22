@@ -426,7 +426,7 @@ public abstract class GraphicalUserInterface {
         }
         if (isNumeric(delayString)) {
           int delay = Integer.parseInt(delayString);
-          if (delay > 100 && delay < 1000) {
+          if (delay >= 100 && delay <= 1000) {
             validInput = true;
             autoReplay(delay);
             redraw();

@@ -140,13 +140,18 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void restartRound(JLabel timeLeft) {
-    currentState = State.RUNNING;
-    maze = persistence.restart();
-    startTimer(timeLeft);
+    if (currentState == State.RUNNING) {
+      Maze newMaze = persistence.restart();
+      maze = persistence.restart();
+      startTimer(timeLeft);
+    }
   }
 
   @Override
   protected void replayGame(JLabel timeLeft) {
+    if (currentState == State.REPLAYING) {
+      return;
+    }
     replay = new Replay(this);
     if (timer != null) {
       timer.stop();
@@ -156,12 +161,15 @@ public class Main extends GraphicalUserInterface {
       maze = newMaze;
       currentState = State.REPLAYING;
       startTimer(timeLeft);
-    } else {
+    } else if (timer != null) {
       timer.start();
     }
   }
 
   public void stopReplaying(){
+    if (currentState == State.REPLAYING) {
+      return;
+    }
     currentState = State.RUNNING;
     replay = null;
   }
@@ -294,7 +302,7 @@ public class Main extends GraphicalUserInterface {
   }
 
   public void moveEnemies() {
-    if (recorder != null) {
+    if (recorder != null && maze.getNumMonsters() > 0) {
       recorder.addBugMove();
     }
     if (maze.moveBugs()) {
