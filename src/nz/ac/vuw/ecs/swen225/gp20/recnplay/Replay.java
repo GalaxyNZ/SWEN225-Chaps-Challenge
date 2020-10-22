@@ -82,7 +82,7 @@ public class Replay {
   /**
    * Allow a file to be selected as long as it is a Json file.
    *
-   * @return file
+   * @return selectedFile
    */
   public Maze selectFile() {
     String selectedFile = "";
