@@ -480,13 +480,12 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        Persistence p = new Persistence();
-
         boolean catchError = false;
         try {
+            Persistence p = new Persistence();
             Maze maze = p.loadJsonString(test.toString());
         }
-        catch (NullPointerException e) {
+        catch (IndexOutOfBoundsException|NullPointerException e) {
             System.out.println("Null pointer thrown and caught.");
             catchError = true;
         }
