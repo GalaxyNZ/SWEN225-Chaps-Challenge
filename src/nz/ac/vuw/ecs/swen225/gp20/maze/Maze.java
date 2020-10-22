@@ -30,7 +30,11 @@ public class Maze {
 	public Maze (Map<?,?> boardMap) {
 		board = new Board(boardMap);
 		player = new Player(board.findPlayer(), board.getChips());
-		levelNumber = (int) Double.parseDouble(boardMap.get("level").toString());
+		if (boardMap.containsKey("level")) {
+			levelNumber = (int) Double.parseDouble(boardMap.get("level").toString());
+		} else {
+			levelNumber = 0;
+		}
 		for(Item i : board.getLoadedInv()) { //Runs 0 times for a new game, will construct a players inventory from a loaded inventory.
 			player.addToInv(i);
 		}

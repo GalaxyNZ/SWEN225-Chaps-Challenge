@@ -34,7 +34,7 @@ public class MonkeyTest {
     public void MonkeyTesting() {
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();
-        Maze maze = p.loadJSONString(test.toString());
+        Maze maze = p.loadJsonString(test.toString());
 
         while (true) {
             int rand = (int) (Math.random() * 4);

@@ -471,6 +471,15 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
 
+        String moves = "";
+
+        String expected =
+                "|#|_|_|_|#|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|X|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
+
         Persistence p = new Persistence();
         try {
             Maze maze = p.loadJSONString(test.toString());
@@ -525,6 +534,15 @@ public class FixedTests {
                 + "_|_|_|_|_";
 
         JSONObject test = toJSON(map);
+
+        String moves = "";
+
+        String expected =
+                "|#|_|_|_|#|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n" +
+                        "|_|_|_|_|_|\n";
 
         Persistence p = new Persistence();
 
