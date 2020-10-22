@@ -1,10 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.Gson;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -12,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javax.json.Json;
+import javax.json.JsonBuilderFactory;
+import javax.json.JsonObjectBuilder;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
@@ -24,7 +25,7 @@ import org.json.simple.JSONObject;
 
 public class Persistence {
   Map<?, ?> map;
-  String path = "src/nz/ac/vuw/ecs/swen225/gp20/persistence/levels/";
+  String path = "src/files.levels/";
   String selectedFile = "";
   int fileCount = 0;
 
@@ -183,20 +184,37 @@ public class Persistence {
    * @return file name.
    */
   public String saveGame(Maze maze) {
+    HashMap<String, Integer> config = new HashMap();
+    JsonBuilderFactory factory = Json.createBuilderFactory(config);
 
-    JSONObject file = new JSONObject();
+    JsonObjectBuilder object = factory.createObjectBuilder();
 
-    file.put("xSize", maze.getBoardSize().getX());
-    file.put("ySize", maze.getBoardSize().getY());
-    file.put("tileInfo", "something");
-    file.put("SETGK", 2);
-    file.put("SETBK", 1);
-    file.put("SETYK", 1);
-    file.put("SETRK", 1);
-    file.put("numChips", maze.chipsRemaining());
-    file.put("time", maze.getTimeElapsed());
-    file.put("level", maze.getLevel());
-    file.put("board", maze.toString());
+    object.add("xSize", maze.getBoardSize().getX());
+    object.add("ySize", maze.getBoardSize().getY());
+    object.add("tileInfo", "something");
+    object.add("SETGK", 2);
+    object.add("SETBK", 1);
+    object.add("SETYK", 1);
+    object.add("SETRK", 1);
+    object.add("numChips", maze.chipsRemaining());
+    object.add("time", maze.getTimeElapsed());
+    object.add("level", maze.getLevel());
+    object.add("board", maze.toString());
+
+    if (maze.getNumMonsters() > 0) {
+      object.add("numBugs", maze.getNumMonsters());
+    }
+
+    for (HashMap<Integer, ArrayList<String>> map : maze.getBugMoves()) {
+      for (Map.Entry<Integer, ArrayList<String>> monster : map.entrySet()) {
+        StringBuilder moves = new StringBuilder();
+        for (String move : monster.getValue()) {
+          moves.append(move);
+          moves.append("|");
+        }
+        object.add("enemy" + monster.getKey(), moves.toString());
+      }
+    }
     ArrayList<Item> inv = maze.getPlayerInv();
     if (!inv.isEmpty()) {
       StringBuilder inventory = new StringBuilder();
@@ -205,41 +223,30 @@ public class Persistence {
           inventory.append(i.getColor()).append("|");
         }
       }
-      file.put("inventory", inventory.toString());
+      object.add("inventory", inventory.toString());
     }
-    if (maze.getNumMonsters() > 0) {
-      file.put("numBugs", maze.getNumMonsters());
-    }
-    for (HashMap<Integer, ArrayList<String>> map : maze.getBugMoves()) {
-      for (Map.Entry<Integer, ArrayList<String>> monster : map.entrySet()) {
-        StringBuilder moves = new StringBuilder();
-        for (String move : monster.getValue()) {
-          moves.append(move);
-          moves.append("|");
-        }
-        file.put("enemy" + monster.getKey(), moves.toString());
-      }
-    }
-
 
     String fileName = fileName();
-    try (FileWriter saveFile = new FileWriter(path + fileName + ".json")) {
-      String fileString = file.toJSONString();
-      for (int i = 0; i < fileString.length(); i++) {
-        char next = fileString.charAt(i);
-        if (next == ',' || next == '{') {
-          saveFile.write(next + "\n\t");
-        } else if (next == '}') {
-          saveFile.write("\n" + next);
-        } else {
-          saveFile.write(next);
-        }
+    try {
+      Writer stringWriter = new StringWriter();
+      Json.createWriter(stringWriter).write(object.build());
+      String savedGame = stringWriter.toString();
+      int saveLength = savedGame.length();
+      stringWriter.close();
+
+      Writer writer = new BufferedWriter(new FileWriter(path + fileName + ".json"));
+
+      for (int i = 0; i < saveLength; i++) {
+        char next = savedGame.charAt(i);
+        if (next == ',' || next == '{') writer.write(next + "\n\t");
+        else if (next == '}') writer.write("\n" + next);
+        else writer.write(next);
       }
 
-      saveFile.flush();
+      writer.close();
 
     } catch (IOException e) {
-      e.printStackTrace();
+      System.out.printf("Error saving game: " + e);
     }
     return fileName;
   }
