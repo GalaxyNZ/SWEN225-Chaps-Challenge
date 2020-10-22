@@ -76,7 +76,7 @@ public class Record {
   /**
    * Start the recording.
    *
-   * @param maze from persistance to get maze
+   * @param maze from persistence to get maze
    */
   public void startRec(Maze maze) {
     Persistence persistence = new Persistence();
