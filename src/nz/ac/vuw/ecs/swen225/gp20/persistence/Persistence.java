@@ -58,7 +58,9 @@ public class Persistence {
     String[] list = directory.list();
     if (list != null) {
       saveCount = list.length;
-      return loadFile(savePath + list[saveCount-1]);
+      if (saveCount > 0) {
+        return loadFile(savePath + list[saveCount - 1]);
+      }
     }
     return null;
   }
