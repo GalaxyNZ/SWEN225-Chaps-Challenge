@@ -234,7 +234,9 @@ public class Main extends GraphicalUserInterface {
   @Override
   protected void restartRound(JLabel timeLeft) {
     // Only restarts if a game is already loaded
-    if (currentState == State.RUNNING) {
+    if (currentState == State.RUNNING || currentState == State.GAME_OVER
+            || currentState == State.GAME_WON) {
+      currentState = State.RUNNING;
       maze = persistence.restart();
       startTimer(timeLeft);
     }
@@ -312,7 +314,7 @@ public class Main extends GraphicalUserInterface {
    */
   public void startTimer(JLabel timeLeft) {
     // Resets timer if method is called again
-    if (timeElapsed > 0f) {
+    if (timeElapsed > 0f || timer != null) {
       timer.stop();
       timeElapsed = 0f;
     }

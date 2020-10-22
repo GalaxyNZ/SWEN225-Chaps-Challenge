@@ -582,7 +582,7 @@ public abstract class GraphicalUserInterface {
         String itemColour = getItems().get(i).getColor();
         try {
           final Class<?> thisClass = getClass();
-          Image img = ImageIO.read(thisClass.getResource("/assets/" + itemColour + ".png"));
+          Image img = ImageIO.read(thisClass.getResource("/assets/" + itemColour + "Key.png"));
           Image scaled = img.getScaledInstance(components[i].getWidth(),
                   components[i].getHeight(), java.awt.Image.SCALE_SMOOTH);
           if (components[i] instanceof JLabel) {
