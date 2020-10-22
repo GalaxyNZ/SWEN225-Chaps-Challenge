@@ -30,7 +30,7 @@ public class MonkeyTest {
             "_|_|_|_|_|#|#|#|#|#|#|#|_|_|_|_|_|" +
             "_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|";
 
-
+    @Test
     public void MonkeyTesting() {
         JSONObject test = toJSON(map);
         Persistence p = new Persistence();

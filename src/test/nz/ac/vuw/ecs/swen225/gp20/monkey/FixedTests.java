@@ -480,11 +480,16 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        Persistence p = new Persistence();
+        boolean catchError = false;
         try {
+            Persistence p = new Persistence();
             Maze maze = p.loadJsonString(test.toString());
         }
-        catch (NullPointerException ignored) {}
+        catch (IndexOutOfBoundsException|NullPointerException e) {
+            System.out.println("Null pointer thrown and caught.");
+            catchError = true;
+        }
+        assertTrue(catchError);
     }
 
     @Test
@@ -501,19 +506,29 @@ public class FixedTests {
         String moves = "";
 
         String expected =
-                "|#|_|_|_|#|\n" +
+                "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n" +
                         "|_|_|X|_|_|\n" +
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        Persistence p = new Persistence();
-        Maze maze = p.loadJsonString(test.toString());
+        boolean catchError = false;
+        try {
+            Persistence p = new Persistence();
+            Maze maze = p.loadJsonString(test.toString());
+
+            assertEquals(expected, maze.toString());
+        } catch (IndexOutOfBoundsException e){
+            catchError = true;
+        }
+
+        assertTrue(catchError);
     }
 
+
     @Test
-    public void t15_noChap() {
-        String map =  "7|32|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
+    public void t16_noChap() {
+        String map =  "5|5|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_|"
@@ -522,20 +537,18 @@ public class FixedTests {
 
         JSONObject test = toJSON(map);
 
-        String moves = "";
 
-        String expected =
-                "|#|_|_|_|#|\n" +
-                        "|_|_|_|_|_|\n" +
-                        "|_|_|_|_|_|\n" +
-                        "|_|_|_|_|_|\n" +
-                        "|_|_|_|_|_|\n";
-
-        Persistence p = new Persistence();
+       boolean catchError = false;
         try {
+            Persistence p = new Persistence();
             Maze maze = p.loadJsonString(test.toString());
         }
-        catch (NullPointerException ignored) {}
+        catch (AssertionError e) {
+            catchError = true;
+        }
+
+        assertTrue(catchError);
+
     }
 
     public void gameplayLoop(Maze maze, String[] moves) {
@@ -543,12 +556,16 @@ public class FixedTests {
             switch (s) {
                 case "s":
                     maze.executeMove(GraphicalUserInterface.Direction.DOWN);
+                    break;
                 case "w":
                     maze.executeMove(GraphicalUserInterface.Direction.UP);
+                    break;
                 case "a":
                     maze.executeMove(GraphicalUserInterface.Direction.LEFT);
+                    break;
                 case "d":
                     maze.executeMove(GraphicalUserInterface.Direction.RIGHT);
+                    break;
             }
         }
     }
@@ -558,6 +575,7 @@ public class FixedTests {
         scan.useDelimiter("\\|");
 
         JSONObject test = new JSONObject();
+        test.put("level", 1);
         test.put("xSize", scan.next());
         test.put("ySize", scan.next());
         test.put("tileInfo", scan.next());
