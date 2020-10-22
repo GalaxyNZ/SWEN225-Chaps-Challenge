@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.Record;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.Replay;
@@ -155,6 +156,11 @@ public class Main extends GraphicalUserInterface {
   @Override
   protected State getCurrentState() {
     return currentState;
+  }
+
+  @Override
+  protected Tile getCurrentTile() {
+    return maze.getBoardTile(maze.getPlayerLocation());
   }
 
   @Override

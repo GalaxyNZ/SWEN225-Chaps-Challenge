@@ -36,7 +36,9 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import nz.ac.vuw.ecs.swen225.gp20.maze.InfoTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
 
 public abstract class GraphicalUserInterface {
 
@@ -45,6 +47,7 @@ public abstract class GraphicalUserInterface {
   private static final int DEFAULT_DISPLAY_SIZE = 800;
   private static final int GAP_SIZE = 25;
   private static final int BORDER_SIZE = 25;
+  JPanel helpBox;
   private JLabel timeLeft;
   private JPanel inventory;
   private JLabel chipsRemaining;
@@ -131,7 +134,7 @@ public abstract class GraphicalUserInterface {
       }
     });
 
-    JLabel lvlText = new JLabel("Level");
+    final JLabel lvlText = new JLabel("Level");
     JLabel lvlNumber = new JLabel("0");
     
     setLvlLabel(lvlNumber);
@@ -147,8 +150,7 @@ public abstract class GraphicalUserInterface {
       @Override
       public void actionPerformed(ActionEvent e) {
         movePlayer(Direction.UP);
-        updateInventory(inventory);
-        updateChips(chipsRemaining);
+        updateInfo();
       }
     };
 
@@ -156,8 +158,7 @@ public abstract class GraphicalUserInterface {
       @Override
       public void actionPerformed(ActionEvent e) {
         movePlayer(Direction.DOWN);
-        updateInventory(inventory);
-        updateChips(chipsRemaining);
+        updateInfo();
       }
     };
 
@@ -165,8 +166,7 @@ public abstract class GraphicalUserInterface {
       @Override
       public void actionPerformed(ActionEvent e) {
         movePlayer(Direction.RIGHT);
-        updateInventory(inventory);
-        updateChips(chipsRemaining);
+        updateInfo();
       }
     };
 
@@ -174,10 +174,10 @@ public abstract class GraphicalUserInterface {
       @Override
       public void actionPerformed(ActionEvent e) {
         movePlayer(Direction.LEFT);
-        updateInventory(inventory);
-        updateChips(chipsRemaining);
+        updateInfo();
       }
     };
+
 
     final Action startRecord = new AbstractAction() {
       @Override
@@ -308,7 +308,7 @@ public abstract class GraphicalUserInterface {
 
     // Creates the main display for the frame
     JPanel display = new JPanel();
-    display.setBackground(new Color(0, 204, 0));
+    display.setBackground(new Color(31, 4, 56, 235));
     display.setPreferredSize(new Dimension(DEFAULT_DISPLAY_SIZE,
             (int) (DEFAULT_DISPLAY_SIZE / 1.6)));
     display.setLayout(null);
@@ -458,8 +458,68 @@ public abstract class GraphicalUserInterface {
     replayMenu.add(autoRep);
     replayMenu.add(iterateRep);
 
+    JPanel helpControls = new JPanel(new GridLayout(5, 1, 5, 5));
+    helpControls.add(new JLabel("   CONTROLS"));
+    JLabel arrow = new JLabel("     - User the arrow keys or the buttons move");
+    JLabel rec = new JLabel("     - Click the right button (next to the UP arrow) "
+            + "to start recording");
+    JLabel stop = new JLabel("     - Click the left button (next to the UP arrow) "
+            + "to stop recording");
+    try {
+      final Class<?> thisClass = getClass();
+      Image img = ImageIO.read(thisClass.getResource("/assets/up.png"));
+      Image scaled = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+      arrow.setIcon(new ImageIcon(scaled));
+      img = ImageIO.read(thisClass.getResource("/assets/record.png"));
+      scaled = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+      rec.setIcon(new ImageIcon(scaled));
+      img = ImageIO.read(thisClass.getResource("/assets/stop_record.png"));
+      scaled = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+      stop.setIcon(new ImageIcon(scaled));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    helpControls.add(arrow);
+    helpControls.add(rec);
+    helpControls.add(stop);
+
+    JPanel helpInstructions = new JPanel(new GridLayout(5, 1, 5, 5));
+    helpInstructions.add(new JLabel("HOW TO PLAY"));
+    JLabel key = new JLabel("  - Doors can only be opened with the key corresponding to "
+            + "its colour");
+    JLabel token = new JLabel("  - Collect all the tokens to open up the exit and then leave");
+    try {
+      final Class<?> thisClass = getClass();
+      Image img = ImageIO.read(thisClass.getResource("/assets/RKey.png"));
+      Image scaled = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+      key.setIcon(new ImageIcon(scaled));
+      img = ImageIO.read(thisClass.getResource("/assets/Treasure.png"));
+      scaled = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+      token.setIcon(new ImageIcon(scaled));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    helpInstructions.add(token);
+    helpInstructions.add(key);
+    helpInstructions.add(new JLabel("  - Watch out for the enemies, they can kill you"));
+
+    helpBox = new JPanel(new GridLayout(1, 2, 5, 5));
+    helpBox.setPreferredSize(new Dimension(1000, 200));
+    helpBox.add(helpControls);
+    helpBox.add(helpInstructions);
+
+    JMenuItem showHelp = new JMenuItem("Show Help");
+    showHelp.addActionListener(new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(frame, helpBox, "Help", JOptionPane.PLAIN_MESSAGE);
+      }
+    });
+
     JMenu help = new JMenu("Help");
     help.setPreferredSize(new Dimension(45, 15));
+    help.add(showHelp);
 
     // creates the Menu at the top and adds all menu items
     JMenuBar controls = new JMenuBar();
@@ -514,6 +574,25 @@ public abstract class GraphicalUserInterface {
     frame.setVisible(true);
   }
 
+  /**
+   * Updates the current info and checks if
+   * info should be displayed.
+   */
+  private void updateInfo() {
+    updateInventory(inventory);
+    updateChips(chipsRemaining);
+    redraw();
+    if (getCurrentTile() instanceof InfoTile) {
+      JOptionPane.showMessageDialog(frame, helpBox, "Help", JOptionPane.PLAIN_MESSAGE);
+    }
+  }
+
+  /**
+   * Sets the JLabel to display level number.
+   *
+   * @param lvlNumber is JLabel that will be the
+   *                  result of the step.
+   */
   protected abstract void setLvlLabel(JLabel lvlNumber);
 
   /**
@@ -624,6 +703,14 @@ public abstract class GraphicalUserInterface {
    *                 time left.
    */
   protected abstract void setTimeLeft(JLabel timeLeft);
+
+  /**
+   * Gets the current tile that the player is standing
+   * on at the time of being called.
+   *
+   * @return the current tile that the player is on
+   */
+  protected abstract Tile getCurrentTile();
 
   /**
    * Restarts the game at the current level.
