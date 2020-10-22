@@ -1,8 +1,13 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.Gson;
-
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -240,9 +245,13 @@ public class Persistence {
 
       for (int i = 0; i < saveLength; i++) {
         char next = savedGame.charAt(i);
-        if (next == ',' || next == '{') writer.write(next + "\n\t");
-        else if (next == '}') writer.write("\n" + next);
-        else writer.write(next);
+        if (next == ',' || next == '{') {
+          writer.write(next + "\n\t");
+        } else if (next == '}') {
+          writer.write("\n" + next);
+        } else {
+          writer.write(next);
+        }
       }
 
       writer.close();
