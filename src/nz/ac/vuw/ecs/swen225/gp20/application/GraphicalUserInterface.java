@@ -33,10 +33,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 
 public abstract class GraphicalUserInterface {
 
@@ -266,6 +266,11 @@ public abstract class GraphicalUserInterface {
       }
     });
 
+    // This stops space bar activating buttons
+    InputMap im = (InputMap) UIManager.get("Button.focusInputMap");
+    im.put(KeyStroke.getKeyStroke("pressed SPACE"), "none");
+    im.put(KeyStroke.getKeyStroke("released SPACE"), "none");
+
     InputMap inputMap = buttons.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), "right");
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, true), "left");
@@ -481,7 +486,6 @@ public abstract class GraphicalUserInterface {
         setLabel(lvlNumber, infoFontSize);
       }
     });
-
 
     frame.setMinimumSize(new Dimension(DEFAULT_DISPLAY_SIZE, (int) (DEFAULT_DISPLAY_SIZE / 1.6)));
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

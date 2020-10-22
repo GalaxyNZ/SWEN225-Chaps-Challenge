@@ -64,6 +64,7 @@ public class Main extends GraphicalUserInterface {
   }
 
   public void gameWon() {
+    System.out.println("won");
     currentState = State.GAME_WON;
   }
 
@@ -91,8 +92,9 @@ public class Main extends GraphicalUserInterface {
     }
     maze.executeMove(dir);
     if (maze.levelWonChecker()) {
-      maze = persistence.nextLevel(this);
-      if (maze != null) {
+      Maze newMaze = persistence.nextLevel(this);
+      if (newMaze != null) {
+        maze = newMaze;
         startTimer(this.timeLeft);
       }
     }
@@ -254,7 +256,7 @@ public class Main extends GraphicalUserInterface {
     // Creates timer that increments every 0.1 seconds
     timer = new Timer(100, e -> {
 
-      if (!gamePaused && currentState != State.REPLAYING && currentState != State.GAME_WON) {
+      if (!gamePaused && currentState != State.REPLAYING) {
         maze.setTimeElapsed(timeElapsed);
         timeLeft.setText(String.valueOf(String.format("%.1f", timePerLevel - timeElapsed)));
         timeElapsed += 0.1f;

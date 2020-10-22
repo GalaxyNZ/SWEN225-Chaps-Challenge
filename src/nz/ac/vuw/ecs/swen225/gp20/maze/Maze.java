@@ -189,6 +189,18 @@ public class Maze {
 	public Point getPlayerLocation() {
 		return player.getLocation();
 	}
+
+	/*
+	 * return the boards
+	 */
+
+	public Board getBoard() {return board;}
+
+	/*
+	 * Returns the chips the player has
+	 */
+
+	public int getPlayerChips() { return player.getTreasure(); }
 	
 	/*
 	 * Returns ArrayList of all items in the players inventory for GUI printing.
