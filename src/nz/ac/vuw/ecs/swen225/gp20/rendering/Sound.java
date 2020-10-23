@@ -60,7 +60,7 @@ public class Sound{
 
     /**
      * Method made for playing background sound
-     * @param filename 
+     * @param filename
      */
    private void setSound(String filename){
        try {
