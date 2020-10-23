@@ -11,7 +11,7 @@ import javax.json.*;
 import java.util.HashMap;
 import java.util.Scanner;
 
-/*
+/**
  * This class represents the fixed testing part of this project.
  * Here tests are run to ensure all core systems are running properly so the game can be played.
  *
@@ -44,7 +44,7 @@ public class FixedTests {
 
 
     // BASIC TESTS
-    /*
+    /**
      * Tests simple board generation
      */
     @Test
@@ -76,7 +76,7 @@ public class FixedTests {
     }
 
 
-    /*
+    /**
      * Tests a more complex board generation with every available tile kind.
      */
     @Test
@@ -128,7 +128,7 @@ public class FixedTests {
     }
 
 
-    /*
+    /**
      * Tests simple movement in all directions.
      */
     @Test
@@ -162,7 +162,7 @@ public class FixedTests {
 
     // Restricted movement
 
-    /*
+    /**
      * Ensures walls work properly.
      */
     @Test
@@ -194,7 +194,7 @@ public class FixedTests {
         assertEquals("[]", maze.getPlayerInv().toString());
     }
 
-    /*
+    /**
      * Ensures you cannot walk off the map
      */
     @Test
@@ -229,7 +229,7 @@ public class FixedTests {
 
     // DOORS and KEYS
 
-    /*
+    /**
      * Tests that doors can be constructed, opened and remain open
      */
     @Test
@@ -263,7 +263,7 @@ public class FixedTests {
     }
 
 
-    /*
+    /**
      * Checks that the correct key uis used to open the correct dooe
      */
     @Test
@@ -297,7 +297,7 @@ public class FixedTests {
     }
 
 
-    /*
+    /**
      * Checks doors cannot be unlocked without the key
      */
     @Test
@@ -333,7 +333,7 @@ public class FixedTests {
 
     // ITEM TESTS
 
-    /*
+    /**
      * Checks whether treasure can be picked up
      */
     @Test
@@ -367,7 +367,7 @@ public class FixedTests {
         assertEquals("[]", maze.getPlayerInv().toString());
     }
 
-    /*
+    /**
      * Checks whether keys can be picked up
      */
 
@@ -402,7 +402,7 @@ public class FixedTests {
         assertEquals("[r, g, b, y]", maze.getPlayerInv().toString());
     }
 
-    /*
+    /**
      * Checks whether multiple of the same keys can be picked up.
      */
     @Test
@@ -437,7 +437,7 @@ public class FixedTests {
     }
 
 
-    /*
+    /**
      * Checks the info tile can be walked on, and has the correct info.
      */
     @Test
@@ -474,7 +474,7 @@ public class FixedTests {
     }
 
     // Ending Game
-    /*
+    /**
      * Makes sure the game state can be ended. and that the player cannot walk onto it
      */
     @Test
@@ -511,7 +511,7 @@ public class FixedTests {
 
     // Break it
 
-    /*
+    /**
      * Gives bad inputs and hopes a board cannot be constructed with them
      *
      * This will throw an IndexOutOfBoundsException and NullPointerException if it works correctly
@@ -548,8 +548,8 @@ public class FixedTests {
         assertTrue(catchError);
     }
 
-    /*
-     * Gives incorrect sizes in the board data. Claims it is 7x32 but board is only 5x5
+    /**
+     * Gives incorrect sizes in the board data. Claims it is 7x32 but board is only 5x5.
      *
      * This will throw an IndexOutOfBoundsException if it works correctly
      */
@@ -587,7 +587,7 @@ public class FixedTests {
     }
 
 
-    /*
+    /**
      * Ensures a map cannot be created without chap.
      */
     @Test
@@ -615,8 +615,11 @@ public class FixedTests {
 
     }
 
-    /*
+    /**
      * Loops through the predefined movements
+     *
+     * @param maze current maze
+     * @param moves moves string of moves to do
      */
     public void gameplayLoop(Maze maze, String[] moves) {
         for (String s : moves) {
@@ -638,8 +641,10 @@ public class FixedTests {
     }
 
 
-    /*
+    /**
      * turns the old map generation string into the new JSON generation file
+     * @param map string of the map to convert
+     * @return map in json format
      */
     public static JsonObject toJSON(String map) {
         Scanner scan = new Scanner(map);

@@ -9,7 +9,7 @@ import javax.json.JsonObject;
 
 import static test.nz.ac.vuw.ecs.swen225.gp20.monkey.FixedTests.toJSON;
 
-/*
+/**
  * This class represents the Monkey Testing aspect of this project.
  *
  * @author Luke Catherall - catherluke
@@ -39,7 +39,7 @@ public class MonkeyTest {
 
 
     /**
-     * Gives the game a random input until the game is won.
+     * Creates a map and starts a gameplay loop
      */
     @Test
     public void MonkeyTesting() {
@@ -60,6 +60,12 @@ public class MonkeyTest {
         MonkeyTestingLoop(maze);
 
     }
+
+    /**
+     * Gives the game a random input until the game is won.
+     *
+     * @param maze maze to add
+     */
 
     private void MonkeyTestingLoop(Maze maze) {
         int count = 0;
