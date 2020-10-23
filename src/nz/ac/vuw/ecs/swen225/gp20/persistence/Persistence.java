@@ -53,7 +53,7 @@ public class Persistence {
    *
    * @return last played save.
    */
-  public Maze getLastLevel(){
+  public Maze getLastLevel() {
     File directory = new File(savePath);
     String[] list = directory.list();
     if (list != null) {
@@ -260,7 +260,8 @@ public class Persistence {
       int saveLength = savedGame.length();
       stringWriter.close();
 
-      Writer writer = new BufferedWriter(new FileWriter(savePath + fileName + ".json", StandardCharsets.UTF_8));
+      Writer writer = new BufferedWriter(new FileWriter(savePath + fileName
+              + ".json", StandardCharsets.UTF_8));
 
       for (int i = 0; i < saveLength; i++) {
         char next = savedGame.charAt(i);

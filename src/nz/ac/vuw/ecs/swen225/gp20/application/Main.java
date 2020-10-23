@@ -16,9 +16,9 @@ import nz.ac.vuw.ecs.swen225.gp20.recnplay.Replay;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.Rendering;
 
 public class Main extends GraphicalUserInterface {
-  private static final float timePerLevel = 60f;
+  private static final float timePerLevel = 120f;
   private final Persistence persistence;
-  private final Rendering renderer;
+  private Rendering renderer;
   public boolean gamePaused = false;
   public float timeElapsed = 0f;
   public State currentState;
@@ -128,7 +128,8 @@ public class Main extends GraphicalUserInterface {
   }
 
   public void movePlayerDirection(GraphicalUserInterface.Direction dir) {
-    if ((currentState != State.RUNNING && currentState != State.REPLAYING) || gamePaused) {
+    if ((currentState != State.RUNNING && currentState != State.REPLAYING)
+            || gamePaused || renderer.isActing()) {
       return;
     }
     maze.executeMove(dir);
@@ -151,12 +152,18 @@ public class Main extends GraphicalUserInterface {
     }
   }
 
+  public boolean isWalking() {
+    return renderer.isActing();
+  }
+
   @Override
   protected void redraw(Graphics g, Dimension d) {
     g.setColor(Color.LIGHT_GRAY);
     g.fillRect(0, 0, d.width, d.height);
     if (maze != null) {
-      renderer.testDrawingAnimation(g, "Down", d, maze);
+      //renderer.testDrawingAnimation(g, "Down", d, maze);
+      renderer.setPause(gamePaused);
+      renderer.update(g, d, maze);
     }
   }
 
@@ -204,6 +211,7 @@ public class Main extends GraphicalUserInterface {
   @Override
   protected void newGame(JLabel timeLeft) {
     // Creates new game and initialised info
+    renderer = new Rendering();
     lvlNumber.setText("1");
     gamePaused = false;
     maze = persistence.newGame();
@@ -230,6 +238,7 @@ public class Main extends GraphicalUserInterface {
 
     // Loads game selected
     maze = newMaze;
+    renderer = new Rendering();
     lvlNumber.setText("" + maze.getLevel());
     startTimer(timeLeft);
     currentState = State.RUNNING;
