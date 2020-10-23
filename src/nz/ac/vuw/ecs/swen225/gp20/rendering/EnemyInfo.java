@@ -11,10 +11,24 @@ public class EnemyInfo {
     private int[] xz = {1,1,1,2,2,2};
 
     public EnemyInfo(){}
+
+    /**
+     * @param b, true if enemy is being rendered
+     */
     public void showExposed(Boolean b){
         exposed = b;
     }
+
+    /**
+     * public method for checking if exposed
+     * @return true if exposed
+     */
     public boolean isExposed(){return exposed;}
+
+    /**
+     * public method for changing position in canvas
+     * @param p, position in canvas
+     */
     public void changePos(Point p){
         if(prev == null) prev = p;
         prev = curr;
@@ -22,9 +36,18 @@ public class EnemyInfo {
         determineAction();
 
     }
+
+    /**
+     * public method for changing position in index
+     * @param p, position in index
+     */
     public void setPos(Point p){
         pos = p;
     }
+
+    /**
+     * Determines the direction of the enemy
+     */
     private void determineAction(){
         if(prev == null || curr == null) return;
         if(prev.x < curr.x) {
@@ -37,6 +60,11 @@ public class EnemyInfo {
             action = CL.Up;
         }
     }
+
+    /**
+     * draws the enemy
+     * @param g, Graphics 2D
+     */
     public void draw(Graphics2D g){
         if(prev == null) return;
         if(exposed){
