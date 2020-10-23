@@ -128,7 +128,8 @@ public class Main extends GraphicalUserInterface {
   }
 
   public void movePlayerDirection(GraphicalUserInterface.Direction dir) {
-    if ((currentState != State.RUNNING && currentState != State.REPLAYING) || gamePaused) {
+    if ((currentState != State.RUNNING && currentState != State.REPLAYING)
+            || gamePaused || renderer.isActing()) {
       return;
     }
     maze.executeMove(dir);
@@ -156,7 +157,9 @@ public class Main extends GraphicalUserInterface {
     g.setColor(Color.LIGHT_GRAY);
     g.fillRect(0, 0, d.width, d.height);
     if (maze != null) {
-      renderer.testDrawingAnimation(g, "Down", d, maze);
+      //renderer.testDrawingAnimation(g, "Down", d, maze);
+      renderer.setPaused(gamePaused);
+      renderer.update(g, d, maze);
     }
   }
 
