@@ -141,6 +141,8 @@ public class Main extends GraphicalUserInterface {
         maze = newMaze;
         lvlNumber.setText("" + maze.getLevel());
         startTimer(this.timeLeft);
+      } else {
+        timer.stop();
       }
     }
     // If recording add player move to recording
