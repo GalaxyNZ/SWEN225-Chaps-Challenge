@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp20.maze;
+package test.nz.ac.vuw.ecs.swen225.gp20.Maze;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -408,12 +408,17 @@ public class FixedTestsImported {
             switch (s) {
                 case "s":
                     maze.executeMove(GraphicalUserInterface.Direction.DOWN);
+                    break;
                 case "w":
                     maze.executeMove(GraphicalUserInterface.Direction.UP);
+                    break;
                 case "a":
                     maze.executeMove(GraphicalUserInterface.Direction.LEFT);
+                    break;
                 case "d":
                     maze.executeMove(GraphicalUserInterface.Direction.RIGHT);
+                    break;
+                default:
             }
         }
     }

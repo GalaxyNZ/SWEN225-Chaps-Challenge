@@ -53,9 +53,7 @@ public class Replay {
    * @param delayTime to move in time
    */
   public void autoStep(int delayTime) {
-    timer = new Timer(delayTime, e -> {
-      iterateStep();
-    });
+    timer = new Timer(delayTime, e -> iterateStep());
     timer.start();
   }
 
@@ -63,26 +61,28 @@ public class Replay {
    * Do one step at every call.
    */
   public void iterateStep() {
-    if (!moves.isEmpty() && main.currentState == Main.State.REPLAYING) {
-      String nextMoves = moves.remove(0);
-      if (nextMoves.equals("ENEMIES")) {
-        main.moveEnemies();
+    if (!main.gamePaused) {
+      if (!moves.isEmpty() && main.currentState == Main.State.REPLAYING) {
+        String nextMoves = moves.remove(0);
+        if (nextMoves.equals("ENEMIES")) {
+          main.moveEnemies();
+        } else {
+          main.movePlayerDirection(GraphicalUserInterface.Direction.valueOf(nextMoves));
+        }
       } else {
-        main.getMaze().executeMove(GraphicalUserInterface.Direction.valueOf(nextMoves));
+        main.stopReplaying();
+        if (timer != null) {
+          timer.stop();
+        }
+        main.setTimeElapsed(timeElapsed);
       }
-    } else {
-      main.stopReplaying();
-      if (timer != null) {
-        timer.stop();
-      }
-      main.setTimeElapsed(timeElapsed);
     }
   }
 
   /**
    * Allow a file to be selected as long as it is a Json file.
    *
-   * @return file
+   * @return selectedFile
    */
   public Maze selectFile() {
     String selectedFile = "";
@@ -116,7 +116,6 @@ public class Replay {
       Reader reader = Files.newBufferedReader(Paths.get(file));
       map = gson.fromJson(reader, Map.class);
       for (Map.Entry<?, ?> entry : map.entrySet()) {
-        String varName = entry.getKey().toString();
         System.out.println(entry.getKey() + " = " + entry.getValue());
 
       }
@@ -124,8 +123,6 @@ public class Replay {
       timeElapsed = Float.parseFloat(map.get("time").toString());
       maze = main.getPersistence().loadFile(path + map.get("replayFile").toString() + ".json");
       reader.close();
-      //maze = new Maze(map);
-
     } catch (Exception ex) {
       ex.printStackTrace();
     }
@@ -148,7 +145,7 @@ public class Replay {
       }
       moves = stringBuilder.toString();
     }
-    ArrayList<String> delimitedInput = new ArrayList<String>(Arrays.asList(moves.split("[,]")));
+    ArrayList<String> delimitedInput = new ArrayList<>(Arrays.asList(moves.split("[,]")));
     this.moves.addAll(delimitedInput);
   }
 

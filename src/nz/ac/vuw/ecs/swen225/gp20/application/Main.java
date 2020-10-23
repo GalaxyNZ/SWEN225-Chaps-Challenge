@@ -127,6 +127,30 @@ public class Main extends GraphicalUserInterface {
     replay = null;
   }
 
+  public void movePlayerDirection(GraphicalUserInterface.Direction dir) {
+    if ((currentState != State.RUNNING && currentState != State.REPLAYING) || gamePaused) {
+      return;
+    }
+    maze.executeMove(dir);
+    // If player has won level proceed to the next level
+    // or end game
+    if (maze.levelWonChecker()) {
+      endRec();
+      Maze newMaze = persistence.nextLevel(this);
+      if (newMaze != null) {
+        maze = newMaze;
+        lvlNumber.setText("" + maze.getLevel());
+        startTimer(this.timeLeft);
+      } else {
+        timer.stop();
+      }
+    }
+    // If recording add player move to recording
+    if (recorder != null) {
+      recorder.addMove(dir);
+    }
+  }
+
   @Override
   protected void redraw(Graphics g, Dimension d) {
     g.setColor(Color.LIGHT_GRAY);
@@ -174,24 +198,7 @@ public class Main extends GraphicalUserInterface {
 
   @Override
   protected void movePlayer(GraphicalUserInterface.Direction dir) {
-    if (currentState != State.RUNNING || gamePaused) {
-      return;
-    }
-    maze.executeMove(dir);
-    // If player has won level proceed to the next level
-    // or end game
-    if (maze.levelWonChecker()) {
-      endRec();
-      Maze newMaze = persistence.nextLevel(this);
-      if (newMaze != null) {
-        maze = newMaze;
-        startTimer(this.timeLeft);
-      }
-    }
-    // If recording add player move to recording
-    if (recorder != null) {
-      recorder.addMove(dir);
-    }
+    movePlayerDirection(dir);
   }
 
   @Override

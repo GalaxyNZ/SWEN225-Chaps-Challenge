@@ -5,17 +5,26 @@ import static org.junit.jupiter.api.Assertions.*;
 import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
-import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 
-import javax.json.Json;
+import javax.json.*;
+import java.util.HashMap;
 import java.util.Scanner;
+
+/*
+ * This class represents the fixed testing part of this project.
+ * Here tests are run to ensure all core systems are running properly so the game can be played.
+ *
+ * @author Luke Catherall - catherluke
+ */
 
 public class FixedTests {
 
     /*
+        * Key table for the board toString output
+
         * X = Chap
-        *   = Free Tile
+        * _ = Free Tile
         * # = Wall
         * % = Exit lock item
         * I = Info tile
@@ -35,7 +44,9 @@ public class FixedTests {
 
 
     // BASIC TESTS
-
+    /*
+     * Tests simple board generation
+     */
     @Test
     public void t01_SimpleBoardGeneration() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
@@ -45,7 +56,7 @@ public class FixedTests {
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_";
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map); // Convers map string to a JSON file
 
         String moves = "";
 
@@ -56,14 +67,18 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        Persistence p = new Persistence();
-        Maze maze = p.loadJsonString(test.toString());
+        Persistence p = new Persistence(); // Creates a persistence instance
+        Maze maze = p.loadJsonString(test.toString()); // Loads the map json file
 
-        assertEquals(expected, maze.toString());
-        assertEquals(0, maze.getPlayerChips());
-        assertEquals("[]", maze.getPlayerInv().toString());
+        assertEquals(expected, maze.toString()); // Checks the map is correct
+        assertEquals(0, maze.getPlayerChips()); // Checks the number of chips is correct
+        assertEquals("[]", maze.getPlayerInv().toString()); // Checks the inventory is correct
     }
 
+
+    /*
+     * Tests a more complex board generation with every available tile kind.
+     */
     @Test
     public void t02_ComplexBoardGeneration() {
         String map =  "17|16|SAMPLE TILE INFO|11|SETBK|1|SETYK|1|SETRK|1|SETGK|2|" +
@@ -103,7 +118,7 @@ public class FixedTests {
                         "|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|\n";
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -112,6 +127,10 @@ public class FixedTests {
         assertEquals("[]", maze.getPlayerInv().toString());
     }
 
+
+    /*
+     * Tests simple movement in all directions.
+     */
     @Test
     public void t03_SimpleMovement() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
@@ -130,7 +149,7 @@ public class FixedTests {
                         "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -143,6 +162,9 @@ public class FixedTests {
 
     // Restricted movement
 
+    /*
+     * Ensures walls work properly.
+     */
     @Test
     public void t04_Walls() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
@@ -152,7 +174,7 @@ public class FixedTests {
                 + "_|#|#|#|_|"
                 + "_|_|_|_|_|";
 
-        String[] moves = new String[]{ "w", "w", "w"};
+        String[] moves = new String[]{ "w", "w", "w", "a", "a", "a", "s", "s", "s", "d", "d", "d"};
 
         String expected =
                 "|_|_|_|_|_|\n" +
@@ -161,7 +183,7 @@ public class FixedTests {
                         "|_|#|#|#|_|\n" +
                         "|_|_|_|_|_|\n";
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -172,7 +194,9 @@ public class FixedTests {
         assertEquals("[]", maze.getPlayerInv().toString());
     }
 
-
+    /*
+     * Ensures you cannot walk off the map
+     */
     @Test
     public void t05_MovementOffMap() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
@@ -192,7 +216,7 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -204,6 +228,10 @@ public class FixedTests {
     }
 
     // DOORS and KEYS
+
+    /*
+     * Tests that doors can be constructed, opened and remain open
+     */
     @Test
     public void t06_LockedDoors() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
@@ -223,7 +251,7 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -235,6 +263,9 @@ public class FixedTests {
     }
 
 
+    /*
+     * Checks that the correct key uis used to open the correct dooe
+     */
     @Test
     public void t07_NoKeyUnlockingDoor() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
@@ -254,7 +285,7 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -265,6 +296,10 @@ public class FixedTests {
         assertEquals("[b]", maze.getPlayerInv().toString());
     }
 
+
+    /*
+     * Checks doors cannot be unlocked without the key
+     */
     @Test
     public void t08_IncorrectKeyUnlockingDoor() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
@@ -284,7 +319,7 @@ public class FixedTests {
                         "|_|_|_|_|_|\n";
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -298,6 +333,9 @@ public class FixedTests {
 
     // ITEM TESTS
 
+    /*
+     * Checks whether treasure can be picked up
+     */
     @Test
     public void t09_PickUpTreasure() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
@@ -318,7 +356,7 @@ public class FixedTests {
 
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -328,6 +366,10 @@ public class FixedTests {
         assertEquals(5, maze.getPlayerChips());
         assertEquals("[]", maze.getPlayerInv().toString());
     }
+
+    /*
+     * Checks whether keys can be picked up
+     */
 
     @Test
     public void t10_PickUpKeys() {
@@ -349,7 +391,7 @@ public class FixedTests {
 
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -360,6 +402,9 @@ public class FixedTests {
         assertEquals("[r, g, b, y]", maze.getPlayerInv().toString());
     }
 
+    /*
+     * Checks whether multiple of the same keys can be picked up.
+     */
     @Test
     public void t11_PickUpMultipleKeys() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
@@ -380,7 +425,7 @@ public class FixedTests {
 
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -392,6 +437,9 @@ public class FixedTests {
     }
 
 
+    /*
+     * Checks the info tile can be walked on, and has the correct info.
+     */
     @Test
     public void t12_InfoItem() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|1|SETYK|0|SETRK|0|SETGK|0|"
@@ -412,7 +460,7 @@ public class FixedTests {
 
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -426,6 +474,9 @@ public class FixedTests {
     }
 
     // Ending Game
+    /*
+     * Makes sure the game state can be ended. and that the player cannot walk onto it
+     */
     @Test
     public void t13_SimpleGameEnd() {
         String map =  "5|5|SAMPLE TILE INFO|0|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
@@ -446,7 +497,7 @@ public class FixedTests {
 
 
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
         Persistence p = new Persistence();
         Maze maze = p.loadJsonString(test.toString());
 
@@ -460,6 +511,11 @@ public class FixedTests {
 
     // Break it
 
+    /*
+     * Gives bad inputs and hopes a board cannot be constructed with them
+     *
+     * This will throw an IndexOutOfBoundsException and NullPointerException if it works correctly
+     */
     @Test
     public void t14_badBoardConstruction() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
@@ -469,12 +525,12 @@ public class FixedTests {
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_";
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
 
         String moves = "";
 
         String expected =
-                "|#|_|_|_|#|\n" +
+                "|_|_|_|_|_|\n" +
                         "|_|_|_|_|_|\n" +
                         "|_|_|X|_|_|\n" +
                         "|_|_|_|_|_|\n" +
@@ -492,6 +548,11 @@ public class FixedTests {
         assertTrue(catchError);
     }
 
+    /*
+     * Gives incorrect sizes in the board data. Claims it is 7x32 but board is only 5x5
+     *
+     * This will throw an IndexOutOfBoundsException if it works correctly
+     */
     @Test
     public void t15_incorrectSize() {
         String map =  "7|32|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
@@ -501,7 +562,7 @@ public class FixedTests {
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_";
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
 
         String moves = "";
 
@@ -526,6 +587,9 @@ public class FixedTests {
     }
 
 
+    /*
+     * Ensures a map cannot be created without chap.
+     */
     @Test
     public void t16_noChap() {
         String map =  "5|5|SAMPLE TILE INFO|11|SETBK|0|SETYK|0|SETRK|0|SETGK|0|"
@@ -535,7 +599,7 @@ public class FixedTests {
                 + "_|_|_|_|_|"
                 + "_|_|_|_|_";
 
-        JSONObject test = toJSON(map);
+        JsonObject test = toJSON(map);
 
 
        boolean catchError = false;
@@ -551,6 +615,9 @@ public class FixedTests {
 
     }
 
+    /*
+     * Loops through the predefined movements
+     */
     public void gameplayLoop(Maze maze, String[] moves) {
         for (String s : moves) {
             switch (s) {
@@ -570,25 +637,32 @@ public class FixedTests {
         }
     }
 
-    public static JSONObject toJSON(String map) {
+
+    /*
+     * turns the old map generation string into the new JSON generation file
+     */
+    public static JsonObject toJSON(String map) {
         Scanner scan = new Scanner(map);
         scan.useDelimiter("\\|");
 
-        JSONObject test = new JSONObject();
-        test.put("level", 1);
-        test.put("xSize", scan.next());
-        test.put("ySize", scan.next());
-        test.put("tileInfo", scan.next());
-        test.put("numChips", scan.next());        scan.next();
-        test.put("SETBK", scan.next());           scan.next();
-        test.put("SETYK", scan.next());           scan.next();
-        test.put("SETRK", scan.next());           scan.next();
-        test.put("SETGK", scan.next());
+        HashMap<String, Integer> config = new HashMap<>();
+        JsonBuilderFactory factory = Json.createBuilderFactory(config);
+
+        JsonObjectBuilder test = factory.createObjectBuilder();
+        test.add("level", 1);
+        test.add("xSize", scan.next());
+        test.add("ySize", scan.next());
+        test.add("tileInfo", scan.next());
+        test.add("numChips", scan.next());        scan.next();
+        test.add("SETBK", scan.next());           scan.next();
+        test.add("SETYK", scan.next());           scan.next();
+        test.add("SETRK", scan.next());           scan.next();
+        test.add("SETGK", scan.next());
         scan.skip("\\|");
         scan.useDelimiter("\n");
 
-        test.put("board", scan.next());
+        test.add("board", scan.next());
 
-        return test; 
+        return test.build();
     }
 }

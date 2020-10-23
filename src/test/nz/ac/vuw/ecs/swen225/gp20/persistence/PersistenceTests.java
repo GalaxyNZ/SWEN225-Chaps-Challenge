@@ -1,7 +1,8 @@
-package nz.ac.vuw.ecs.swen225.gp20.persistence;
+package test.nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.GraphicalUserInterface;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import org.junit.jupiter.api.Test;
 
 public class PersistenceTests {
