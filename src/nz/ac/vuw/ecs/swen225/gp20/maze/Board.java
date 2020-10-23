@@ -77,7 +77,8 @@ public class Board {
 			case "G":
 				uses = GKMax;
 				break;
-			}
+			default:
+			}				
 			toReturn.add(new KeyItem(s,uses));
 		}
 		return toReturn;
