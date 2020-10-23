@@ -61,19 +61,21 @@ public class Replay {
    * Do one step at every call.
    */
   public void iterateStep() {
-    if (!moves.isEmpty() && main.currentState == Main.State.REPLAYING) {
-      String nextMoves = moves.remove(0);
-      if (nextMoves.equals("ENEMIES")) {
-        main.moveEnemies();
+    if (!main.gamePaused) {
+      if (!moves.isEmpty() && main.currentState == Main.State.REPLAYING) {
+        String nextMoves = moves.remove(0);
+        if (nextMoves.equals("ENEMIES")) {
+          main.moveEnemies();
+        } else {
+          main.movePlayerDirection(GraphicalUserInterface.Direction.valueOf(nextMoves));
+        }
       } else {
-        main.getMaze().executeMove(GraphicalUserInterface.Direction.valueOf(nextMoves));
+        main.stopReplaying();
+        if (timer != null) {
+          timer.stop();
+        }
+        main.setTimeElapsed(timeElapsed);
       }
-    } else {
-      main.stopReplaying();
-      if (timer != null) {
-        timer.stop();
-      }
-      main.setTimeElapsed(timeElapsed);
     }
   }
 
