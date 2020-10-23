@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp20.maze;
+package test.nz.ac.vuw.ecs.swen225.gp20.Maze;
 
 import static org.junit.jupiter.api.Assertions.*;
 
