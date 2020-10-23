@@ -61,7 +61,7 @@ public class Replay {
    * Do one step at every call.
    */
   public void iterateStep() {
-    if (!main.gamePaused) {
+    if (!main.gamePaused && !main.isWalking()) {
       if (!moves.isEmpty() && main.currentState == Main.State.REPLAYING) {
         String nextMoves = moves.remove(0);
         if (nextMoves.equals("ENEMIES")) {
