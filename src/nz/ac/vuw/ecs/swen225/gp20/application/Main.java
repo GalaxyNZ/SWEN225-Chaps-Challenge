@@ -158,7 +158,7 @@ public class Main extends GraphicalUserInterface {
     g.fillRect(0, 0, d.width, d.height);
     if (maze != null) {
       //renderer.testDrawingAnimation(g, "Down", d, maze);
-      renderer.setPaused(gamePaused);
+      renderer.setPause(gamePaused);
       renderer.update(g, d, maze);
     }
   }
