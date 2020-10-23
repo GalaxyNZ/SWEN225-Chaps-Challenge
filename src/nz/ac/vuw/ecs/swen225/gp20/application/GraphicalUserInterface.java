@@ -432,19 +432,21 @@ public abstract class GraphicalUserInterface {
 
     JMenuItem autoRep = new JMenuItem("Auto Replay");
     autoRep.addActionListener(ev -> {
-      boolean validInput = false;
-      while (!validInput) {
-        String delayString = JOptionPane.showInputDialog(frame,
-                "How quick do you want the replay speed to be? (100-1000 milliseconds)", null);
-        if (delayString == null) {
-          break;
-        }
-        if (isNumeric(delayString)) {
-          int delay = Integer.parseInt(delayString);
-          if (delay >= 100 && delay <= 1000) {
-            validInput = true;
-            autoReplay(delay);
-            redraw();
+      if (getCurrentState() == Main.State.REPLAYING) {
+        boolean validInput = false;
+        while (!validInput) {
+          String delayString = JOptionPane.showInputDialog(frame,
+                  "How quick do you want the replay speed to be? (1000-3000 milliseconds)", null);
+          if (delayString == null) {
+            break;
+          }
+          if (isNumeric(delayString)) {
+            int delay = Integer.parseInt(delayString);
+            if (delay >= 1000 && delay <= 3000) {
+              validInput = true;
+              autoReplay(delay);
+              redraw();
+            }
           }
         }
       }
